@@ -1,0 +1,13 @@
+# Gros fichiers Insee (re-téléchargés par scripts/05_collecte_insee_carreaux.py)
+donnees/brutes/Filosofi2019_*.zip
+donnees/brutes/*.7z
+donnees/brutes/carreaux_200m_met.gpkg
+
+__pycache__/
+.ipynb_checkpoints/
+donnees/brutes/*.part
+
+# Raccourcis Google Drive et fichiers Windows
+*.gdoc
+*.gsheet
+desktop.ini

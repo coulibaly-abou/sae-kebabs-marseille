@@ -1,0 +1,86 @@
+osm_id,name,lat,lon,amenity,cuisine,addr:housenumber,addr:street,addr:postcode,addr:city,opening_hours,phone,website,ref:FR:SIRET,critere,code_zone,commune,arrondissement
+node/5354464879,Istanbul Kebab,43.526808,5.4464967,fast_food,kebab,1 Bis,Rue Paul Doumer,,,,,,79010476400010,tag_cuisine,13001,Aix-en-Provence,
+node/12576855095,Kashmir,43.5278932,5.4456941,fast_food,kebab;indian;pakistani,23,Rue de la Couronne,,,,+33 4 86 31 40 83,,81925109100016,tag_cuisine,13001,Aix-en-Provence,
+node/12576179589,Kebab Corner,43.5272594,5.446023,fast_food,kebab,1,Rue de la Couronne,13100,Aix-en-Provence,10:30-01:00,,,,tag_cuisine,13001,Aix-en-Provence,
+node/3252250227,Le Samos,43.5290304,5.4470954,fast_food,greek;kebab,13,Rue des Marseillais,13100,Aix-en-Provence,11:00-02:00,,,90084557900011,tag_cuisine,13001,Aix-en-Provence,
+node/2417776110,Paristanbul,43.5275759,5.4458471,restaurant,turkish;kebab,13,Rue de la Couronne,13100,Aix-en-Provence,,,,90983233900024,tag_cuisine,13001,Aix-en-Provence,
+node/12576179594,Snack Le Pacha,43.5274001,5.445958,fast_food,kebab;french_tacos,5,Rue de la Couronne,13100,Aix-en-Provence,Mo-Su 10:00-23:45,,,75397556400018,tag_cuisine,13001,Aix-en-Provence,
+node/11862396320,Turkish Kebab,43.5314508,5.4507502,fast_food,kebab,,,,,Mo-Su 11:00-00:30,,,91349385400016,tag_cuisine,13001,Aix-en-Provence,
+node/13521927059,Ô Berlin’Aix,43.5291816,5.4530378,fast_food,kebab,,,,,,,,,tag_cuisine,13001,Aix-en-Provence,
+node/5268469816,Cappadoce,43.2924826,5.5670074,fast_food,burger;frites;kebab,19,Place des Quinze,13400,Aubagne,,,,89921324300012,tag_cuisine,13005,Aubagne,
+node/4870093282,Istanbul,43.2917605,5.5697254,fast_food,kebab,,,,,,,,,tag_cuisine,13005,Aubagne,
+node/5132958109,Istanbul Kebab,43.2948619,5.5680006,fast_food,kebab,,,,,,,,,tag_cuisine,13005,Aubagne,
+node/11486854572,Le Major II,43.2920745,5.5619071,fast_food,burger;kebab;sandwich,,,,,,,,,tag_cuisine,13005,Aubagne,
+node/5266250042,Le fetou,43.2857282,5.5542516,fast_food,burger;sandwich;kebab;pizza,755,Route Nationale 8,13400,Aubagne,"Mo 11:00-15:00,18:00-22:30; Tu 11:00-15:00,18:00-22:30; We 11:00-15:00,18:00-22:30; Th 11:00-15:00,18:00-22:30; Fr 18:00-22:30; Sa,Su 11:30-22:30",,,,tag_cuisine,13005,Aubagne,
+node/4374862104,Ceyrest'O'Snack,43.2135791,5.6320055,fast_food,burger;sandwich;kebab,,,,,,,,,tag_cuisine,13023,Ceyreste,
+node/12487248799,Aux 3 Frères,43.4548178,5.4658199,fast_food,kebab;burger;french_tacos,49,Boulevard Carnot,13120,Gardanne,,,,49310579500014,tag_cuisine,13041,Gardanne,
+node/12112780178,Snack Mykonos,43.4546398,5.4701121,fast_food,kebab,22,Cours Forbin,13120,Gardanne,Mo-Su 11:30-22:30,,,82036645800017,tag_cuisine,13041,Gardanne,
+node/1787476024,Snack Le Délice,43.5927146,4.9386448,fast_food,kebab,,,,,,,,,tag_cuisine,13047,Istres,
+node/12294208815,Marmara,43.1732705,5.605689,fast_food,kebab,24,Quai François Mitterrand,,,"Mo-Sa 11:00-15:00, 18:30-23:30; Su 11:00-23:00",,,84309099400024,tag_cuisine,13028,La Ciotat,
+node/12696458002,O'BBQ Grill,43.1871652,5.6233488,fast_food,barbecue;burger;friture;grill;kebab;sandwich;steak_house,223,Boulevard Beaurivage,13600,,,+33488394236,,,tag_cuisine,13028,La Ciotat,
+node/13535224946,Berliner Das Original,43.414525,5.3614064,fast_food,kebab,,Chemin des Rigons,13170,Les Pennes-Mirabeau,11:00-23:00,,https://restaurants.berliner-do.com/kebab-plan-de-campagne/,,tag_cuisine,13071,Les Pennes-Mirabeau,
+node/12379023252,La Cantine,43.4184686,5.2830136,restaurant,sandwich;burger;kebab,6,Avenue Jean Jaures,,,07:00-21:303,+33 6 46 77 24 30,,88534844100019,tag_cuisine,13071,Les Pennes-Mirabeau,
+node/4605018780,Star Kebab,43.4155091,5.2149805,fast_food,regional,132,Avenue Jean Jaurès,13700,Marignane,06:00-00:00,,,51491712900017,nom,13054,Marignane,
+node/9999002033,Ankara Grill,43.2982294,5.377092,fast_food,kebab;turkish,40,Cours Belsunce,13001,Marseille,,,,93902912000010,tag_cuisine,13201,Marseille,1.0
+node/11205017489,Antalya Kebab,43.2965306,5.3786199,fast_food,kebab,,,,,,,,98491428300010,tag_cuisine,13201,Marseille,1.0
+node/9831796373,Berliner - Marseille,43.293749,5.373217,fast_food,kebab,,,,,Mo-Su 11:00-00:00,,,89183370900027,tag_cuisine,13201,Marseille,1.0
+node/12073824914,Bodrum city,43.2982951,5.3770653,fast_food,kebab,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+node/12362363509,Capuccino Pizzeria,43.2962078,5.3803103,fast_food,kebab;pizza,,Rue Rodolphe Pollak,,Marseille,,,,84961982000012,tag_cuisine,13201,Marseille,1.0
+node/12117289879,Durum kebab,43.2960745,5.3813242,restaurant,,,,,,,,,,nom,13201,Marseille,1.0
+node/9929575760,Facefood,43.2945845,5.3849645,fast_food,kebab,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+node/2363311736,Fruits et Legumes,43.2965198,5.3786947,,chicken;kebab;tacos,,,,Marseille,,,,,tag_cuisine,13201,Marseille,1.0
+node/11933091165,Istambul Kebab d'Or,43.295619,5.3778953,fast_food,kebab,,,,,,,,91140686600010,tag_cuisine,13201,Marseille,1.0
+node/12484284701,Izmir,43.3012338,5.3804188,fast_food,kebab;turkish,,,,,,+33 7 83 05 52 72; +33 4 86 77 65 97,,,tag_cuisine,13201,Marseille,1.0
+node/11933097469,Le Bodrum,43.2955575,5.3777166,fast_food,kebab,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+node/1513994385,Le Jardin des Vestiges,43.2964261,5.3746408,restaurant,kebab,,,,,,,,44160385900022,tag_cuisine,13201,Marseille,1.0
+node/8532266125,Les Violettes,43.2927999,5.3750764,fast_food,kebab;pizza;sandwich,,,,,,,,41963879600013,tag_cuisine,13201,Marseille,1.0
+node/13110772701,Saray grill,43.2996626,5.3806054,restaurant,kebab;steak_house;turkish,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+node/5822477585,Tombiq Döner,43.2934346,5.3740116,fast_food,kebab,23,,,Marseille,,,,,tag_cuisine,13201,Marseille,1.0
+node/5202084894,Welcome to Istanbul,43.297894,5.373026,fast_food,kebab,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+node/13866539776,,43.2996454,5.3776654,fast_food,kebab,,,,,,,,,tag_cuisine,13201,Marseille,1.0
+way/178655330,Chez Maestro,43.300508,5.366224,fast_food,kebab,,,,,,,,,tag_cuisine,13202,Marseille,2.0
+node/11932626170,Kebab Berliner,43.2968547,5.3721317,fast_food,kebab,,,,,,,,,tag_cuisine,13202,Marseille,2.0
+node/6425944270,DK'S Food,43.3064282,5.3802163,fast_food,kebab,,,,,,,,99036680900012,tag_cuisine,13203,Marseille,3.0
+node/4393392839,L’européen,43.308995,5.3716686,fast_food,pizza;kebab;french_tacos,,,,,,,,85322934200011,tag_cuisine,13203,Marseille,3.0
+node/2862082932,Rafraf,43.3116869,5.3726505,restaurant,arab;kebab,,,,,,,,,tag_cuisine,13203,Marseille,3.0
+node/6425861556,Timgad,43.309755,5.3794264,fast_food,kebab,,,,,,,,,tag_cuisine,13203,Marseille,3.0
+node/4430509401,,43.3063849,5.3833163,fast_food,kebab;pizza,,,,,,,,,tag_cuisine,13203,Marseille,3.0
+node/13112822899,Distric Five,43.3010199,5.3988026,fast_food,kebab,,,,,"Sa-Th 11:00-02:00, Fr 15:00-02:00",,,,tag_cuisine,13204,Marseille,4.0
+node/12679788301,Inci Restaurant,43.3029599,5.396331,restaurant,kebab;sandwich;steak_house;turkish,33,Boulevard Philippon,13004,,Tu-Su 09:30-00:00,+33 7 86 35 44 74,,93897091000015,tag_cuisine,13204,Marseille,4.0
+node/11757616995,L'antidote,43.3105016,5.402151,fast_food,kebab;oriental,,,,,,,,,tag_cuisine,13204,Marseille,4.0
+node/13051911101,Mimas,43.3068911,5.3999265,restaurant,arab;kebab,3,Place Pierre Brossolette,13004,,Mo-Su 11:00-23:00,,,,tag_cuisine,13204,Marseille,4.0
+node/3442822194,Ritheje,43.3033468,5.4035,fast_food,kebab,109,Boulevard de la Blancarde,,,,,,83122259100016,tag_cuisine,13204,Marseille,4.0
+node/13744032253,Istanbul délice,43.2939678,5.4005916,fast_food,kebab,39,Boulevard Jeanne d'Arc,13005,Marseille,Mo-Fr 11:30-23:00; Su 18:00-23:00,,,,tag_cuisine,13205,Marseille,5.0
+node/12759691369,Naan kebab,43.2939301,5.4008099,fast_food,kebab,41,Boulevard Jeanne d'Arc,13005,Marseille,,,,,tag_cuisine,13205,Marseille,5.0
+node/9929575759,Dwish Burger,43.2945514,5.3847643,fast_food,kebab;burger;tacos,,,,,,,,,tag_cuisine,13206,Marseille,6.0
+node/7054970471,Frisch Cag Kebap,43.2952609,5.3829258,fast_food,kebab,9,Cours Julien,,,,,,,tag_cuisine,13206,Marseille,6.0
+node/2019893918,Grillade - Salon de thé 7/7,43.2864284,5.3850484,fast_food,kebab,,,,,,,,,tag_cuisine,13206,Marseille,6.0
+way/69124661,L'atelier du Sandwich,43.2916213,5.3796356,fast_food,sandwich;kebab,,,,,Mo-Su 10:00-19:00,,,,tag_cuisine,13206,Marseille,6.0
+node/5584615721,Le Mirage,43.295647,5.3817833,cafe,kebab;sandwich,3,,,,Mo-Su 08:00-02:30,,,,tag_cuisine,13206,Marseille,6.0
+node/12196654660,Le Tarpin Bon,43.2888297,5.3827482,fast_food,kebab,7,Rue Berlioz,13006,,,,,,tag_cuisine,13206,Marseille,6.0
+node/13725774101,Makhlouf,43.2889194,5.3787637,fast_food,kebab;lebanese,109,Rue Paradis,,,,,,,tag_cuisine,13206,Marseille,6.0
+node/7058016104,Mido,43.2938566,5.3829713,fast_food,kebab;egyptian,,,,,,,,44304827700018,tag_cuisine,13206,Marseille,6.0
+node/8475740494,Papyrus,43.290808,5.3813024,restaurant,kebab;mediterranean;pizza,,,,,Mo-Sa 11:00-20:00,,,44219059100010,tag_cuisine,13206,Marseille,6.0
+way/1518057718,El Cabane,43.2721678,5.3911951,fast_food,kebab,,,,,,,,,tag_cuisine,13208,Marseille,8.0
+node/6766431731,Mister Kebab,43.2454322,5.3732927,fast_food,,,,,,Mo-Su 09:00-02:00,+33 9 53 03 90 78,https://www.mister-kebab13.fr/,,nom,13208,Marseille,8.0
+node/13638040151,Chez Alex,43.2570064,5.4111147,fast_food,burger;french_tacos;kebab;sandwich,,,,,,+33 7 60 42 18 96,,,tag_cuisine,13209,Marseille,9.0
+way/753515199,L'Espresso Café,43.2589215,5.4091657,fast_food,sandwich;kebab;salad,,,,,Mo-Fr 07:00-15:00,,,,tag_cuisine,13209,Marseille,9.0
+node/4290912686,La Broche,43.2696136,5.4032357,fast_food,kebab,,,,,06:30-02:00,+33 4 91 79 23 48,,,tag_cuisine,13209,Marseille,9.0
+way/1259806414,New Delice,43.2725931,5.4117158,fast_food,kebab,293,Boulevard Romain Rolland,,,,,,88421026100019,tag_cuisine,13209,Marseille,9.0
+node/1974107069,BBC Barbecue,43.2797626,5.4185126,fast_food,kebab,,,,,,,,,tag_cuisine,13210,Marseille,10.0
+node/5181596458,Le Delice,43.282372,5.430084,fast_food,kebab,,,,,,,,,tag_cuisine,13210,Marseille,10.0
+node/13283877801,Le Tarpin Bon - Saint Barnabé,43.3045166,5.4152949,fast_food,kebab,18,Avenue de Saint-Julien,13012,,"Tu-Fr 11:30-14:00, 19:00-22:00; Sa-Su 19:00-22:00",,,88861336100037,tag_cuisine,13212,Marseille,12.0
+node/673004191,Club Chiken,43.3224395,5.4128387,fast_food,burger;kebab;tacos,3,Rue de Roubaix,,Marseille,,,,79931001600024,tag_cuisine,13213,Marseille,13.0
+node/13965785080,Grill Kebab,43.3274666,5.4239314,fast_food,kebab,,,,,,,,,tag_cuisine,13213,Marseille,13.0
+node/3780623740,Istanbul Kebab,43.3290543,5.4270695,fast_food,,179,Avenue de la Rose,,,,,,98199840400017,nom,13213,Marseille,13.0
+node/9506012517,Factory kebab,43.3168046,5.3688888,fast_food,,,,,,,,,,nom,13215,Marseille,15.0
+node/11132236821,Tat Kebab Salonu,43.3246113,5.3673108,fast_food,kebab,38,Rue de Lyon,,,,+334 86 77 76 83,https://www.tatkebabsalonu.fr/,,tag_cuisine,13215,Marseille,15.0
+node/7203966593,Snack Kebab,43.3593742,5.3326007,fast_food,kebab,,,,,,,,,tag_cuisine,13216,Marseille,16.0
+node/9608455014,La reine Nefertiti,43.4075062,5.0549827,fast_food,kebab,,,,,,,,,tag_cuisine,13056,Martigues,
+node/9774917516,L'Alhambra,43.5811714,5.0010637,fast_food,kebab,14,Avenue Charles de Gaulle,13140,Miramas,Mo-Su 10:00-22:00,+33 4 23 65 82 15,,83896042500018,tag_cuisine,13063,Miramas,
+node/9381944611,,43.6932275,5.5010994,fast_food,kebab,,,,,,,,,tag_cuisine,84089,Pertuis,
+node/12316312600,Regal Tacos,43.6304507,5.1509095,fast_food,kebab,,,,,,,,,tag_cuisine,13069,Pélissanne,
+node/10942398755,Cappadoce,43.6409581,5.0964071,fast_food,kebab,,,,,,,,,tag_cuisine,13103,Salon-de-Provence,
+node/4197235195,Empire Kabab,43.639889,5.0984609,fast_food,kebab;turkish,,,,,,,,83751071800013,tag_cuisine,13103,Salon-de-Provence,
+node/4589206646,Grill Istanbul,43.4477472,5.6831908,fast_food,kebab;kurdish,18,Avenue Mirabeau,13530,Trets,Mo-Su 10:00-22:00,+33758173489,https://share.google/nkH0crUkE5M1v0Mfa,,tag_cuisine,13110,Trets,
+node/13619982201,La Casa Del Kebab,43.424868,5.2716671,fast_food,burger;kebab,229,Avenue Rhin-Danube,13127,,Mo-Sa 11:00-22:00; Su 18:00-22:00,+337 85 05 40 74,https://lacasadelkebab.byclickeat.fr/,93768739000016,tag_cuisine,13117,Vitrolles,

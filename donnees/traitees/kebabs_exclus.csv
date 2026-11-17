@@ -1,0 +1,11 @@
+source,osm_id,siret,nom,commune,raison_exclusion
+osm,node/2363311736,,Fruits et Legumes,Marseille,pas un restaurant (tag amenity absent ou autre)
+sirene,,94938288100017,AIXMEX,Aix-en-Provence,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,80317891200017,AZIM KHAN,Aubagne,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,79387554300027,BRASSERIE LE 3G,Cabriès,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,52993867200035,JEAN-FRANCOIS FIORINO (L'ECAILLER DU PANIER),Marseille,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,52993867200043,JEAN-FRANCOIS FIORINO (L'ECAILLER DU PANIER),Marseille,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,98286746700010,"SANTORINI (SANTORIN, BERLIN)",Marseille,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,52266336800036,DOUCE CORTES (FERNANDEZ) (PAELLA CORTES),Marseille,aucun mot-clé dans le nom (résultat flou de l'API)
+sirene,,85102177400019,ISTANBUL BAKLAVA,Marseille,"pâtisserie (Istanbul Baklava), pas un kebab"
+sirene,,49341260500047,ROLAND GARCIA-LARA (PIZZA KING),Marseille,aucun mot-clé dans le nom (résultat flou de l'API)

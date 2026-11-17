@@ -1,0 +1,19 @@
+test,territoire,variable,mediane_avec,mediane_sans,p,taille_effet_r,observe,attendu_si_comme_population
+Mann-Whitney avec/sans kebab,Métropole,densite_hab_km2,12018.749993983263,2324.999998836138,5.588716485588481e-43,-0.7608687077385425,,
+Mann-Whitney avec/sans kebab,Métropole,niveau_vie_moyen,19595.006057347673,26557.13436555891,4.25053674298898e-36,0.694511645379414,,
+Mann-Whitney avec/sans kebab,Métropole,taux_pauvrete,0.25407548629531385,0.08571428571428572,3.6579355921782405e-41,-0.7427554470323066,,
+Mann-Whitney avec/sans kebab,Métropole,part_logement_social,0.0156622145425676,0.0,4.7916237908547925e-20,-0.361220886551465,,
+Mann-Whitney avec/sans kebab,Métropole,part_18_39,0.29524134512963074,0.23255813953488372,6.169276974169999e-17,-0.46294139744552965,,
+Mann-Whitney avec/sans kebab,Métropole,part_65_plus,0.16872471823999619,0.20430107526881722,0.0004864881178351814,0.19311138241923365,,
+Mann-Whitney avec/sans kebab,Métropole,dist_gare_m,335.0842988470115,2054.9584288138158,2.720186886314494e-34,0.6760293012772352,,
+Mann-Whitney avec/sans kebab,Marseille,densite_hab_km2,16574.999991695688,4474.999997749459,1.524630227841288e-17,-0.5809861121973565,,
+Mann-Whitney avec/sans kebab,Marseille,niveau_vie_moyen,19397.76179092841,24536.581818181818,3.6734148361333506e-14,0.5160273957297521,,
+Mann-Whitney avec/sans kebab,Marseille,taux_pauvrete,0.2757802445302445,0.1282051282051282,4.3963711898450136e-17,-0.5725227087360201,,
+Mann-Whitney avec/sans kebab,Marseille,part_logement_social,0.015471839885241982,0.0,1.2216710971810945e-05,-0.24965643609711408,,
+Mann-Whitney avec/sans kebab,Marseille,part_18_39,0.2894690950690225,0.24108761329305137,2.1202190985425724e-08,-0.381763739762913,,
+Mann-Whitney avec/sans kebab,Marseille,part_65_plus,0.16872471823999619,0.19773095623987033,0.005075272645796133,0.19097125236025603,,
+Mann-Whitney avec/sans kebab,Marseille,dist_gare_m,244.88681111758982,1082.4900679403881,1.701291006416923e-20,0.6323922103169726,,
+Regroupement (plus proche voisin vs population),Métropole,distance moyenne au plus proche kebab (m),,,0.001,,811.6921874894247,1572.32410388735
+Regroupement (plus proche voisin vs population),Marseille,distance moyenne au plus proche kebab (m),,,0.001,,331.5264662080517,574.6741313694456
+Binomial exact (taux par habitant),Marseille,Nord (13e-16e) vs Sud et Est (7e-12e),,,0.023662381499819314,,0.9176801046953301,0.44518817056468196
+Binomial exact (taux par habitant),Marseille,Centre (1er-6e) vs Nord (13e-16e),,,0.00038431149323416274,,2.169223063179608,0.9176801046953301

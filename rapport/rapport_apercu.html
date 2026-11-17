@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rapport SAÉ kebabs (aperçu)</title>
+<script>window.MathJax = {tex: {inlineMath: [['$', '$']]}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body { font-family: Georgia, 'Times New Roman', serif; max-width: 820px; margin: 2rem auto;
+       padding: 0 16px; line-height: 1.55; color: #0b0b0b; background: #fcfcfb; }
+h1, h2, h3 { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.25; }
+h1 { border-bottom: 2px solid #2a78d6; padding-bottom: .2em; margin-top: 2.2em; }
+img { max-width: 100%; display: block; margin: 1.2em auto .3em; }
+img + em, p > em:only-child { display: block; text-align: center; color: #52514e; font-size: .9em; }
+table { border-collapse: collapse; margin: 1em 0; font-size: .92em; }
+th, td { border: 1px solid #dcdad3; padding: .3em .7em; }
+th { background: #f0efec; }
+blockquote { border-left: 4px solid #2a78d6; margin: 1em 0; padding: .2em 1em; background: #f0efec; }
+code { background: #f0efec; padding: 0 .25em; border-radius: 3px; }
+.saut-de-page { page-break-after: always; }
+@media print { body { max-width: none; margin: 0; } h1 { page-break-before: auto; } }
+</style></head>
+<body><div align="center">
+<p>Université de Perpignan Via Domitia<br>
+IUT, BUT Science des Données, 3e année</p>
+<p><br><br><br></p>
+<h1 id="étude-de-limplantation-des-kebabs-dans-lagglomération-marseillaise">Étude de l'implantation des kebabs dans l'agglomération marseillaise</h1>
+<h3 id="ce-que-la-carte-des-kebabs-révèle-de-la-métropole-aix-marseille-provence">Ce que la carte des kebabs révèle de la métropole Aix-Marseille-Provence</h3>
+<p><br></p>
+<p><em>SAÉ 5.EMS.01 : Mener une étude statistique dans un domaine d'application</em></p>
+<p><br><br></p>
+<p>Réalisé par Coulibaly Aboubakar, [Nom 2] et [Nom 3]<br>
+Encadrant : Sébastien Pinel<br>
+Année universitaire 2026-2027<br>
+Rendu le [jj/mm/2027]</p>
+</div>
+<div class="saut-de-page" style="page-break-after: always;"></div>
+
+<h2 id="sommaire">Sommaire</h2>
+<ul>
+<li><a href="#résumé">Résumé</a></li>
+<li><a href="#glossaire">Glossaire</a></li>
+<li><a href="#1-introduction">1. Introduction</a></li>
+<li><a href="#11-contexte">1.1 Contexte</a></li>
+<li><a href="#12-problématique">1.2 Problématique</a></li>
+<li><a href="#13-hypothèses-de-départ">1.3 Hypothèses de départ</a></li>
+<li><a href="#2-gestion-de-projet">2. Gestion de projet</a></li>
+<li><a href="#21-organisation-du-groupe">2.1 Organisation du groupe</a></li>
+<li><a href="#22-planning">2.2 Planning</a></li>
+<li><a href="#3-méthodologie-de-collecte-des-données">3. Méthodologie de collecte des données</a></li>
+<li><a href="#31-périmètre-détude">3.1 Périmètre d'étude</a></li>
+<li><a href="#32-sources-mobilisées">3.2 Sources mobilisées</a></li>
+<li><a href="#33-constitution-de-la-base-des-kebabs">3.3 Constitution de la base des kebabs</a></li>
+<li><a href="#34-gares-et-stations">3.4 Gares et stations</a></li>
+<li><a href="#35-données-socio-démographiques">3.5 Données socio-démographiques</a></li>
+<li><a href="#36-limites-et-biais-de-la-collecte">3.6 Limites et biais de la collecte</a></li>
+<li><a href="#4-analyse-exploratoire-spatiale">4. Analyse exploratoire spatiale</a></li>
+<li><a href="#41-répartition-des-kebabs">4.1 Répartition des kebabs</a></li>
+<li><a href="#42-carroyage-et-densité">4.2 Carroyage et densité</a></li>
+<li><a href="#43-rapporter-à-la-population">4.3 Rapporter à la population</a></li>
+<li><a href="#5-croisement-avec-les-variables-socio-démographiques">5. Croisement avec les variables socio-démographiques</a></li>
+<li><a href="#51-jointure-et-indicateurs">5.1 Jointure et indicateurs</a></li>
+<li><a href="#52-les-kebabs-sont-plus-groupés-que-la-population-h1">5.2 Les kebabs sont plus groupés que la population (H1)</a></li>
+<li><a href="#53-corrélations-avec-les-caractéristiques-des-carreaux-h2">5.3 Corrélations avec les caractéristiques des carreaux (H2)</a></li>
+<li><a href="#54-lâge-des-habitants-les-25-39-ans-plutôt-que-les-étudiants">5.4 L'âge des habitants, les 25-39 ans plutôt que les étudiants</a></li>
+<li><a href="#55-fractures-nord-sud-et-centre-périphérie-à-marseille-h4">5.5 Fractures Nord-Sud et centre-périphérie à Marseille (H4)</a></li>
+<li><a href="#56-effet-des-gares-et-carte-isochrone-h3">5.6 Effet des gares et carte isochrone (H3)</a></li>
+<li><a href="#57-le-dicton-de-la-gare-h5">5.7 Le dicton de la gare (H5)</a></li>
+<li><a href="#6-modélisation">6. Modélisation</a></li>
+<li><a href="#61-le-modèle">6.1 Le modèle</a></li>
+<li><a href="#62-ce-qui-explique-la-présence-dun-kebab">6.2 Ce qui explique la présence d'un kebab</a></li>
+<li><a href="#63-qualité-du-modèle">6.3 Qualité du modèle</a></li>
+<li><a href="#7-retour-et-recommandations">7. Retour et recommandations</a></li>
+<li><a href="#8-conclusion">8. Conclusion</a></li>
+<li><a href="#bibliographie-et-sources">Bibliographie et sources</a></li>
+<li><a href="#annexes">Annexes</a></li>
+<li><a href="#a-diagramme-de-gantt-prévisionnel">A. Diagramme de Gantt prévisionnel</a></li>
+<li><a href="#b-code-source">B. Code source</a></li>
+<li><a href="#c-dictionnaire-des-données">C. Dictionnaire des données</a></li>
+</ul>
+<h3 id="liste-des-figures">Liste des figures</h3>
+<table>
+<thead>
+<tr>
+<th>N°</th>
+<th>Titre</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Les kebabs de la métropole</td>
+<td>4.1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Les kebabs à Marseille, zoom sur l'hypercentre</td>
+<td>4.1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Nombre de kebabs par carreau de 200 m</td>
+<td>4.2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Carte de chaleur des kebabs à Marseille</td>
+<td>4.2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Nombre de kebabs pour 10 000 habitants</td>
+<td>4.3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Niveau de vie et implantation des kebabs à Marseille</td>
+<td>5.1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Corrélations entre kebabs et caractéristiques des carreaux</td>
+<td>5.3</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Jeunes adultes et implantation des kebabs à Marseille</td>
+<td>5.4</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Âge des habitants des carreaux avec et sans kebab</td>
+<td>5.4</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Isochrones à pied autour de la gare Saint-Charles</td>
+<td>5.6</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Gares, stations et kebabs à Marseille</td>
+<td>5.6</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Ce qui explique la présence d'un kebab (modèle)</td>
+<td>6.2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="liste-des-tableaux">Liste des tableaux</h3>
+<table>
+<thead>
+<tr>
+<th>N°</th>
+<th>Titre</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Sources de données mobilisées</td>
+<td>3.2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Base finale des kebabs par source et fiabilité</td>
+<td>3.3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Kebabs par arrondissement de Marseille</td>
+<td>4.3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Test de regroupement des kebabs</td>
+<td>5.2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Carreaux avec et sans kebab à Marseille</td>
+<td>5.3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Taux de kebabs par groupe d'arrondissements</td>
+<td>5.5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Kebabs et habitants selon le temps de marche depuis Saint-Charles</td>
+<td>5.6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Distance des kebabs et des habitants aux gares</td>
+<td>5.6</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Effets estimés par le modèle</td>
+<td>6.2</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Performances du modèle en validation croisée</td>
+<td>6.3</td>
+</tr>
+</tbody>
+</table>
+<div class="saut-de-page" style="page-break-after: always;"></div>
+
+<h2 id="résumé">Résumé</h2>
+<p>[À FAIRE, à rédiger en dernier : en 5 à 8 lignes, la question posée, les données utilisées,
+la méthode, les principaux résultats et la réponse à la problématique.]</p>
+<p>Mots-clés : kebab, analyse spatiale, Marseille, Aix-Marseille-Provence, données carroyées,
+Insee Filosofi, OpenStreetMap, SIRENE, gares, inégalités socio-spatiales.</p>
+<h2 id="glossaire">Glossaire</h2>
+<table>
+<thead>
+<tr>
+<th>Terme</th>
+<th>Définition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agglomération</td>
+<td>Dans cette étude, le territoire de la Métropole d'Aix-Marseille-Provence (92 communes)</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Service en ligne qu'un programme peut interroger pour récupérer des données</td>
+</tr>
+<tr>
+<td>Carreau Insee</td>
+<td>Carré de 200 m de côté pour lequel l'Insee diffuse des statistiques</td>
+</tr>
+<tr>
+<td>EPCI</td>
+<td>Établissement public de coopération intercommunale, ici la métropole</td>
+</tr>
+<tr>
+<td>Filosofi</td>
+<td>Fichier de l'Insee sur les revenus et la pauvreté, issu des données fiscales</td>
+</tr>
+<tr>
+<td>Isochrone</td>
+<td>Zone que l'on peut atteindre depuis un point en un temps donné, par exemple 10 minutes à pied</td>
+</tr>
+<tr>
+<td>NAF</td>
+<td>Nomenclature des activités françaises (56.10C correspond à la restauration rapide)</td>
+</tr>
+<tr>
+<td>OSM</td>
+<td>OpenStreetMap, carte collaborative et libre</td>
+</tr>
+<tr>
+<td>SIRENE</td>
+<td>Répertoire de l'Insee qui recense les entreprises et leurs établissements</td>
+</tr>
+<tr>
+<td>SIRET</td>
+<td>Numéro unique d'un établissement, à 14 chiffres</td>
+</tr>
+</tbody>
+</table>
+<div class="saut-de-page" style="page-break-after: always;"></div>
+
+<h1 id="1-introduction">1. Introduction</h1>
+<h2 id="11-contexte">1.1 Contexte</h2>
+<p>Le kebab est l'un des commerces de restauration rapide les plus répandus en France. Une
+vidéo des Échos, « Ce que la carte des kebabs révèle de Paris », a montré que leur
+répartition dans la capitale reflète ses fractures sociales. Sur internet, un dicton fait
+aussi débat : « plus c'est près de la gare, moins le kebab est bon ».</p>
+<p>Nous avons voulu transposer cette démarche à l'agglomération marseillaise, que nous
+entendons ici comme la Métropole d'Aix-Marseille-Provence. Elle réunit 92 communes, environ
+1,9 million d'habitants et 3 150 km². C'est un territoire très contrasté. On y trouve une
+grande ville dense et marquée par une forte opposition entre ses quartiers Nord et Sud
+(Marseille, 886 000 habitants répartis en 16 arrondissements), une seconde ville plutôt aisée
+(Aix-en-Provence), des pôles industriels autour de l'étang de Berre et de Fos-sur-Mer, et de
+nombreuses communes périurbaines ou rurales.</p>
+<h2 id="12-problématique">1.2 Problématique</h2>
+<blockquote>
+<p>Comment expliquer la répartition spatiale des kebabs dans l'agglomération marseillaise,
+et cette répartition révèle-t-elle d'autres fractures socio-spatiales du territoire ?</p>
+</blockquote>
+<h2 id="13-hypothèses-de-départ">1.3 Hypothèses de départ</h2>
+<p>Pour répondre à cette question, nous partons de cinq hypothèses.</p>
+<p>La première (H1) est que les kebabs ne sont pas répartis de façon homogène : ils se
+concentreraient dans certaines zones, comme les centres-villes et les axes passants, et
+davantage à Marseille que dans le reste de la métropole.</p>
+<p>La deuxième (H2) est que leur densité dépend des caractéristiques des habitants : densité de
+population, part de jeunes, niveau de revenu et part de logements sociaux.</p>
+<p>La troisième (H3) est que les kebabs sont plus nombreux à proximité des gares et des stations.</p>
+<p>La quatrième (H4) est que leur répartition diffère nettement entre les quartiers Nord et Sud
+de Marseille, et entre le centre de la métropole et sa périphérie.</p>
+<p>Enfin, à titre d'ouverture, la cinquième (H5) reprend le dicton : les kebabs proches d'une
+gare seraient moins bien notés.</p>
+<h1 id="2-gestion-de-projet">2. Gestion de projet</h1>
+<h2 id="21-organisation-du-groupe">2.1 Organisation du groupe</h2>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Rôle principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coulibaly Aboubakar</td>
+<td>[À FAIRE]</td>
+</tr>
+<tr>
+<td>[Nom 2]</td>
+<td>[À FAIRE]</td>
+</tr>
+<tr>
+<td>[Nom 3]</td>
+<td>[À FAIRE]</td>
+</tr>
+</tbody>
+</table>
+<p>Nous travaillons sur un espace commun, un dossier Google Drive partagé qui contient les
+scripts, les données et le rapport.</p>
+<h2 id="22-planning">2.2 Planning</h2>
+<p>Le diagramme de Gantt prévisionnel, établi sur 30 heures par tranches de 2 heures, est
+présenté en annexe A.</p>
+<h1 id="3-méthodologie-de-collecte-des-données">3. Méthodologie de collecte des données</h1>
+<p>Il n'existe aucune liste de kebabs prête à l'emploi en open data. Nous avons donc constitué
+notre propre base en croisant plusieurs sources. Toute la collecte est automatisée en Python,
+ce qui la rend entièrement reproductible (voir l'annexe B).</p>
+<h2 id="31-périmètre-détude">3.1 Périmètre d'étude</h2>
+<p>Notre terrain d'étude est la Métropole d'Aix-Marseille-Provence et ses 92 communes. Pour les
+comparaisons entre territoires, nous découpons la ville de Marseille en ses 16 arrondissements,
+plus fins que la commune. Cela donne 107 zones de travail : les 91 autres communes et les
+16 arrondissements marseillais.</p>
+<p>Pour les analyses statistiques, nous descendons à une échelle beaucoup plus fine, celle du
+carreau Insee de 200 mètres de côté. La métropole compte 25 957 carreaux habités, dont 3 150
+à Marseille. C'est l'échelle la plus fine que diffuse l'Insee, et celle que propose le sujet :
+elle permet de distinguer une rue commerçante d'un quartier résidentiel voisin. Nous avons
+aussi refait les analyses avec des carreaux de 1 km, en additionnant les petits carreaux :
+les conclusions sont les mêmes, avec des corrélations plus fortes car il y a moins de
+carreaux vides.</p>
+<p>Enfin, un zoom sur la ville de Marseille permet de comparer nos résultats à l'étude
+parisienne.</p>
+<h2 id="32-sources-mobilisées">3.2 Sources mobilisées</h2>
+<p><em>Tableau 1 : sources de données mobilisées</em></p>
+<table>
+<thead>
+<tr>
+<th>Donnée</th>
+<th>Source</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Limites des communes et arrondissements</td>
+<td>API Découpage administratif (IGN, Insee)</td>
+<td>Périmètre, regroupements</td>
+</tr>
+<tr>
+<td>Kebabs</td>
+<td>OpenStreetMap, via l'API Overpass</td>
+<td>Base de travail</td>
+</tr>
+<tr>
+<td>Kebabs</td>
+<td>Répertoire SIRENE de l'Insee, via l'API Recherche d'entreprises</td>
+<td>Base de travail</td>
+</tr>
+<tr>
+<td>Gares, métro, tram</td>
+<td>OpenStreetMap, via l'API Overpass</td>
+<td>Calcul de distances</td>
+</tr>
+<tr>
+<td>Population, revenus, âges, logement</td>
+<td>Insee, Filosofi 2019, carreaux de 200 m</td>
+<td>Variables explicatives</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-constitution-de-la-base-des-kebabs">3.3 Constitution de la base des kebabs</h2>
+<p>Dans OpenStreetMap, nous retenons les établissements dont la cuisine est déclarée comme
+kebab, döner ou shawarma, ainsi que les fast-foods et restaurants dont le nom contient
+« kebab » ou « döner ». Nous obtenons ainsi 85 établissements répartis dans 16 communes,
+dont 55 à Marseille.</p>
+<p>Dans SIRENE, nous cherchons les établissements de restauration encore en activité dont le
+nom ou l'enseigne contient un mot-clé. Les mots-clés principaux (kebab, doner, döner, durum)
+renvoient 51 établissements. Des mots-clés secondaires, plus incertains, comme Istanbul,
+Bosphore, Antalya, Berliner ou Shawarma, en ajoutent 39. Cela fait 90 établissements dans
+12 communes, dont 63 à Marseille. Nous avons aussi testé les mots « grill », « snack » et
+« tacos », puis nous les avons abandonnés, car ils ramenaient trop de restaurants qui ne
+sont pas des kebabs.</p>
+<p>Ces deux listes brutes ont ensuite été nettoyées et fusionnées en quatre étapes.</p>
+<p>Nous avons d'abord jugé la fiabilité de chaque établissement. Il est considéré comme
+certain si son nom contient un mot-clé kebab ou si sa seule cuisine déclarée est le kebab.
+Il est considéré comme probable si le kebab n'est qu'une offre parmi d'autres, dans un snack
+généraliste par exemple, ou si son nom est seulement évocateur, comme « Istanbul ». Dix
+établissements ont été écartés comme faux positifs : la recherche de SIRENE ramenait par
+exemple une pizzeria (Pizza King) ou un restaurant de paella, et nous avons retiré à la main
+une pâtisserie orientale.</p>
+<p>Nous avons ensuite supprimé les doublons à l'intérieur de SIRENE. Quand un local change
+d'exploitant, l'ancien établissement reste parfois enregistré comme actif. C'est le cas,
+par exemple, de cinq établissements successifs au 18-20 cours Belsunce. Nous avons regroupé
+les établissements situés à moins de 30 mètres l'un de l'autre et portant des noms proches,
+en gardant le plus récent. Sept doublons ont ainsi été éliminés.</p>
+<p>La troisième étape consistait à reconnaître les kebabs présents dans les deux sources. Deux
+fiches désignent le même lieu si elles ont le même numéro SIRET, si elles sont à moins de
+100 mètres avec des noms proches, ou si elles se trouvent à la même adresse (moins de
+10 mètres). La distance seule ne suffit pas, car deux kebabs différents sont parfois voisins.
+Nous avons retrouvé 14 kebabs dans les deux sources, dont la moitié grâce au SIRET.</p>
+<p>Enfin, nous avons fusionné le tout, à raison d'une ligne par kebab. Lorsqu'un kebab est dans
+les deux sources, nous gardons la position donnée par OpenStreetMap, plus précise, car elle
+est placée sur le bâtiment et non déduite de l'adresse.</p>
+<p><em>Tableau 2 : base finale des kebabs selon la source et la fiabilité</em></p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Certain</th>
+<th>Probable</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenStreetMap seul</td>
+<td>40</td>
+<td>30</td>
+<td>70</td>
+</tr>
+<tr>
+<td>SIRENE seul</td>
+<td>39</td>
+<td>21</td>
+<td>60</td>
+</tr>
+<tr>
+<td>Les deux sources</td>
+<td>13</td>
+<td>1</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>92</td>
+<td>52</td>
+<td>144</td>
+</tr>
+</tbody>
+</table>
+<p>Notre base finale compte 144 kebabs, dont 95 à Marseille et 13 à Aix-en-Provence. Les deux
+sources n'ont que 14 kebabs en commun : elles se complètent bien, mais aucune n'est
+exhaustive. Nous menons les analyses sur l'ensemble des kebabs, certains et probables, puis
+nous vérifions que les résultats tiennent avec les seuls kebabs certains.</p>
+<p>Ce faible recouvrement permet aussi d'estimer le nombre réel de kebabs par la méthode de
+capture-recapture de Lincoln-Petersen :
+$\hat N = \frac{n_{OSM} \times n_{SIRENE}}{n_{commun}} = \frac{84 \times 74}{14} \approx 440$.
+Notre base couvrirait donc environ un tiers des kebabs de la métropole. Ce chiffre reste
+indicatif, car la méthode suppose que les deux sources sont indépendantes, ce qui est
+douteux : un kebab bien visible, avec « kebab » dans son nom, a plus de chances de figurer
+dans les deux.</p>
+<h2 id="34-gares-et-stations">3.4 Gares et stations</h2>
+<p>Nous avons extrait d'OpenStreetMap 42 gares SNCF et TER, 29 stations de métro et 61 arrêts
+de tramway (à Marseille et Aubagne). Nous avons aussi gardé cinq gares situées juste en dehors
+de la métropole, comme Bandol ou Saint-Martin-de-Crau, car elles peuvent être la gare la plus
+proche d'un kebab situé en bordure. La définition même de la « gare » est un choix de
+méthode : nous testerons d'abord les gares SNCF seules, puis l'ensemble des stations de
+transport en commun.</p>
+<h2 id="35-données-socio-démographiques">3.5 Données socio-démographiques</h2>
+<p>Les caractéristiques des habitants proviennent des données carroyées Filosofi 2019 de
+l'Insee. Les carreaux de 200 mètres couvrant la métropole regroupent 1 822 434 habitants,
+dont 810 486 à Marseille. Chaque carreau est rattaché à la commune, ou à l'arrondissement,
+qui contient son centre.</p>
+<p>À partir de ces données, nous construisons pour chaque carreau sept indicateurs : la densité
+de population, le niveau de vie moyen par habitant, le taux de pauvreté des ménages, la part
+de logements sociaux, la part des 18-39 ans, la part des 65 ans et plus, et la distance à la
+gare ou à la station la plus proche. Le détail des calculs figure dans le dictionnaire des
+données (annexe C).</p>
+<h2 id="36-limites-et-biais-de-la-collecte">3.6 Limites et biais de la collecte</h2>
+<p>Notre collecte comporte plusieurs limites qu'il faut garder à l'esprit.</p>
+<p>La première concerne l'exhaustivité. OpenStreetMap est une carte collaborative, remplie par
+des bénévoles : n'importe qui peut y ajouter ou corriger un restaurant. Pour savoir qui
+renseigne nos kebabs, nous avons récupéré l'historique de leurs fiches. Les 85 kebabs ont
+été modifiés en dernier par 53 contributeurs différents, mais un seul d'entre eux a mis à
+jour 16 fiches, et les trois plus actifs en couvrent près d'un tiers. La source dépend donc
+beaucoup de quelques passionnés, souvent plus actifs dans les grandes villes qu'à la campagne.
+Les fiches sont en revanche plutôt récentes : 78 % ont été modifiées depuis 2024, même si un
+quart n'ont jamais été retouchées depuis leur création, et deux datent de 2012.</p>
+<p>SIRENE, de son côté, ne permet de trouver que les kebabs dont le nom contient un mot-clé :
+un « Snack du Port » qui vend des kebabs reste invisible.</p>
+<p>À l'inverse, la recherche dans SIRENE ramène des restaurants qui ne sont pas des kebabs. Nous
+en avons écarté dix, mais les établissements classés comme probables restent incertains.</p>
+<p>Les données n'ont pas non plus la même date. OpenStreetMap et SIRENE sont à jour en 2026,
+alors que les données Filosofi datent de 2019. Par ailleurs, SIRENE indique si un
+établissement est fermé, mais OpenStreetMap ne le fait pas toujours.</p>
+<p>Il faut aussi tenir compte du secret statistique : pour les carreaux très peu peuplés,
+l'Insee remplace les vraies valeurs par des estimations.</p>
+<p>Enfin, une grande partie de la métropole est rurale ou naturelle. La plupart des carreaux
+n'ont donc aucun kebab, ce dont les modèles devront tenir compte.</p>
+<h1 id="4-analyse-exploratoire-spatiale">4. Analyse exploratoire spatiale</h1>
+<p>Toutes les cartes de cette partie sont construites à partir de la base nettoyée de
+144 kebabs.</p>
+<h2 id="41-répartition-des-kebabs">4.1 Répartition des kebabs</h2>
+<p><img alt="Figure 1 : les kebabs de la métropole Aix-Marseille-Provence" src="figures/fig01_kebabs_metropole.png" /></p>
+<p><em>Figure 1 : les kebabs de la métropole Aix-Marseille-Provence.</em></p>
+<p>À l'échelle de la métropole, la répartition est très inégale. Marseille concentre 95 des
+144 kebabs, soit 66 %, alors qu'elle n'abrite que 46 % de la population. En dehors de
+Marseille, seules 17 communes sur 91 comptent au moins un kebab. Il s'agit surtout de villes
+moyennes : Aix-en-Provence (13 kebabs), Aubagne (6), Vitrolles et Gardanne (4 chacune). Les
+74 communes sans kebab regroupent pourtant 472 000 habitants, principalement dans des
+communes périurbaines ou rurales.</p>
+<p><img alt="Figure 2 : les kebabs à Marseille" src="figures/fig02_kebabs_marseille.png" /></p>
+<p><em>Figure 2 : les kebabs à Marseille, avec un zoom sur l'hypercentre.</em></p>
+<p>À Marseille, les kebabs forment un noyau très dense dans les 1er et 6e arrondissements,
+autour de la Canebière, de Noailles et du cours Julien. Ils s'étirent ensuite le long de deux
+axes, l'un vers le nord (3e, 14e et 15e arrondissements), l'autre vers l'est (4e et 13e). Les
+quartiers Sud et Est sont presque vides : on ne compte aucun kebab dans le 7e arrondissement,
+et un seul dans le 11e comme dans le 12e.</p>
+<h2 id="42-carroyage-et-densité">4.2 Carroyage et densité</h2>
+<p><img alt="Figure 3 : carroyage 200 m" src="figures/fig03_carroyage_marseille.png" /></p>
+<p><em>Figure 3 : nombre de kebabs par carreau de 200 m à Marseille.</em></p>
+<p>Chaque kebab est ensuite placé dans le carreau Insee de 200 mètres qui le contient. Trois
+kebabs se trouvent dans des carreaux sans habitants, comme des zones commerciales : nous
+avons ajouté ces carreaux pour ne pas les perdre. À Marseille, seuls 77 carreaux sur 3 151,
+soit 2,4 %, contiennent un kebab. La plupart (66) n'en ont qu'un, et trois carreaux de
+l'hypercentre en ont trois ou plus, jusqu'à six. La variable que nous cherchons à expliquer
+est donc presque toujours nulle, ce qui orientera le choix du modèle.</p>
+<p><img alt="Figure 4 : carte de chaleur" src="figures/fig04_chaleur_marseille.png" /></p>
+<p><em>Figure 4 : densité lissée des kebabs à Marseille.</em></p>
+<p>La carte de chaleur lisse la position des kebabs sur environ 400 mètres, soit quelques
+minutes de marche. Elle fait ressortir un pôle unique et très marqué dans l'hypercentre, avec
+plus de 20 kebabs au km², et quelques pôles secondaires plus modestes, à Saint-Just et
+Malpassé au nord-est, et vers la Timone et Baille au sud-est.</p>
+<h2 id="43-rapporter-à-la-population">4.3 Rapporter à la population</h2>
+<p><img alt="Figure 5 : kebabs pour 10 000 habitants" src="figures/fig05_kebabs_par_habitant.png" /></p>
+<p><em>Figure 5 : nombre de kebabs pour 10 000 habitants, par commune et par arrondissement.</em></p>
+<p><em>Tableau 3 : kebabs par arrondissement de Marseille</em></p>
+<table>
+<thead>
+<tr>
+<th>Arrondissement</th>
+<th>Kebabs</th>
+<th>Population</th>
+<th>Kebabs pour 10 000 hab.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1er</td>
+<td>23</td>
+<td>37 599</td>
+<td>6,1</td>
+</tr>
+<tr>
+<td>2e</td>
+<td>3</td>
+<td>24 378</td>
+<td>1,2</td>
+</tr>
+<tr>
+<td>3e</td>
+<td>8</td>
+<td>58 029</td>
+<td>1,4</td>
+</tr>
+<tr>
+<td>4e</td>
+<td>5</td>
+<td>49 363</td>
+<td>1,0</td>
+</tr>
+<tr>
+<td>5e</td>
+<td>2</td>
+<td>45 702</td>
+<td>0,4</td>
+</tr>
+<tr>
+<td>6e</td>
+<td>14</td>
+<td>38 476</td>
+<td>3,6</td>
+</tr>
+<tr>
+<td>7e</td>
+<td>0</td>
+<td>35 173</td>
+<td>0,0</td>
+</tr>
+<tr>
+<td>8e</td>
+<td>5</td>
+<td>84 683</td>
+<td>0,6</td>
+</tr>
+<tr>
+<td>9e</td>
+<td>4</td>
+<td>77 406</td>
+<td>0,5</td>
+</tr>
+<tr>
+<td>10e</td>
+<td>6</td>
+<td>60 317</td>
+<td>1,0</td>
+</tr>
+<tr>
+<td>11e</td>
+<td>1</td>
+<td>59 883</td>
+<td>0,2</td>
+</tr>
+<tr>
+<td>12e</td>
+<td>1</td>
+<td>64 399</td>
+<td>0,2</td>
+</tr>
+<tr>
+<td>13e</td>
+<td>8</td>
+<td>95 112</td>
+<td>0,8</td>
+</tr>
+<tr>
+<td>14e</td>
+<td>5</td>
+<td>60 505</td>
+<td>0,8</td>
+</tr>
+<tr>
+<td>15e</td>
+<td>9</td>
+<td>79 161</td>
+<td>1,1</td>
+</tr>
+<tr>
+<td>16e</td>
+<td>1</td>
+<td>15 854</td>
+<td>0,6</td>
+</tr>
+<tr>
+<td>Marseille</td>
+<td>95</td>
+<td>886 040</td>
+<td>1,1</td>
+</tr>
+<tr>
+<td>Reste de la métropole</td>
+<td>49</td>
+<td>1 053 037</td>
+<td>0,5</td>
+</tr>
+</tbody>
+</table>
+<p>Même rapporté au nombre d'habitants, l'écart reste fort. Marseille compte 1,1 kebab pour
+10 000 habitants, soit deux fois plus que le reste de la métropole. Les 1er et 6e
+arrondissements réunissent à eux seuls 39 % des kebabs marseillais pour seulement 9 % des
+habitants. La population qui vit sur place n'explique donc pas tout : l'hypercentre attire
+aussi des gens de passage, avec ses commerces, sa gare et sa vie nocturne. Une opposition
+entre le Nord et le Sud apparaît également, puisque les arrondissements du nord (13e à 16e)
+comptent 0,9 kebab pour 10 000 habitants, deux fois plus que ceux du sud et de l'est (7e à
+12e), à 0,45.</p>
+<p>Ces taux doivent cependant être lus avec prudence dans les petites communes. À Ceyreste ou à
+Ensuès-la-Redonne, un seul kebab pour environ 5 000 habitants suffit à donner un taux de
+2 pour 10 000, qui n'a pas de réelle signification.</p>
+<p>Ces premières cartes vont dans le sens de plusieurs de nos hypothèses. La concentration des
+kebabs (H1) est très visible, et une double opposition, entre centre et périphérie et entre
+Nord et Sud, se dessine (H4). Le pôle principal entoure par ailleurs la gare Saint-Charles,
+ce qui justifie d'étudier l'effet des gares (H3). Il reste à confirmer tout cela par des
+tests statistiques, ce qui fait l'objet de la partie suivante.</p>
+<h1 id="5-croisement-avec-les-variables-socio-démographiques">5. Croisement avec les variables socio-démographiques</h1>
+<h2 id="51-jointure-et-indicateurs">5.1 Jointure et indicateurs</h2>
+<p>Chaque carreau de 200 mètres porte à la fois son nombre de kebabs et les sept indicateurs
+décrits plus haut (section 3.5). Nous pouvons donc comparer directement les carreaux entre eux.</p>
+<p>Avant cela, nous avons fait un choix important. Pour les carreaux de moins de 11 ménages,
+l'Insee remplace les vraies valeurs par des estimations afin de respecter le secret
+statistique. C'est le cas de 62 % des carreaux, mais ils ne contiennent que 7 kebabs sur 141.
+Nous les avons donc écartés, pour ne travailler que sur des données réelles. Il reste
+9 790 carreaux dans la métropole, dont 2 493 à Marseille. Parmi eux, 110 contiennent au
+moins un kebab, dont 74 à Marseille.</p>
+<p><img alt="Figure 6 : niveau de vie et kebabs" src="figures/fig06_niveau_vie_kebabs.png" /></p>
+<p><em>Figure 6 : niveau de vie moyen par carreau et implantation des kebabs à Marseille.</em></p>
+<h2 id="52-les-kebabs-sont-plus-groupés-que-la-population-h1">5.2 Les kebabs sont plus groupés que la population (H1)</h2>
+<p>On pourrait penser que les kebabs sont nombreux au centre simplement parce que beaucoup de
+gens y habitent. Pour le vérifier, nous avons mesuré, pour chaque kebab, la distance qui le
+sépare du kebab le plus proche, puis nous avons comparé la moyenne obtenue avec ce que l'on
+observerait si les kebabs étaient placés au hasard là où vivent les habitants. Nous avons
+simulé 999 répartitions de ce type, en tirant les carreaux en proportion de leur population.</p>
+<p><em>Tableau 4 : distance moyenne entre un kebab et le kebab le plus proche</em></p>
+<table>
+<thead>
+<tr>
+<th>Territoire</th>
+<th>Distance observée</th>
+<th>Distance attendue si les kebabs suivaient la population</th>
+<th>p-valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Métropole</td>
+<td>812 m</td>
+<td>1 572 m</td>
+<td>0,001</td>
+</tr>
+<tr>
+<td>Marseille</td>
+<td>332 m</td>
+<td>575 m</td>
+<td>0,001</td>
+</tr>
+</tbody>
+</table>
+<p>Les kebabs sont deux fois plus proches les uns des autres que ne le voudrait la seule
+répartition des habitants. Aucune des 999 simulations n'atteint un tel regroupement, ce qui
+donne une p-valeur de 0,001, la plus petite possible avec ce nombre de tirages. Notre première
+hypothèse est donc confirmée : les kebabs sont plus concentrés que la population.</p>
+<h2 id="53-corrélations-avec-les-caractéristiques-des-carreaux-h2">5.3 Corrélations avec les caractéristiques des carreaux (H2)</h2>
+<p>Le nombre de kebabs par carreau est presque toujours nul et sa distribution est très
+déséquilibrée. Nous utilisons donc la corrélation de Spearman, qui repose sur le classement
+des valeurs et non sur les valeurs elles-mêmes, plutôt que celle de Pearson. Comme nous
+réalisons 14 tests (7 indicateurs sur 2 territoires), nous appliquons la correction de Holm,
+qui évite de trouver des liens significatifs par simple effet du hasard.</p>
+<p><img alt="Figure 7 : corrélations de Spearman" src="figures/fig07_correlations.png" /></p>
+<p><em>Figure 7 : corrélations de Spearman entre le nombre de kebabs et les indicateurs des carreaux.</em></p>
+<p>Toutes les corrélations sont significatives après correction, et elles vont dans le même sens
+à Marseille et dans l'ensemble de la métropole. Les kebabs sont plus nombreux dans les
+carreaux denses, pauvres, jeunes et proches d'une gare ou d'une station, et plus rares dans
+les carreaux aisés et âgés.</p>
+<p>Ces corrélations restent toutefois faibles, la plus forte atteignant 0,19. Ce n'est pas
+étonnant : entre 97 et 99 % des carreaux n'ont aucun kebab, ce qui réduit mécaniquement les
+coefficients. La comparaison directe entre carreaux avec et sans kebab est plus parlante.
+Toutes les différences présentées ci-dessous sont significatives (test de Mann-Whitney).</p>
+<p><em>Tableau 5 : valeurs médianes des carreaux avec et sans kebab, à Marseille</em></p>
+<table>
+<thead>
+<tr>
+<th>Indicateur</th>
+<th>Carreaux avec kebab</th>
+<th>Carreaux sans kebab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Densité de population</td>
+<td>16 600 hab./km²</td>
+<td>4 500 hab./km²</td>
+</tr>
+<tr>
+<td>Niveau de vie moyen</td>
+<td>19 400 €</td>
+<td>24 500 €</td>
+</tr>
+<tr>
+<td>Taux de pauvreté des ménages</td>
+<td>28 %</td>
+<td>13 %</td>
+</tr>
+<tr>
+<td>Part des 18-39 ans</td>
+<td>29 %</td>
+<td>24 %</td>
+</tr>
+<tr>
+<td>Distance à la gare ou station la plus proche</td>
+<td>245 m</td>
+<td>1 080 m</td>
+</tr>
+</tbody>
+</table>
+<p>Le logement social fait figure d'exception, avec la corrélation la plus faible. Les kebabs
+s'installent bien dans des quartiers pauvres, mais pas dans les grands ensembles de logements
+sociaux des quartiers Nord. On les trouve surtout dans le centre ancien, à Noailles, à
+Belsunce ou le long de la Canebière, où les ménages modestes sont logés dans un parc privé
+souvent dégradé.</p>
+<p>Il faut cependant se méfier d'un effet confondant. Densité, pauvreté et proximité des gares
+augmentent toutes en se rapprochant du centre-ville. Ces indicateurs sont donc liés entre eux,
+et chaque corrélation reflète en partie la même opposition entre centre et périphérie. Pour
+isoler l'effet propre de chacun, nous avons calculé à Marseille des corrélations partielles,
+c'est-à-dire à distance égale du Vieux-Port. Elles diminuent nettement mais restent
+significatives pour le niveau de vie (-0,12), la pauvreté (0,12), la proximité des gares
+(-0,11) et la densité (0,09). En revanche, le lien avec le logement social disparaît presque
+(0,04). La deuxième hypothèse est donc confirmée pour la pauvreté, la densité et l'âge, mais
+pas pour le logement social. La modélisation (partie 6) permettra d'estimer plus précisément
+le poids de chaque facteur.</p>
+<h2 id="54-lâge-des-habitants-les-25-39-ans-plutôt-que-les-étudiants">5.4 L'âge des habitants, les 25-39 ans plutôt que les étudiants</h2>
+<p>L'indicateur « part des 18-39 ans » mélange deux publics bien différents : les étudiants, qui
+ont pour la plupart entre 18 et 24 ans, et les jeunes actifs, entre 25 et 39 ans. Pour savoir
+lequel des deux compte, nous avons repris l'analyse avec les dix tranches d'âge de l'Insee.
+Pour chacune, nous comparons sa part dans la population des carreaux avec et sans kebab, et
+nous calculons sa corrélation avec le nombre de kebabs, toujours avec la correction de Holm.</p>
+<p><img alt="Figure 8 : jeunes adultes et kebabs" src="figures/fig08_jeunes_adultes_kebabs.png" /></p>
+<p><em>Figure 8 : part des 18-39 ans par carreau et implantation des kebabs à Marseille.</em></p>
+<p><img alt="Figure 9 : structure par âge" src="figures/fig09_structure_ages.png" /></p>
+<p><em>Figure 9 : âge des habitants des carreaux avec et sans kebab, à Marseille.</em></p>
+<p>Le résultat est net : seule la tranche des 25-39 ans est plus présente autour des kebabs. Elle
+représente 22,1 % des habitants des carreaux avec kebab, contre 19,3 % ailleurs, soit un
+écart de 2,8 points à Marseille et de 4,1 points dans la métropole. Les 18-24 ans, eux, ne font
+aucune différence (6,9 % contre 7,0 %). Les 55-79 ans sont légèrement moins présents, d'environ
+un point par tranche. On note enfin un peu plus de très jeunes enfants (0-3 ans), ce qui
+correspond aux enfants de ces jeunes ménages.</p>
+<p>Contrairement à une idée répandue, le kebab n'est donc pas, à Marseille, un commerce
+d'étudiants. Il s'implante plutôt là où vivent de jeunes actifs, souvent dans les petits
+logements du centre ancien. Deux réserves s'imposent toutefois. Les étudiants sont parfois
+recensés chez leurs parents, ce qui peut les sous-estimer dans les quartiers du centre. Et
+l'âge reste étroitement lié à la densité et à la pauvreté, un effet que la modélisation devra
+démêler.</p>
+<h2 id="55-fractures-nord-sud-et-centre-périphérie-à-marseille-h4">5.5 Fractures Nord-Sud et centre-périphérie à Marseille (H4)</h2>
+<p>Pour tester ces fractures, nous comparons le nombre de kebabs par habitant entre groupes
+d'arrondissements à l'aide d'un test binomial exact. L'idée est simple : si les kebabs
+suivaient la population, chaque groupe d'arrondissements aurait une part des kebabs égale à
+sa part des habitants.</p>
+<p><em>Tableau 6 : kebabs pour 10 000 habitants selon les groupes d'arrondissements</em></p>
+<table>
+<thead>
+<tr>
+<th>Comparaison</th>
+<th>Kebabs pour 10 000 hab.</th>
+<th>p-valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nord (13e-16e) et Sud-Est (7e-12e)</td>
+<td>0,92 contre 0,45</td>
+<td>0,024</td>
+</tr>
+<tr>
+<td>Centre (1er-6e) et Nord (13e-16e)</td>
+<td>2,17 contre 0,92</td>
+<td>&lt; 0,001</td>
+</tr>
+</tbody>
+</table>
+<p>Les deux écarts sont significatifs. Les quartiers Nord comptent deux fois plus de kebabs par
+habitant que le Sud et l'Est, et le centre en compte plus de deux fois plus que le Nord. Notre
+quatrième hypothèse est donc confirmée : la carte des kebabs suit le gradient social de
+Marseille, avec un centre populaire et des quartiers Nord plus pauvres que le Sud aisé. Il
+s'agit néanmoins d'une association, et non d'un lien de cause à effet.</p>
+<h2 id="56-effet-des-gares-et-carte-isochrone-h3">5.6 Effet des gares et carte isochrone (H3)</h2>
+<p>Où sont les gares par rapport aux kebabs ? La figure 11 superpose les kebabs marseillais et
+les 132 gares et stations du périmètre : gares SNCF et TER, stations de métro et arrêts de
+tramway. Les kebabs suivent nettement les lignes de transport, en particulier le métro et le
+tram du centre-ville, alors que les gares SNCF des quartiers périphériques n'en attirent que
+peu.</p>
+<p><img alt="Figure 11 : gares, stations et kebabs" src="figures/fig11_gares_kebabs.png" /></p>
+<p><em>Figure 11 : gares, stations de métro, arrêts de tram et kebabs à Marseille.</em></p>
+<p>Pour le vérifier, nous mesurons la distance de chaque kebab à la gare ou à la station la
+plus proche, et nous la comparons à celle qu'auraient des kebabs placés au hasard chez les
+habitants (999 simulations, comme pour le test de la section 5.2). Nous testons deux
+définitions de la gare, car c'est un choix qui peut changer le résultat : les gares SNCF
+seules, puis toutes les stations.</p>
+<p><em>Tableau 8 : distance des kebabs et des habitants à la gare la plus proche, à Marseille</em></p>
+<table>
+<thead>
+<tr>
+<th>Définition de la gare</th>
+<th>Distance médiane des kebabs</th>
+<th>Si les kebabs suivaient la population</th>
+<th>p-valeur</th>
+<th>Kebabs à moins de 500 m</th>
+<th>Habitants à moins de 500 m</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gares SNCF et TER</td>
+<td>1 170 m</td>
+<td>1 630 m</td>
+<td>0,003</td>
+<td>15 %</td>
+<td>8 %</td>
+</tr>
+<tr>
+<td>Toutes les stations</td>
+<td>230 m</td>
+<td>700 m</td>
+<td>0,001</td>
+<td>78 %</td>
+<td>39 %</td>
+</tr>
+</tbody>
+</table>
+<p>Les kebabs sont nettement plus proches des gares que les habitants, et l'écart est encore
+plus fort avec les stations de métro et de tram. À Marseille, 78 % des kebabs se trouvent
+à moins de 500 mètres d'une station, contre 39 % des habitants. Le résultat est le même à
+l'échelle de la métropole (60 % contre 22 %). La troisième hypothèse est donc confirmée :
+les kebabs recherchent les lieux de passage, et c'est la proximité du métro et du tram, plus
+que celle des grandes gares, qui compte.</p>
+<p>La carte isochrone précise ce résultat autour de la principale gare, Saint-Charles. Elle
+montre les zones que l'on peut atteindre à pied en 5, 10 et 15 minutes, en suivant le
+réseau réel des rues et des escaliers, et non à vol d'oiseau. Ces zones ont été calculées
+avec le service libre Valhalla, qui s'appuie sur les données d'OpenStreetMap.</p>
+<p><img alt="Figure 10 : isochrones autour de Saint-Charles" src="figures/fig10_isochrone_saint_charles.png" /></p>
+<p><em>Figure 10 : zones atteignables à pied en 5, 10 et 15 minutes depuis la gare Saint-Charles.</em></p>
+<p><em>Tableau 7 : kebabs et habitants selon le temps de marche depuis la gare Saint-Charles</em></p>
+<table>
+<thead>
+<tr>
+<th>Temps de marche</th>
+<th>Kebabs</th>
+<th>Habitants</th>
+<th>Kebabs pour 10 000 hab.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Moins de 5 min</td>
+<td>1</td>
+<td>2 300</td>
+<td>4,4</td>
+</tr>
+<tr>
+<td>5 à 10 min</td>
+<td>7</td>
+<td>18 000</td>
+<td>3,9</td>
+</tr>
+<tr>
+<td>10 à 15 min</td>
+<td>17</td>
+<td>38 000</td>
+<td>4,5</td>
+</tr>
+<tr>
+<td>Reste de Marseille</td>
+<td>70</td>
+<td>752 000</td>
+<td>0,9</td>
+</tr>
+</tbody>
+</table>
+<p>Un quart des kebabs marseillais (25 sur 95) se trouvent à moins de 15 minutes à pied de la
+gare, alors que cette zone n'abrite que 7 % des habitants de la ville. Rapporté à la
+population, on y compte près de cinq fois plus de kebabs qu'ailleurs. Il y a cependant une
+nuance : un seul kebab se trouve à moins de 5 minutes de la gare. Saint-Charles est perchée
+sur une butte, entourée de voies ferrées et de bâtiments universitaires. Les kebabs se
+concentrent plutôt entre 10 et 15 minutes de marche, en descendant vers Noailles, Belsunce
+et la Canebière. Ce n'est donc pas la gare elle-même qui les attire, mais le quartier
+commerçant et très fréquenté qui l'entoure.</p>
+<h2 id="57-le-dicton-de-la-gare-h5">5.7 Le dicton de la gare (H5)</h2>
+<p>Le dicton « plus c'est près de la gare, moins le kebab est bon » ne peut pas être testé avec
+nos données, car nous ne disposons d'aucune mesure de la qualité des kebabs. OpenStreetMap et
+SIRENE ne contiennent pas de notes. Les notes Google, utilisées dans les études qui ont tenté
+de tester ce dicton, ne sont accessibles que par une API payante, et leur collecte
+automatique est encadrée par les conditions d'utilisation du service.</p>
+<p>Si ces notes étaient disponibles, le protocole serait le suivant. Pour chaque kebab, on
+relèverait la note moyenne et le nombre d'avis. On mesurerait la distance à pied à la gare
+la plus proche, plutôt que la distance à vol d'oiseau. On relierait ensuite la note à cette
+distance, en tenant compte du nombre d'avis, car un kebab qui n'a que trois avis peut avoir
+une note extrême par hasard. Il faudrait aussi tester un effet de seuil : la qualité pourrait
+baisser seulement dans les toutes premières centaines de mètres autour de la gare.</p>
+<p>Nos résultats apportent déjà un élément au débat. Les kebabs sont bien plus nombreux près des
+gares et des stations, car ce sont des lieux de passage. Une clientèle de passage revient
+peu, ce qui pourrait en théorie moins inciter à soigner la qualité. Mais cela reste une
+hypothèse : seule une mesure de la qualité permettrait de trancher.</p>
+<h1 id="6-modélisation">6. Modélisation</h1>
+<p>Les parties précédentes ont montré que les kebabs se trouvent dans des quartiers denses,
+pauvres, jeunes et proches des stations. Mais ces caractéristiques vont souvent ensemble : un
+quartier dense est souvent pauvre et bien desservi. La question reste donc entière : qu'est-ce
+qui explique vraiment qu'un kebab s'installe à un endroit plutôt qu'à un autre ? Est-ce la
+jeunesse des habitants, leur niveau de revenu, la proximité d'une gare ? Pour démêler ces
+effets, nous construisons un modèle qui mesure l'effet de chaque facteur toutes choses égales
+par ailleurs.</p>
+<h2 id="61-le-modèle">6.1 Le modèle</h2>
+<p>Nous utilisons une régression logistique. Pour chaque carreau de 200 mètres, elle estime la
+probabilité qu'il contienne au moins un kebab, en fonction de sept caractéristiques : la
+densité de population, le niveau de vie moyen, la part de logements sociaux, la part des
+25-39 ans, la part des 65 ans et plus, la distance à la station la plus proche, et le fait
+que le carreau soit situé à Marseille ou non. Le taux de pauvreté n'est pas retenu, car il
+est presque l'inverse du niveau de vie et les deux ensemble rendraient les effets difficiles
+à lire. Nous avons vérifié que les autres variables ne sont pas trop liées entre elles.</p>
+<p>Le modèle porte sur les 9 790 carreaux de la métropole dont les données sont réelles, dont
+110 contiennent un kebab. Pour comparer les effets entre eux, chaque variable est exprimée en
+écarts-types : l'effet indiqué est celui d'une hausse « typique » de la variable. Il se lit
+comme un multiplicateur des chances d'avoir un kebab : 2 signifie des chances doublées,
+0,5 des chances divisées par deux.</p>
+<h2 id="62-ce-qui-explique-la-présence-dun-kebab">6.2 Ce qui explique la présence d'un kebab</h2>
+<p><img alt="Figure 12 : effets du modèle" src="figures/fig12_effets_modele.png" /></p>
+<p><em>Figure 12 : effet de chaque caractéristique sur les chances d'avoir un kebab, toutes choses
+égales par ailleurs.</em></p>
+<p><em>Tableau 9 : effets estimés par le modèle</em></p>
+<table>
+<thead>
+<tr>
+<th>Caractéristique du carreau</th>
+<th>Hausse d'un écart-type</th>
+<th>Effet sur les chances d'avoir un kebab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Niveau de vie moyen</td>
+<td>+ 5 500 € par an</td>
+<td>divisées par près de 4 (x 0,27)</td>
+</tr>
+<tr>
+<td>Densité de population</td>
+<td>x 2,5 habitants</td>
+<td>multipliées par 2,3</td>
+</tr>
+<tr>
+<td>Distance à la station la plus proche</td>
+<td>x 2,7 en distance</td>
+<td>divisées par 2,3 (x 0,44)</td>
+</tr>
+<tr>
+<td>Part des 25-39 ans</td>
+<td>+ 7,5 points</td>
+<td>multipliées par 1,9</td>
+</tr>
+<tr>
+<td>Part des 65 ans et plus</td>
+<td>+ 11 points</td>
+<td>multipliées par 1,8</td>
+</tr>
+<tr>
+<td>Part de logements sociaux</td>
+<td>+ 23 points</td>
+<td>divisées par 1,9 (x 0,54)</td>
+</tr>
+<tr>
+<td>Carreau situé à Marseille</td>
+<td></td>
+<td>non significatif (x 0,79)</td>
+</tr>
+</tbody>
+</table>
+<p>Le modèle répond clairement à la question de départ. Le facteur le plus déterminant est le
+niveau de vie : à densité, âge et desserte égaux, les kebabs évitent les quartiers aisés.
+Une hausse de 5 500 euros du niveau de vie moyen divise par près de quatre les chances de trouver un
+kebab. Viennent ensuite la densité de population et la proximité d'une station, qui
+traduisent le besoin d'une clientèle nombreuse et de passage. Les jeunes adultes comptent
+aussi, mais moins : une part plus forte de 25-39 ans multiplie les chances par 1,9.</p>
+<p>Deux résultats méritent une explication. À revenu égal, le logement social réduit les
+chances d'avoir un kebab. Ce n'est pas contradictoire avec le reste : les kebabs s'installent
+dans les quartiers modestes du centre ancien, où l'on se loge dans le parc privé, et non dans
+les grands ensembles, souvent conçus sans rez-de-chaussée commerçants. L'effet positif des
+65 ans et plus surprend davantage. Il faut le lire avec la part des 25-39 ans : à part de
+jeunes adultes égale, plus de seniors signifie surtout moins de familles avec enfants. Ce
+sont donc les quartiers familiaux et pavillonnaires qui attirent le moins les kebabs.</p>
+<p>Enfin, une fois ces facteurs pris en compte, le fait d'être à Marseille n'a plus d'effet
+propre. Les nombreux kebabs de Marseille s'expliquent donc par ses caractéristiques (densité,
+pauvreté, réseau de métro et de tram), et non par un effet propre à la ville. Ces résultats
+restent les mêmes lorsque l'on ne garde que les kebabs certains, ce qui montre qu'ils ne
+dépendent pas de notre classement des kebabs probables.</p>
+<p>Il faut toutefois rester prudent. Le modèle mesure des associations et non des causes : un
+kebab ne s'installe pas parce que les habitants sont pauvres, mais peut-être parce que les
+loyers commerciaux y sont plus bas, ou parce que la clientèle de passage y est nombreuse. De
+plus, le modèle ne tient pas compte du fait que des carreaux voisins se ressemblent (on parle
+d'autocorrélation spatiale), ce qui peut rendre les intervalles de confiance un peu trop
+étroits.</p>
+<h2 id="63-qualité-du-modèle">6.3 Qualité du modèle</h2>
+<p>Pour juger le modèle, nous le testons sur des carreaux qu'il n'a pas vus pendant son
+apprentissage : c'est la validation croisée. Les carreaux sont répartis en cinq groupes ; le
+modèle apprend sur quatre et prédit le cinquième, et l'opération est répétée 10 fois.</p>
+<p><em>Tableau 10 : performances du modèle en validation croisée</em></p>
+<table>
+<thead>
+<tr>
+<th>Modèle</th>
+<th>AUC</th>
+<th>F1-score</th>
+<th>Précision</th>
+<th>Rappel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modèle complet</td>
+<td>0,93</td>
+<td>0,22</td>
+<td>18 %</td>
+<td>31 %</td>
+</tr>
+<tr>
+<td>Densité de population seule</td>
+<td>0,88</td>
+<td>0,13</td>
+<td>8 %</td>
+<td>29 %</td>
+</tr>
+</tbody>
+</table>
+<p>L'AUC mesure la capacité du modèle à classer les carreaux : elle vaut 0,5 pour un modèle qui
+tirerait au hasard et 1 pour un modèle parfait. Avec 0,93, notre modèle distingue très bien
+les carreaux qui ont un kebab de ceux qui n'en ont pas. Il fait nettement mieux que la seule
+densité de population (0,88), ce qui confirme que le revenu, l'âge et les stations apportent
+une information réelle.</p>
+<p>Le F1-score, en revanche, est faible (0,22). Sur une validation, le modèle signale en moyenne
+188 carreaux comme « à kebab » : 34 en ont réellement un, et 154 n'en ont pas. Il retrouve
+ainsi 34 des 109 carreaux qui ont un kebab. Ce résultat modeste s'explique d'abord par la
+rareté des kebabs : à peine plus d'un carreau sur cent en contient un, ce qui rend toute
+prédiction exacte très difficile. Ensuite, beaucoup de « fausses alertes » sont sans doute de
+vrais emplacements de kebabs absents de notre base, qui n'en couvre qu'environ un tiers
+(section 3.3). Le modèle est donc bon pour repérer les quartiers favorables aux kebabs, mais
+il ne permet pas de dire dans quelle rue précise un kebab s'installera.</p>
+<h1 id="7-retour-et-recommandations">7. Retour et recommandations</h1>
+<p>[À FAIRE : difficultés rencontrées dans le traitement des données et pistes d'amélioration.]</p>
+<h1 id="8-conclusion">8. Conclusion</h1>
+<p>[À FAIRE : réponse à la problématique et ouverture.]</p>
+<h1 id="bibliographie-et-sources">Bibliographie et sources</h1>
+<p>Les Échos, <em>Ce que la carte des kebabs révèle de Paris</em>, vidéo.</p>
+<p>Insee, <em>Revenus, pauvreté et niveau de vie en 2019 : données carroyées (Filosofi)</em>.</p>
+<p>OpenStreetMap et ses contributeurs, données extraites avec l'API Overpass.</p>
+<p>Insee et DINUM, <em>API Recherche d'entreprises</em> (répertoire SIRENE).</p>
+<p>IGN et Insee, <em>API Découpage administratif</em> (geo.api.gouv.fr).</p>
+<p>[À compléter : articles et ressources sur le dicton « kebab et gare ».]</p>
+<div class="saut-de-page" style="page-break-after: always;"></div>
+
+<h1 id="annexes">Annexes</h1>
+<h2 id="a-diagramme-de-gantt-prévisionnel">A. Diagramme de Gantt prévisionnel</h2>
+<p>[À FAIRE : insérer le diagramme de Gantt.]</p>
+<h2 id="b-code-source">B. Code source</h2>
+<p>L'ensemble du traitement est réalisé en Python. Les scripts, commentés et reproductibles, se
+trouvent dans le dossier scripts du projet et s'exécutent dans l'ordre de leur numéro.</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00_lancer_collecte.py</td>
+<td>Lance toute la collecte (scripts 01 à 05)</td>
+</tr>
+<tr>
+<td>01_collecte_limites.py</td>
+<td>Limites des communes et arrondissements, découpage en 107 zones</td>
+</tr>
+<tr>
+<td>02_collecte_kebabs_osm.py</td>
+<td>Kebabs d'OpenStreetMap</td>
+</tr>
+<tr>
+<td>03_collecte_kebabs_sirene.py</td>
+<td>Kebabs du répertoire SIRENE</td>
+</tr>
+<tr>
+<td>04_collecte_gares.py</td>
+<td>Gares SNCF, stations de métro et arrêts de tram</td>
+</tr>
+<tr>
+<td>05_collecte_insee_carreaux.py</td>
+<td>Carreaux Insee Filosofi de 200 m</td>
+</tr>
+<tr>
+<td>06_nettoyage_kebabs.py</td>
+<td>Fiabilité, doublons, fusion des deux sources</td>
+</tr>
+<tr>
+<td>07_cartes_exploratoires.py</td>
+<td>Carroyage et cartes de la partie 4</td>
+</tr>
+<tr>
+<td>08_croisement_insee.py</td>
+<td>Indicateurs, tests et figures des sections 5.1 à 5.5</td>
+</tr>
+<tr>
+<td>09_contributeurs_osm.py</td>
+<td>Historique des fiches kebabs d'OpenStreetMap (section 3.6)</td>
+</tr>
+<tr>
+<td>10_gares_isochrone.py</td>
+<td>Distance aux gares et isochrones de Saint-Charles (section 5.6)</td>
+</tr>
+<tr>
+<td>11_modelisation.py</td>
+<td>Régression logistique et validation croisée (partie 6)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="c-dictionnaire-des-données">C. Dictionnaire des données</h2>
+<p>[À FAIRE : description des colonnes des fichiers de données brutes et traitées, et calcul
+des indicateurs à partir des variables Insee (par exemple, niveau de vie moyen = somme des
+niveaux de vie / nombre d'individus).]</p></body></html>

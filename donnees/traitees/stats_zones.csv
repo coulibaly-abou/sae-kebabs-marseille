@@ -1,0 +1,108 @@
+code_zone,nom_zone,commune,arrondissement,est_marseille,population,nb_kebabs,nb_kebabs_certains,surface_km2,kebabs_pour_10000_hab,habitants_par_kebab,kebabs_par_km2
+13201,Marseille 1er Arrondissement,Marseille,1.0,True,37599,23,16,1.7782,6.117183967658714,1634.7391304347825,12.934428073332583
+13206,Marseille 6e Arrondissement,Marseille,6.0,True,38476,14,6,2.0619,3.6386318744152195,2748.285714285714,6.78985401813861
+13001,Aix-en-Provence,Aix-en-Provence,,False,149695,13,8,187.49919999999997,0.8684324793747286,11515.0,0.06933362915681775
+13215,Marseille 15e Arrondissement,Marseille,15.0,True,79161,9,4,16.6375,1.136923485049456,8795.666666666666,0.540946656649136
+13213,Marseille 13e Arrondissement,Marseille,13.0,True,95112,8,4,27.9894,0.8411136344520145,11889.0,0.28582248994262116
+13203,Marseille 3e Arrondissement,Marseille,3.0,True,58029,8,5,2.5431,1.378621034310431,7253.625,3.1457669773111556
+13210,Marseille 10e Arrondissement,Marseille,10.0,True,60317,6,5,10.747,0.9947444335759404,10052.833333333334,0.5582953382339257
+13005,Aubagne,Aubagne,,False,47529,6,3,54.773599999999995,1.2623871741463106,7921.5,0.1095418230680474
+13208,Marseille 8e Arrondissement,Marseille,8.0,True,84683,5,3,20.5973,0.5904372778479743,16936.6,0.24275026338403577
+13204,Marseille 4e Arrondissement,Marseille,4.0,True,49363,5,2,2.8834,1.0129044020825315,9872.6,1.7340639522785601
+13214,Marseille 14e Arrondissement,Marseille,14.0,True,60505,5,5,16.3641,0.8263779852904718,12101.0,0.3055468983934344
+13209,Marseille 9e Arrondissement,Marseille,9.0,True,77406,4,2,63.227,0.5167558070433816,19351.5,0.06326411185094975
+13041,Gardanne,Gardanne,,False,21597,4,3,27.172800000000002,1.8521090892253553,5399.25,0.14720602955897072
+13117,Vitrolles,Vitrolles,,False,36758,4,4,36.751999999999995,1.0881984874041024,9189.5,0.10883761427949501
+13202,Marseille 2e Arrondissement,Marseille,2.0,True,24378,3,2,3.5154,1.2306177701206005,8126.0,0.8533879501621436
+13054,Marignane,Marignane,,False,33692,3,2,23.5688,0.8904190905853021,11230.666666666666,0.12728692169308578
+13071,Les Pennes-Mirabeau,Les Pennes-Mirabeau,,False,22537,3,2,33.6785,1.3311443404179792,7512.333333333333,0.08907760143711864
+13103,Salon-de-Provence,Salon-de-Provence,,False,44194,3,3,70.52850000000001,0.6788251798886726,14731.333333333334,0.04253599608668836
+13205,Marseille 5e Arrondissement,Marseille,5.0,True,45702,2,2,2.1906,0.43761760973261565,22851.0,0.9129918743723181
+13063,Miramas,Miramas,,False,26203,2,2,25.7417,0.7632713811395642,13101.5,0.07769494633221581
+13077,Port-de-Bouc,Port-de-Bouc,,False,15802,2,1,11.7591,1.2656625743576764,7901.0,0.17008104361728363
+13028,La Ciotat,La Ciotat,,False,38477,2,1,32.0299,0.5197910440003118,19238.5,0.06244165607760249
+13033,Ensuès-la-Redonne,Ensuès-la-Redonne,,False,5757,1,1,26.033,1.7370158068438424,5757.0,0.03841278377444013
+13023,Ceyreste,Ceyreste,,False,4863,1,0,23.1572,2.0563438206868185,4863.0,0.04318311367522844
+13211,Marseille 11e Arrondissement,Marseille,11.0,True,59883,1,0,33.496700000000004,0.1669923016548937,59883.0,0.029853687079622764
+13216,Marseille 16e Arrondissement,Marseille,16.0,True,15854,1,1,14.173,0.6307556452630251,15854.0,0.07055669230226487
+13212,Marseille 12e Arrondissement,Marseille,12.0,True,64399,1,1,14.034500000000001,0.15528191431543967,64399.0,0.07125298371869321
+13069,Pélissanne,Pélissanne,,False,11085,1,1,19.1306,0.9021199819576003,11085.0,0.0522722758303451
+13047,Istres,Istres,,False,44292,1,1,114.2383,0.22577440621331166,44292.0,0.00875363166293616
+13110,Trets,Trets,,False,10946,1,0,70.1417,0.913575735428467,10946.0,0.014256854339144902
+84089,Pertuis,Pertuis,,False,19548,1,1,59.3749,0.511561285041948,19548.0,0.01684213362885664
+13056,Martigues,Martigues,,False,48298,1,1,72.605,0.20704791088657917,48298.0,0.013773156118724605
+13014,Berre-l'Étang,Berre-l'Étang,,False,13832,0,0,43.699799999999996,0.0,,0.0
+13013,Belcodène,Belcodène,,False,2009,0,0,13.1049,0.0,,0.0
+13016,La Bouilladisse,La Bouilladisse,,False,6547,0,0,12.7195,0.0,,0.0
+13015,Bouc-Bel-Air,Bouc-Bel-Air,,False,15381,0,0,21.8906,0.0,,0.0
+13207,Marseille 7e Arrondissement,Marseille,7.0,True,35173,0,0,5.6937999999999995,0.0,,0.0
+13003,Alleins,Alleins,,False,2852,0,0,16.853099999999998,0.0,,0.0
+13009,La Barben,La Barben,,False,868,0,0,22.9144,0.0,,0.0
+13012,Beaurecueil,Beaurecueil,,False,585,0,0,10.0649,0.0,,0.0
+13007,Auriol,Auriol,,False,13037,0,0,44.612700000000004,0.0,,0.0
+13008,Aurons,Aurons,,False,555,0,0,12.5353,0.0,,0.0
+13002,Allauch,Allauch,,False,21443,0,0,50.374700000000004,0.0,,0.0
+13035,Eyguières,Eyguières,,False,7119,0,0,68.83840000000001,0.0,,0.0
+13032,Éguilles,Éguilles,,False,8479,0,0,34.1481,0.0,,0.0
+13031,La Destrousse,La Destrousse,,False,4133,0,0,2.9945999999999997,0.0,,0.0
+13030,Cuges-les-Pins,Cuges-les-Pins,,False,6236,0,0,39.643699999999995,0.0,,0.0
+13026,Châteauneuf-les-Martigues,Châteauneuf-les-Martigues,,False,18455,0,0,32.1643,0.0,,0.0
+13029,Cornillon-Confoux,Cornillon-Confoux,,False,1667,0,0,14.8652,0.0,,0.0
+13024,Charleval,Charleval,,False,2640,0,0,14.359300000000001,0.0,,0.0
+13025,Châteauneuf-le-Rouge,Châteauneuf-le-Rouge,,False,2376,0,0,13.2156,0.0,,0.0
+13019,Cabriès,Cabriès,,False,10240,0,0,36.6714,0.0,,0.0
+13020,Cadolive,Cadolive,,False,2236,0,0,4.1914,0.0,,0.0
+13022,Cassis,Cassis,,False,6661,0,0,26.005300000000002,0.0,,0.0
+13021,Carry-le-Rouet,Carry-le-Rouet,,False,5702,0,0,9.9169,0.0,,0.0
+13046,Gréasque,Gréasque,,False,4554,0,0,6.2314,0.0,,0.0
+13044,Grans,Grans,,False,5489,0,0,27.721700000000002,0.0,,0.0
+13043,Gignac-la-Nerthe,Gignac-la-Nerthe,,False,10343,0,0,8.5802,0.0,,0.0
+13048,Jouques,Jouques,,False,4547,0,0,80.2384,0.0,,0.0
+13051,Lançon-Provence,Lançon-Provence,,False,9915,0,0,69.1224,0.0,,0.0
+13053,Mallemort,Mallemort,,False,6166,0,0,28.613699999999998,0.0,,0.0
+13049,Lamanon,Lamanon,,False,2097,0,0,19.407899999999998,0.0,,0.0
+13050,Lambesc,Lambesc,,False,10024,0,0,65.2029,0.0,,0.0
+13062,Mimet,Mimet,,False,4241,0,0,18.8662,0.0,,0.0
+13060,Meyreuil,Meyreuil,,False,6747,0,0,20.1474,0.0,,0.0
+13070,La Penne-sur-Huveaune,La Penne-sur-Huveaune,,False,6605,0,0,3.6425,0.0,,0.0
+13059,Meyrargues,Meyrargues,,False,3847,0,0,41.7592,0.0,,0.0
+13072,Peynier,Peynier,,False,3739,0,0,24.7824,0.0,,0.0
+13073,Peypin,Peypin,,False,5771,0,0,13.2678,0.0,,0.0
+13074,Peyrolles-en-Provence,Peyrolles-en-Provence,,False,5409,0,0,35.041799999999995,0.0,,0.0
+13075,Plan-de-Cuques,Plan-de-Cuques,,False,11632,0,0,8.499500000000001,0.0,,0.0
+13042,Gémenos,Gémenos,,False,6579,0,0,32.935500000000005,0.0,,0.0
+13037,La Fare-les-Oliviers,La Fare-les-Oliviers,,False,9039,0,0,14.2469,0.0,,0.0
+13039,Fos-sur-Mer,Fos-sur-Mer,,False,15862,0,0,87.5089,0.0,,0.0
+13040,Fuveau,Fuveau,,False,10337,0,0,30.0704,0.0,,0.0
+13081,Rognac,Rognac,,False,12576,0,0,17.6124,0.0,,0.0
+13080,Le Puy-Sainte-Réparade,Le Puy-Sainte-Réparade,,False,5935,0,0,44.8917,0.0,,0.0
+13079,Puyloubier,Puyloubier,,False,1768,0,0,40.9307,0.0,,0.0
+13078,Port-Saint-Louis-du-Rhône,Port-Saint-Louis-du-Rhône,,False,8573,0,0,81.2867,0.0,,0.0
+13087,Rousset,Rousset,,False,5425,0,0,19.5371,0.0,,0.0
+13082,Rognes,Rognes,,False,4693,0,0,58.268100000000004,0.0,,0.0
+13085,Roquefort-la-Bédoule,Roquefort-la-Bédoule,,False,5798,0,0,30.928800000000003,0.0,,0.0
+13084,La Roque-d'Anthéron,La Roque-d'Anthéron,,False,5459,0,0,25.4036,0.0,,0.0
+13091,Saint-Cannat,Saint-Cannat,,False,6097,0,0,36.8243,0.0,,0.0
+13092,Saint-Chamas,Saint-Chamas,,False,8676,0,0,26.7477,0.0,,0.0
+13095,Saint-Marc-Jaumegarde,Saint-Marc-Jaumegarde,,False,1273,0,0,23.272100000000002,0.0,,0.0
+13093,Saint-Estève-Janson,Saint-Estève-Janson,,False,357,0,0,6.8256,0.0,,0.0
+13098,Saint-Mitre-les-Remparts,Saint-Mitre-les-Remparts,,False,6175,0,0,21.1608,0.0,,0.0
+13088,Le Rove,Le Rove,,False,5246,0,0,23.093899999999998,0.0,,0.0
+13090,Saint-Antonin-sur-Bayon,Saint-Antonin-sur-Bayon,,False,126,0,0,17.5578,0.0,,0.0
+13086,Roquevaire,Roquevaire,,False,8915,0,0,23.973499999999998,0.0,,0.0
+13102,Saint-Victoret,Saint-Victoret,,False,6730,0,0,4.6926,0.0,,0.0
+13101,Saint-Savournin,Saint-Savournin,,False,3397,0,0,5.9125,0.0,,0.0
+13099,Saint-Paul-lès-Durance,Saint-Paul-lès-Durance,,False,885,0,0,45.867200000000004,0.0,,0.0
+13104,Sausset-les-Pins,Sausset-les-Pins,,False,7574,0,0,12.1692,0.0,,0.0
+13107,Simiane-Collongue,Simiane-Collongue,,False,5780,0,0,30.1944,0.0,,0.0
+13109,Le Tholonet,Le Tholonet,,False,2391,0,0,10.8496,0.0,,0.0
+13106,Septèmes-les-Vallons,Septèmes-les-Vallons,,False,11995,0,0,17.706500000000002,0.0,,0.0
+13105,Sénas,Sénas,,False,6925,0,0,30.6574,0.0,,0.0
+13112,Velaux,Velaux,,False,8941,0,0,25.1571,0.0,,0.0
+13111,Vauvenargues,Vauvenargues,,False,1058,0,0,54.3653,0.0,,0.0
+13114,Ventabren,Ventabren,,False,5839,0,0,26.343400000000003,0.0,,0.0
+13113,Venelles,Venelles,,False,8418,0,0,20.5332,0.0,,0.0
+13115,Vernègues,Vernègues,,False,2166,0,0,15.9619,0.0,,0.0
+13118,Coudoux,Coudoux,,False,3825,0,0,12.660699999999999,0.0,,0.0
+13119,Carnoux-en-Provence,Carnoux-en-Provence,,False,6873,0,0,3.7205,0.0,,0.0
+83120,Saint-Zacharie,Saint-Zacharie,,False,5879,0,0,27.1936,0.0,,0.0

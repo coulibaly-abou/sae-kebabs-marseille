@@ -1,0 +1,138 @@
+name,type,lat,lon,operator,nb_points_osm,code_zone,commune,arrondissement,dans_perimetre
+Baille,metro,43.2881498,5.3920826,Régie des Transports Marseillais,1,13205,Marseille,5.0,True
+Bougainville,metro,43.3205086,5.371454,Régie des Transports Métropolitains,1,13215,Marseille,15.0,True
+Capitaine Gèze,metro,43.327942,5.3672639,Régie des Transports Métropolitains,1,13215,Marseille,15.0,True
+Castellane,metro,43.2858617,5.3839803,Régie des Transports Marseillais,1,13206,Marseille,6.0,True
+Chartreux,metro,43.3094491,5.4016648,Régie des Transports Marseillais,1,13204,Marseille,4.0,True
+Cinq Avenues Longchamp,metro,43.3041573,5.3965352,Régie des Transports Marseillais,1,13204,Marseille,4.0,True
+Colbert,metro,43.3003952,5.3744048,Régie des Transports Marseillais,1,13202,Marseille,2.0,True
+Désirée Clary,metro,43.30951,5.3727085,Régie des Transports Marseillais,1,13203,Marseille,3.0,True
+Estrangin - Préfecture,metro,43.2901511,5.3780043,Régie des Transports Marseillais,1,13206,Marseille,6.0,True
+Frais Vallon,metro,43.3254903,5.4232137,,1,13213,Marseille,13.0,True
+Joliette,metro,43.3039964,5.3678756,Régie des Transports Marseillais,1,13202,Marseille,2.0,True
+Jules Guesde,metro,43.3019794,5.3739858,Régie des Transports Marseillais,1,13202,Marseille,2.0,True
+La Blancarde,metro,43.295522,5.4062539,Régie des Transports Marseillais,1,13205,Marseille,5.0,True
+La Fourragère,metro,43.3038191,5.4241032,Régie des Transports Marseillais,1,13212,Marseille,12.0,True
+La Rose,metro,43.3336461,5.430028,Régie des Transports Marseillais,1,13213,Marseille,13.0,True
+La Timone,metro,43.2911917,5.4004528,Régie des Transports Marseillais,1,13205,Marseille,5.0,True
+Louis Armand,metro,43.3000347,5.41364,Régie des Transports Marseillais,1,13212,Marseille,12.0,True
+Malpassé,metro,43.3206206,5.4160368,Régie des Transports Marseillais,1,13213,Marseille,13.0,True
+National,metro,43.3151942,5.3730609,Régie des Transports Marseillais,1,13203,Marseille,3.0,True
+Noailles,metro,43.2968497,5.3811958,,1,13201,Marseille,1.0,True
+Notre-Dame du Mont Cours Julien,metro,43.2926848,5.3837064,Régie des Transports Marseillais,1,13206,Marseille,6.0,True
+Périer,metro,43.2792195,5.3877561,Régie des Transports Marseillais,1,13208,Marseille,8.0,True
+Rond-Point du Prado,metro,43.2714444,5.3926008,Régie des Transports Métropolitains,1,13208,Marseille,8.0,True
+Réformés - Canebière,metro,43.300238,5.3858577,Régie des Transports Marseillais,1,13201,Marseille,1.0,True
+Saint-Barnabé,metro,43.3033728,5.4189427,Régie des Transports Marseillais,1,13212,Marseille,12.0,True
+Saint-Charles,metro,43.3024105,5.3801312,Régie des Transports Marseillais,1,13201,Marseille,1.0,True
+Saint-Just,metro,43.3154186,5.4060987,Régie des Transports Marseillais,1,13204,Marseille,4.0,True
+Sainte-Marguerite Dromel,metro,43.2708869,5.4028149,Régie des Transports Marseillais,1,13209,Marseille,9.0,True
+Vieux Port,metro,43.295543,5.3743186,Régie des Transports Marseillais,1,13202,Marseille,2.0,True
+Aix-en-Provence,train,43.5227288,5.4451153,SNCF Gares & Connexions,1,13001,Aix-en-Provence,,True
+Aix-en-Provence TGV,train,43.4551451,5.3172873,SNCF Gares & Connexions,1,13001,Aix-en-Provence,,True
+Aubagne,train,43.2962054,5.5663993,SNCF Gares & Connexions,1,13005,Aubagne,,True
+Berre,train,43.5010572,5.1789222,SNCF Gares & Connexions,1,13014,Berre-l'Étang,,True
+Carry-le-Rouet,train,43.3366765,5.1535981,SNCF Gares & Connexions,1,13021,Carry-le-Rouet,,True
+Cassis,train,43.2341325,5.5531719,SNCF Gares & Connexions,1,13022,Cassis,,True
+La Redonne Ensuès,train,43.3343581,5.1975594,SNCF Gares & Connexions,1,13033,Ensuès-la-Redonne,,True
+Gardanne,train,43.456267,5.4627723,SNCF Gares & Connexions,1,13041,Gardanne,,True
+Gare d'Istres,train,43.5154048,4.9802627,SNCF Gares & Connexions,1,13047,Istres,,True
+Rassuen,train,43.4966558,4.9731232,SNCF Voyageurs,1,13047,Istres,,True
+La Ciotat-Ceyreste,train,43.1996146,5.6328221,SNCF Gares & Connexions,1,13028,La Ciotat,,True
+La Penne sur Huveaune,train,43.284653,5.5155695,SNCF Gares & Connexions,1,13070,La Penne-sur-Huveaune,,True
+Lamanon,train,43.6999604,5.0914608,SNCF Gares & Connexions,1,13049,Lamanon,,True
+Niolon,train,43.3401363,5.2570243,SNCF Gares & Connexions,1,13088,Le Rove,,True
+Pas-des-Lanciers,train,43.4096625,5.2539909,SNCF Gares & Connexions,1,13054,Marignane,,True
+Arenc-Euroméditerranée,train,43.3132341,5.3676147,SNCF Gares & Connexions,1,13202,Marseille,2.0,True
+L'Estaque,train,43.3637375,5.3213843,SNCF Gares & Connexions,1,13216,Marseille,16.0,True
+La Barasse,train,43.2860568,5.4836488,SNCF Gares & Connexions,1,13211,Marseille,11.0,True
+La Pomme,train,43.2905448,5.4411408,SNCF Gares & Connexions,1,13211,Marseille,11.0,True
+Marseille Saint-Charles,train,43.3032635,5.3811927,SNCF Gares & Connexions,1,13201,Marseille,1.0,True
+Marseille-Blancarde,train,43.2965017,5.4067495,SNCF Gares & Connexions,1,13204,Marseille,4.0,True
+Picon Busserine,train,43.3310818,5.393064,SNCF Gares & Connexions,1,13214,Marseille,14.0,True
+Saint-Antoine,train,43.3690258,5.3586542,SNCF Gares & Connexions,1,13215,Marseille,15.0,True
+Saint-Joseph-le-Castellas,train,43.3520051,5.3771136,SNCF Gares & Connexions,1,13214,Marseille,14.0,True
+Saint-Marcel,train,43.2884219,5.4665782,SNCF,1,13211,Marseille,11.0,True
+Sainte-Marthe-en-Provence,train,43.3392966,5.3906641,SNCF Gares & Connexions,1,13214,Marseille,14.0,True
+Croix Sainte,train,43.4088984,5.0196687,SNCF Gares & Connexions,1,13056,Martigues,,True
+La Couronne Carro,train,43.3399417,5.0517193,SNCF Gares & Connexions,1,13056,Martigues,,True
+Martigues,train,43.3929443,5.0256298,SNCF Gares & Connexions,1,13056,Martigues,,True
+Meyrargues,train,43.6441141,5.5395759,SNCF Gares & Connexions,1,13059,Meyrargues,,True
+Miramas,train,43.5810466,4.9993667,SNCF Gares & Connexions,1,13063,Miramas,,True
+Pertuis,train,43.6843731,5.5035974,,1,84089,Pertuis,,True
+Fos-sur-Mer,train,43.4280293,4.974579,SNCF Gares & Connexions,1,13077,Port-de-Bouc,,True
+Port-de-Bouc,train,43.4073118,4.9846166,SNCF Gares & Connexions,1,13077,Port-de-Bouc,,True
+Rognac,train,43.4866432,5.2308485,SNCF Gares & Connexions,1,13081,Rognac,,True
+Saint-Chamas,train,43.5511053,5.0401037,SNCF Gares & Connexions,1,13092,Saint-Chamas,,True
+Salon,train,43.6390736,5.0884425,SNCF Gares & Connexions,1,13103,Salon-de-Provence,,True
+Sausset-Les-Pins,train,43.3329833,5.1100682,SNCF Gares & Connexions,1,13104,Sausset-les-Pins,,True
+Septèmes,train,43.4036815,5.3703149,SNCF Gares & Connexions,1,13106,Septèmes-les-Vallons,,True
+Simiane,train,43.4349419,5.4261445,,1,13107,Simiane-Collongue,,True
+Sénas,train,43.740885,5.0732427,SNCF Gares & Connexions,1,13105,Sénas,,True
+Vitrolles Aéroport Marseille Provence,train,43.4412293,5.2371148,SNCF Gares & Connexions,1,13117,Vitrolles,,True
+Bandol,train,43.140372,5.7501474,SNCF Gares & Connexions,1,,,,False
+Fontvieille,train,43.728478,4.706596,,1,,,,False
+Orgon,train,43.7858539,5.0455446,SNCF Gares & Connexions,1,,,,False
+Saint-Cyr - Les Lecques - La Cadière,train,43.1853928,5.7037699,SNCF Gares & Connexions,1,,,,False
+Saint-Martin-de-Crau,train,43.6221642,4.8004947,SNCF Gares & Connexions,1,,,,False
+Campagne Valérie,tram,43.30149695,5.57534785,,2,13005,Aubagne,,True
+Centre-ville Voltaire,tram,43.29474,5.5685868,,1,13005,Aubagne,,True
+Château Blanc,tram,43.281722,5.550095000000001,,2,13005,Aubagne,,True
+Colette Molina - Le Charrel,tram,43.2791671,5.5511486,,1,13005,Aubagne,,True
+Gare d'Aubagne,tram,43.295825,5.5658023,,2,13005,Aubagne,,True
+La Tourtelle,tram,43.28564055,5.55444595,,2,13005,Aubagne,,True
+Les Défensions,tram,43.29523935,5.5727449,,2,13005,Aubagne,,True
+Martin Luther King,tram,43.29295315,5.5627526,,2,13005,Aubagne,,True
+Napollon Solans,tram,43.31519695,5.57775305,,2,13005,Aubagne,,True
+Piscine Alain Bernard - Oasis du Charrel,tram,43.2846683,5.54802675,,2,13005,Aubagne,,True
+Pont-de-l'Étoile,tram,43.325148850000005,5.5918806,,2,13005,Aubagne,,True
+Ravel Decroix,tram,43.2904781,5.5598786,,2,13005,Aubagne,,True
+Auriol Saint-Zacharie,tram,43.3666975,5.6110996,,1,13007,Auriol,,True
+La Destrousse,tram,43.3749913,5.6100334,,1,13007,Auriol,,True
+La Bouilladisse,tram,43.3933422,5.5934781,,1,13016,La Bouilladisse,,True
+La Chapelle,tram,43.3942388,5.6019877,,1,13016,La Bouilladisse,,True
+Air-Bel,tram,43.2942988,5.429040049999999,Régie des Transports Marseillais,2,13212,Marseille,12.0,True
+Arenc Euroméditerranée,tram,43.313320000000004,5.3681209,Régie des Transports Métropolitains,2,13202,Marseille,2.0,True
+Aubert Ganay,tram,43.266412900000006,5.4029088000000005,Régie des Transports Métropolitains,2,13209,Marseille,9.0,True
+Belsunce Alcazar,tram,43.2984948,5.37664465,,2,13201,Marseille,1.0,True
+Camas,tram,43.29537165,5.3931198,Régie des Transports Marseillais,2,13205,Marseille,5.0,True
+Canebière Capucins,tram,43.2968554,5.378996900000001,Régie des Transports Marseillais,2,13201,Marseille,1.0,True
+Cantini Rouet,tram,43.27988065,5.3948733,Régie des Transports Métropolitains,2,13210,Marseille,10.0,True
+Castellane,tram,43.285363000000004,5.3847971,Régie des Transports Marseillais,2,13206,Marseille,6.0,True
+Cinq Avenues,tram,43.30232745,5.3970781500000005,Régie des Transports Marseillais,2,13204,Marseille,4.0,True
+Cours Saint-Louis,tram,43.2960481,5.3780172,,2,13201,Marseille,1.0,True
+Eugène Pierre,tram,43.2951583,5.389608533333333,Régie des Transports Marseillais,3,13205,Marseille,5.0,True
+Euroméditerranée Le Silo,tram,43.30868935,5.3681681,Régie des Transports Métropolitains,2,13202,Marseille,2.0,True
+Foch Boisson,tram,43.29814375,5.4032893,Régie des Transports Marseillais,2,13204,Marseille,4.0,True
+Foch Sakakini,tram,43.30032,5.4000902,Régie des Transports Marseillais,2,13204,Marseille,4.0,True
+George,tram,43.295616499999994,5.39714135,Régie des Transports Marseillais,2,13205,Marseille,5.0,True
+Gèze,tram,43.3270174,5.3662532,Régie des Transports Métropolitains,2,13215,Marseille,15.0,True
+Hôpital Sainte-Marguerite,tram,43.259430449999996,5.40878465,Régie des Transports Métropolitains,2,13209,Marseille,9.0,True
+Jean Martin,tram,43.29588615,5.4017078000000005,Régie des Transports Marseillais,2,13204,Marseille,4.0,True
+Joliette,tram,43.30540055,5.3671831999999995,,2,13202,Marseille,2.0,True
+La Blancarde,tram,43.296195925,5.4058796749999996,Régie des Transports Marseillais,4,13204,Marseille,4.0,True
+La Boiseraie,tram,43.29494545,5.4224955999999995,Régie des Transports Marseillais,2,13212,Marseille,12.0,True
+La Gaye,tram,43.25679835,5.4109817499999995,Régie des Transports Métropolitains,2,13209,Marseille,9.0,True
+La Grognarde,tram,43.2946168,5.432309050000001,Régie des Transports Marseillais,2,13212,Marseille,12.0,True
+La Parette,tram,43.2950036,5.4192383500000005,Régie des Transports Marseillais,2,13212,Marseille,12.0,True
+Les Caillols,tram,43.2947499,5.444082525,Régie des Transports Marseillais,4,13211,Marseille,11.0,True
+Longchamp National,tram,43.30153305,5.3886031,Régie des Transports Marseillais,2,13201,Marseille,1.0,True
+Noailles,tram,43.29728255,5.381438275,Régie des transprts métropolitains,4,13201,Marseille,1.0,True
+Palais Longchamp,tram,43.303276350000004,5.392352799999999,Régie des Transports Marseillais,2,13201,Marseille,1.0,True
+Parc Sévigné,tram,43.2619033,5.404787000000001,Régie des Transports Métropolitains,2,13209,Marseille,9.0,True
+Parc du 26e Centenaire,tram,43.282360749999995,5.3903273,Régie des Transports Métropolitains,2,13210,Marseille,10.0,True
+Place Ferrié,tram,43.27692665,5.39928345,Régie des Transports Métropolitains,2,13210,Marseille,10.0,True
+Place de Rome,tram,43.291344800000005,5.38069345,Régie des Transports Métropolitains,2,13206,Marseille,6.0,True
+Rome Davso,tram,43.2935664,5.37943195,Régie des Transports Métropolitains,2,13201,Marseille,1.0,True
+Rome Dragon,tram,43.289052,5.3820052,Régie des Transports Métropolitains,2,13206,Marseille,6.0,True
+Réformés Canebière,tram,43.3000369,5.38550155,Régie des Transports Marseillais,2,13201,Marseille,1.0,True
+République Dames,tram,43.3021753,5.3693248,Régie des Transports Métropolitains,2,13202,Marseille,2.0,True
+Sadi Carnot,tram,43.299886650000005,5.3711965500000005,,2,13202,Marseille,2.0,True
+Saint-Pierre,tram,43.2918315,5.4141865,Régie des Transports Marseillais,2,13205,Marseille,5.0,True
+Sainte-Marguerite Dromel,tram,43.27120915,5.402078550000001,Régie des Transports Métropolitains,2,13209,Marseille,9.0,True
+Sainte-Thérèse,tram,43.2940313,5.409601650000001,Régie des Transports Marseillais,2,13205,Marseille,5.0,True
+Salengro Bachas,tram,43.317265449999994,5.36899675,Régie des Transports Métropolitains,2,13215,Marseille,15.0,True
+Salengro Cougit,tram,43.32158485,5.36757265,Régie des Transports Métropolitains,2,13215,Marseille,15.0,True
+William Booth,tram,43.2926569,5.436825499999999,,2,13211,Marseille,11.0,True
+Le Cannet,tram,43.3321744,5.595116000000001,,2,13086,Roquevaire,,True
+Roquevaire,tram,43.3493055,5.5992911,,1,13086,Roquevaire,,True

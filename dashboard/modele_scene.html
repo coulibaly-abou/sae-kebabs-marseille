@@ -110,6 +110,17 @@ button:disabled { opacity: .35; cursor: default; }
 .source { position: fixed; z-index: 4; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   font-family: var(--f-data); font-size: 10px; color: var(--texte-2); text-align: right; max-width: 60vw; }
 #replier { display: none; }
+.horloge { position: fixed; z-index: 5; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: var(--panneau); border: 1px solid var(--trait); border-radius: 10px; padding: 10px 16px 18px; width: min(420px, calc(100vw - 32px));
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.horloge .minute { display: flex; align-items: baseline; gap: 10px; }
+.horloge .minute span { font-family: var(--f-titre); font-weight: 700; font-size: 34px; color: var(--lilas); font-variant-numeric: tabular-nums; }
+.horloge small { font-size: 12px; color: var(--texte-2); }
+.horloge .compte { font-size: 13px; color: #cfd7e2; margin: 2px 0 8px; }
+.horloge .compte b { color: var(--braise); font-family: var(--f-data); font-weight: 500; }
+.barre-temps { position: relative; height: 6px; background: #22324a; border-radius: 3px; }
+.barre-temps i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--lilas); border-radius: 3px; }
+.barre-temps span { position: absolute; top: 9px; transform: translateX(-50%); font-family: var(--f-data); font-size: 10px; color: var(--texte-2); }
 
 @media (max-width: 760px) {
   .console { display: none; width: auto; left: max(16px, env(safe-area-inset-left, 0px)); top: auto; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
@@ -117,7 +128,7 @@ button:disabled { opacity: .35; cursor: default; }
   .carnet { top: auto; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-height: 52%; }
   .carnet.replie .etape { display: none; }
   #replier { display: inline-block; }
-  .simu { bottom: auto; top: calc(12px + env(safe-area-inset-top, 0px)); }
+  .simu, .horloge { bottom: auto; top: calc(12px + env(safe-area-inset-top, 0px)); }
   .source { display: none; }
   .effet { grid-template-columns: 110px 1fr 36px; }
 }
@@ -163,13 +174,19 @@ button:disabled { opacity: .35; cursor: default; }
   <svg id="histo" viewBox="0 0 520 92" role="img" aria-label="Distance médiane à une station dans 1 000 placements au hasard, comparée aux vrais kebabs"></svg>
 </section>
 
+<div class="horloge" id="horloge" hidden>
+  <div class="minute"><span id="h-min">00</span><small>min de marche depuis la gare</small></div>
+  <div class="compte"><b id="h-keb">0</b> kebabs atteints sur <span id="h-tot">0</span></div>
+  <div class="barre-temps"><i id="h-barre"></i><span style="left:20%">5</span><span style="left:40%">10</span><span style="left:60%">15</span></div>
+</div>
+
 <div class="source">Sources : OpenStreetMap, Insee (SIRENE, Filosofi 2019), Valhalla. Carreaux de 200 m.</div>
 
 <script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
 <script>const D=/*__DONNEES__*/null;</script>
 <script>
 (() => {
-const {DeckGL, ColumnLayer, ScatterplotLayer, GeoJsonLayer, ArcLayer, PolygonLayer,
+const {DeckGL, ColumnLayer, ScatterplotLayer, GeoJsonLayer, ArcLayer, PolygonLayer, PathLayer, TripsLayer,
        FlyToInterpolator, LightingEffect, AmbientLight, DirectionalLight} = deck;
 const $ = s => document.querySelector(s);
 const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -196,7 +213,9 @@ function couleurProba(p) {                // probabilité du modèle : nuit -> p
 // ---------- état ----------
 const etat = {
   relief: "pop", tourne: false, simulation: false,
-  couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false, zones: true},
+  marche: false, minute: 0,
+  couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false, zones: true,
+            rames: false, pietons: false, rates: false},
 };
 const COUCHES = [
   ["carreaux", "Carreaux de 200 m", "linear-gradient(90deg,#e0487f,#7d8aa0,#3cc4d4)"],
@@ -204,7 +223,10 @@ const COUCHES = [
   ["stations", "Gares, métro, tram", "#e9edf3"],
   ["arcs", "Kebab → station la plus proche", "linear-gradient(90deg,#ffb23e,#e9edf3)"],
   ["isochrones", "À pied de Saint-Charles", "#a58cff"],
+  ["rames", "Métro et tram en mouvement", "#9fd8ff"],
+  ["pietons", "Piétons sortant de Saint-Charles", "#ffe2b0"],
   ["favoris", "Emplacements favorables", "#7fe08f"],
+  ["rates", "Kebabs que le modèle n'attendait pas", "#ff5d5d"],
   ["zones", "Limites des communes", "#34465e"],
 ];
 
@@ -212,40 +234,47 @@ const COUCHES = [
 const nbMars = D.kebabs.filter(k => k.commune === "Marseille").length;
 const ETAPES = [
   {titre: "Une métropole, 144 kebabs", vue: {longitude: 5.36, latitude: 43.43, zoom: 9.1, pitch: 50, bearing: -12},
-   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: false}, relief: "pop",
+   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: false, rames: false, pietons: false, rates: false}, relief: "pop",
    texte: [`Chaque colonne est un carreau Insee de 200 m : sa hauteur donne le nombre d'habitants, sa couleur leur niveau de vie moyen. Les colonnes dorées, plus fines, sont les kebabs que nous avons recensés en croisant OpenStreetMap et le répertoire SIRENE.`,
            `Le relief suit la population : Marseille, Aix, Aubagne, Martigues, Salon. Les kebabs, eux, ne la suivent pas : ${nbMars} des 144 sont à Marseille.`],
    chiffres: [["144", "kebabs dans la métropole", true], ["92", "communes, 1,9 M d'habitants"]]},
   {titre: "Marseille, la fracture Nord-Sud en volume", vue: {longitude: 5.395, latitude: 43.31, zoom: 11.4, pitch: 58, bearing: 24},
-   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: false}, relief: "pop",
+   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: false, rames: false, pietons: false, rates: false}, relief: "pop",
    texte: [`Au nord, les tours des quartiers populaires apparaissent en rose ; au sud et à l'est, les quartiers plus aisés tirent vers le bleu. Les kebabs ne se placent ni d'un côté ni de l'autre : ils se serrent au centre.`,
            `Rapporté aux habitants, le centre (1er au 6e arrondissement) compte 2,2 kebabs pour 10 000 habitants, le Nord 0,9 et le Sud et l'Est 0,45. Les deux écarts sont significatifs (test binomial exact).`],
    chiffres: [["2,2", "kebabs / 10 000 hab. au centre", true], ["0,45", "au Sud et à l'Est"]]},
   {titre: "L'hypercentre : Belsunce, Noailles, la Canebière", vue: {longitude: 5.3805, latitude: 43.2985, zoom: 13.9, pitch: 58, bearing: -32},
-   couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false}, relief: "pop",
+   couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false, rames: false, pietons: false, rates: false}, relief: "pop",
    texte: [`À cette échelle, on lit rue par rue. Le 1er arrondissement concentre 23 kebabs pour 37 600 habitants, soit 6,1 pour 10 000 : le taux le plus élevé de toute la métropole.`,
            `Ce sont des carreaux très denses, au niveau de vie bas, et traversés chaque jour par bien plus de monde qu'il n'y habite. Survolez une colonne dorée pour voir le kebab.`],
    chiffres: [["23", "kebabs dans le 1er arr.", true], ["6,1", "pour 10 000 habitants"]]},
   {titre: "Saint-Charles et le dicton de la gare", vue: {longitude: 5.381, latitude: 43.3005, zoom: 13.6, pitch: 50, bearing: 8},
-   couches: {carreaux: false, kebabs: true, stations: true, arcs: false, isochrones: true, favoris: false}, relief: "pop",
+   couches: {carreaux: false, kebabs: true, stations: true, arcs: false, isochrones: true, favoris: false, rames: true, pietons: false, rates: false}, relief: "pop",
    texte: [`Les anneaux violets montrent ce que l'on atteint à pied depuis la gare en 5, 10 et 15 minutes, calculés sur le vrai réseau de rues.`,
            `Un quart des kebabs marseillais (25 sur ${nbMars}) est à moins de 15 minutes de marche, alors que cette zone n'abrite que 7 % des habitants. Mais un seul est à moins de 5 minutes : la gare est sur une butte. C'est le quartier commerçant en contrebas qui attire les kebabs, pas le quai.`],
    chiffres: [["25", `kebabs sur ${nbMars} à moins de 15 min`, true], ["7 %", "des habitants dans cette zone"]]},
+  {titre: "L'isochrone en mouvement", vue: {longitude: 5.3805, latitude: 43.2995, zoom: 14.3, pitch: 58, bearing: -20},
+   couches: {carreaux: false, kebabs: true, stations: false, arcs: false, isochrones: true, favoris: false, rames: true, pietons: true, rates: false},
+   relief: "pop", marche: true, tourne: true,
+   texte: [`Une isochrone, c'est une carte du temps. Ici, ${D.pietons.length} piétons sortent ensemble de la gare Saint-Charles et marchent chacun vers un kebab situé à moins de 2,5 km, en suivant les vraies rues et les escaliers (itinéraires calculés par Valhalla sur OpenStreetMap). Le temps défile environ 75 fois plus vite que dans la réalité.`,
+           `À 5, 10 puis 15 minutes, la terrasse violette correspondante s'allume. Avant 5 minutes, presque personne n'arrive : la gare est sur une butte et il faut d'abord descendre. Ensuite les arrivées s'enchaînent entre 10 et 15 minutes, dans Belsunce, Noailles et sur la Canebière. Pendant ce temps, les rames du métro et du tram roulent sur leurs vrais tracés.`],
+   chiffres: [["1", "kebab à moins de 5 min de la gare", true], ["17", "entre 10 et 15 min"]]},
   {titre: "Le fil invisible des stations", vue: {longitude: 5.39, latitude: 43.305, zoom: 12.1, pitch: 55, bearing: -18},
-   couches: {carreaux: false, kebabs: true, stations: true, arcs: true, isochrones: false, favoris: false}, relief: "pop",
+   couches: {carreaux: false, kebabs: true, stations: true, arcs: true, isochrones: false, favoris: false, rames: true, pietons: false, rates: false}, relief: "pop",
    texte: [`Chaque arc relie un kebab à la gare, la station de métro ou l'arrêt de tram le plus proche. Les arcs sont courts : la plupart des kebabs se trouvent à quelques centaines de mètres d'une station.`],
    chiffres: [[`${fmt(S.reel.station_mediane_m)} m`, "distance médiane kebab → station", true],
               [`${fmt(100 * S.reel.part_500m_station)} %`, "des kebabs à moins de 500 m"]]},
   {titre: "Simulation : et si les kebabs suivaient la population ?", vue: {longitude: 5.40, latitude: 43.33, zoom: 10.6, pitch: 50, bearing: 10},
-   couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false}, relief: "pop", simu: true,
+   couches: {carreaux: true, kebabs: true, stations: true, arcs: false, isochrones: false, favoris: false, rames: false, pietons: false, rates: false}, relief: "pop", simu: true,
    texte: [`Lancez la simulation : les 144 kebabs quittent leur adresse et se posent au hasard, chaque carreau ayant une chance proportionnelle à son nombre d'habitants. Revenez ensuite à la réalité pour voir la différence.`,
            `Nous avons répété ce tirage ${fmt(S.n)} fois. Dans aucun d'eux les kebabs ne sont aussi proches des stations, ni aussi groupés entre eux, que dans la réalité. Leur répartition n'est donc pas un simple reflet de la population (hypothèses H1 et H3).`],
    chiffres: [[`${fmt(S.reel.voisin_moyen_m)} m`, "entre deux kebabs voisins, en réalité", true],
               [`${fmt(S.sim_mediane.voisin_moyen_m)} m`, "s'ils suivaient la population"]]},
-  {titre: "Ce que voit le modèle", vue: {longitude: 5.40, latitude: 43.32, zoom: 11.2, pitch: 60, bearing: -28},
-   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: true}, relief: "proba",
+  {titre: "Ce que voit le modèle", vue: {longitude: 5.40, latitude: 43.31, zoom: 10.1, pitch: 55, bearing: -20},
+   couches: {carreaux: true, kebabs: true, stations: false, arcs: false, isochrones: false, favoris: true, rames: false, pietons: false, rates: true}, relief: "proba",
    texte: [`Le relief montre maintenant la probabilité qu'un carreau abrite un kebab, selon notre régression logistique (densité, niveau de vie, logement social, âge, distance à une station). Le modèle distingue très bien les carreaux à kebab des autres : AUC de ${fmt(D.auc, 2)} en validation croisée.`,
-           `Les anneaux verts sont les douze carreaux qu'il juge les plus favorables mais où nous ne connaissons aucun kebab. Certains en ont sans doute un qui manque à notre base ; les autres sont des emplacements à étudier.`],
+           `Pourquoi ce modèle simple ? Nous l'avons comparé à deux modèles plus souples, avec le même protocole (AUC) : ${D.comparaison.map(m => `${m.modele.replace(" (retenue)", "").toLowerCase()} ${fmt(m.auc, 3)}`).join(", ")}. Le plus simple est aussi le meilleur, et c'est le seul dont on peut lire chaque effet.`,
+           `Les anneaux verts sont les douze carreaux qu'il juge les plus favorables sans kebab connu : des oublis de notre base, ou des emplacements à étudier. Les anneaux rouges sont ses ratés, des kebabs qu'il n'attendait pas, en bord de mer (Ensuès, La Ciotat, le 8e arrondissement) ou en zone commerciale (Vitrolles). Il lui manque une mesure du tourisme et de l'activité, que le recensement ne donne pas.`],
    chiffres: [[fmt(D.auc, 2), "AUC en validation croisée", true], [fmt(D.n_carreaux_modele), "carreaux utilisés"]],
    favoris: true, effets: true},
 ];
@@ -262,6 +291,39 @@ let pulsation = 0;
 const echelle = z => 2 * Math.pow(2, -(z - 9.5) * 0.55);
 const rayonKebab = z => Math.max(18, Math.min(120, 60 * Math.pow(2, (11 - z) * 0.8)));
 let zoomDessine = 9;
+// --- Mouvement : rames (horloge propre) et piétons (horloge de la marche) ---
+const longueurs = trace => {                      // distance cumulée en mètres le long d'un tracé
+  const c = [0], k = 111320 * Math.cos(43.3 * Math.PI / 180);
+  for (let i = 1; i < trace.length; i++) {
+    const dx = (trace[i][0] - trace[i - 1][0]) * k, dy = (trace[i][1] - trace[i - 1][1]) * 111320;
+    c.push(c[i - 1] + Math.hypot(dx, dy));
+  }
+  return c;
+};
+const CYCLE_RAMES = 3600;                          // secondes simulées, multiple des intervalles
+const RAMES = [];
+for (const l of D.lignes) {
+  const metro = l.type === "subway", v = metro ? 9 : 5.5, h = metro ? 240 : 360;
+  for (const trace of [l.trace, [...l.trace].reverse()]) {
+    const c = longueurs(trace), duree = c[c.length - 1] / v;
+    for (let depart = -Math.ceil(duree / h) * h; depart < CYCLE_RAMES; depart += h)
+      RAMES.push({metro, path: trace, ts: c.map(x => depart + x / v)});
+  }
+}
+const PIETONS = D.pietons.map(p => {
+  const c = longueurs(p.trace), L = c[c.length - 1] || 1;
+  return {...p, ts: c.map(x => p.secondes * x / L)};
+});
+const DUREE_MARCHE = 30 * 60;                      // on suit les piétons pendant 30 minutes
+const tetes = t => PIETONS.map(p => {
+  if (t >= p.secondes) return {pos: p.trace[p.trace.length - 1], arrive: true};
+  let i = 1; while (i < p.ts.length - 1 && p.ts[i] < t) i++;
+  const a = Math.min(1, (t - p.ts[i - 1]) / Math.max(1e-6, p.ts[i] - p.ts[i - 1])), A = p.trace[i - 1], B = p.trace[i];
+  return {pos: [A[0] + (B[0] - A[0]) * a, A[1] + (B[1] - A[1]) * a], arrive: false};
+});
+let horlogeRames = 0, horlogeMarche = 0;
+const procheGare = new Set(D.pietons.map(p => p.k));
+let atteints = new Set();
 const doux = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 function couches() {
@@ -276,6 +338,35 @@ function couches() {
     id: "iso", data: [...D.isochrones].sort((a, b) => b.minutes - a.minutes), getPolygon: d => d.contour,
     filled: true, stroked: true, pickable: true,
     getFillColor: d => [...LILAS, d.minutes === 5 ? 90 : d.minutes === 10 ? 60 : 38], getLineColor: [...LILAS, 230], lineWidthMinPixels: 1.5,
+  }));
+  if (c.isochrones && etat.marche) {
+    // terrasses du temps : plus on est près de la gare, plus la terrasse est haute
+    const ech = echelle(zoomDessine);
+    L.push(new PolygonLayer({
+      id: "terrasses", data: [...D.isochrones].sort((a, b) => b.minutes - a.minutes), getPolygon: d => d.contour,
+      extruded: true, wireframe: true, getElevation: d => (20 - d.minutes) * 9 * ech, pickable: true,
+      getFillColor: d => [...LILAS, etat.minute >= d.minutes ? 95 : 22], getLineColor: [...LILAS, 200],
+      updateTriggers: {getFillColor: Math.floor(etat.minute / 5)}, material: materiau,
+      parameters: {depthMask: false},   // translucides : les piétons restent visibles à travers
+    }));
+  }
+  if (c.rames) {
+    L.push(new PathLayer({id: "reseau", data: D.lignes, getPath: d => d.trace, widthMinPixels: 1.5,
+      getColor: d => d.type === "subway" ? [233, 237, 243, 70] : [159, 216, 255, 70]}));
+    L.push(new TripsLayer({id: "rames", data: RAMES, getPath: d => d.path, getTimestamps: d => d.ts,
+      getColor: d => d.metro ? [242, 245, 255] : [159, 216, 255], widthMinPixels: 4, capRounded: true, jointRounded: true,
+      fadeTrail: true, trailLength: 75, currentTime: horlogeRames % CYCLE_RAMES}));
+  }
+  if (c.pietons && etat.marche) {
+    L.push(new TripsLayer({id: "pietons", data: PIETONS, getPath: d => d.trace, getTimestamps: d => d.ts,
+      getColor: [255, 236, 200], widthMinPixels: 4, capRounded: true, jointRounded: true, fadeTrail: true, trailLength: 180, currentTime: horlogeMarche}));
+    L.push(new ScatterplotLayer({id: "tetes", data: tetes(Math.min(horlogeMarche, DUREE_MARCHE)), getPosition: d => d.pos,
+      getRadius: 14, radiusMinPixels: 5, stroked: true, getLineColor: [10, 17, 27, 255], lineWidthMinPixels: 1,
+      getFillColor: d => d.arrive ? [...BRAISE, 255] : [255, 250, 235, 255]}));
+  }
+  if (c.rates) L.push(new ScatterplotLayer({
+    id: "rates", data: D.rates, getPosition: d => [d.lon, d.lat, 40], pickable: true, getRadius: 260, radiusMinPixels: 7,
+    stroked: true, filled: true, getFillColor: [255, 93, 93, 45], getLineColor: [255, 93, 93, 255], lineWidthMinPixels: 2.5,
   }));
   if (c.carreaux) L.push(new ColumnLayer({
     id: "carreaux", data: D.carreaux, diskResolution: 4, angle: 45, radius: 128, coverage: 0.92,
@@ -316,9 +407,11 @@ function couches() {
     }));
     L.push(new ColumnLayer({
       id: "kebabs", data: D.kebabs, diskResolution: 12, radius: rayonKebab(zoomDessine), extruded: true, pickable: true, material: materiau,
-      getPosition: pos, getElevation: d => d.fiab === "certain" ? 3000 : 2200, elevationScale: echelle(zoomDessine),
-      getFillColor: d => sim ? [233, 237, 243, 235] : d.fiab === "certain" ? [...BRAISE, 255] : [255, 210, 140, 235],
-      updateTriggers: {getPosition: sim, getFillColor: sim}, transitions: tr,
+      getPosition: pos, getElevation: d => d.fiab === "certain" ? 3000 : 2200, elevationScale: echelle(zoomDessine) * (etat.marche ? 0.22 : 1),
+      getFillColor: (d, {index}) => sim ? [233, 237, 243, 235]
+        : etat.marche ? (atteints.has(index) ? [...BRAISE, 255] : (procheGare.has(index) ? [120, 96, 60, 220] : [...BRAISE, 90]))
+        : d.fiab === "certain" ? [...BRAISE, 255] : [255, 210, 140, 235],
+      updateTriggers: {getPosition: sim, getFillColor: [sim, etat.marche, atteints.size]}, transitions: tr,
     }));
   }
   return L;
@@ -344,7 +437,10 @@ function bulle({layer, object}) {
   } else if (layer.id === "favoris") {
     h = `<b>Emplacement favorable</b><br>${echap(object.zone)}<br><span class="m">probabilité ${fmt(100 * object.proba, 0)} % · ${fmt(object.pop)} hab.` +
       `<br>station à ${fmt(object.station_m)} m</span>`;
-  } else if (layer.id === "iso") {
+  } else if (layer.id === "rates") {
+    h = `<b>Raté du modèle</b><br>${echap(object.zone)}<br><span class="m">un kebab existe, mais le modèle ne lui donnait que ${fmt(100 * object.proba, 2)} %` +
+      `<br>(${fmt(object.rang)}e carreau sur ${fmt(D.n_carreaux_modele)})</span>`;
+  } else if (layer.id === "iso" || layer.id === "terrasses") {
     h = `<b>${object.minutes} min à pied</b><br><span class="m">depuis la gare Saint-Charles</span>`;
   } else if (layer.id === "terre") {
     const p = object.properties, n = p.nb_kebabs ?? 0;
@@ -386,7 +482,22 @@ function boucle(t) {
     vue = {...vue, bearing: (vue.bearing ?? 0) + dt * 0.006, transitionDuration: 0};
     scene.setProps({initialViewState: vue});
   }
-  if (etat.couches.favoris && !reduit) { pulsation += dt * 0.004; redessiner(); }
+  let anime = false;
+  if (etat.couches.favoris && !reduit) { pulsation += dt * 0.004; anime = true; }
+  if (etat.couches.rames && !reduit && !document.hidden) { horlogeRames += dt * 0.04; anime = true; }   // temps x40
+  if (etat.marche && etat.couches.pietons && !document.hidden) {
+    horlogeMarche += dt * (reduit ? 0 : 0.075);                                                        // temps x75
+    if (reduit) horlogeMarche = DUREE_MARCHE;                                                          // état final, sans animation
+    if (horlogeMarche > DUREE_MARCHE + 240) { horlogeMarche = 0; atteints = new Set(); }                // courte pause, puis on repart
+    const t = Math.min(horlogeMarche, DUREE_MARCHE);
+    etat.minute = t / 60;
+    for (const p of PIETONS) if (t >= p.secondes) atteints.add(p.k);
+    $("#h-min").textContent = String(Math.floor(etat.minute)).padStart(2, "0");
+    $("#h-keb").textContent = atteints.size;
+    $("#h-barre").style.width = `${Math.min(100, 100 * t / (25 * 60))}%`;
+    anime = true;
+  }
+  if (anime) redessiner();
   requestAnimationFrame(boucle);
 }
 requestAnimationFrame(boucle);
@@ -492,12 +603,22 @@ function aller(i) {
   Object.assign(etat.couches, e.couches);
   if (!e.simu && etat.simulation) { etat.simulation = false; majSimu(); }
   $("#simu").classList.toggle("visible", !!e.simu);
+  etat.marche = !!e.marche;
+  $("#horloge").hidden = !e.marche;
+  $("#h-tot").textContent = D.pietons.length;
+  if (e.marche) { horlogeMarche = 0; atteints = new Set(); etat.minute = 0; }
   majCouches(); relief(e.relief);
   voler(e.vue);
+  if (e.tourne && !reduit) setTimeout(() => {
+    if (courante !== i) return;
+    etat.tourne = true; $("#tourner").setAttribute("aria-pressed", "true"); $("#tourner").textContent = "Arrêter";
+  }, 2800);
   $("#prec").disabled = i === 0;
   $("#suiv").disabled = i === ETAPES.length - 1;
   $("#points").querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-current", j === i));
 }
 aller(0);
+// accès pour les tests automatiques : avancer l'horloge de la marche (en secondes simulées)
+window.scene3d = {avancer: s => { horlogeMarche = s; }};
 })();
 </script>

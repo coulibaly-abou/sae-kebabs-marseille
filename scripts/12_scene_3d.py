@@ -144,7 +144,32 @@ effets = [{"libelle": l.libelle, "or": r(l.odds_ratio, 2), "bas": r(l.ic_bas, 2)
            "p": float(l.p)} for l in res.itertuples()]
 valid = pd.read_csv(DONNEES_TRAITEES / "resultats_validation.csv").iloc[0]
 
-donnees = {"carreaux": carreaux, "kebabs": kebabs, "stations": stations, "zones": zones,
+# --- Mouvement : rames de métro / tram et piétons sortant de Saint-Charles (script 14) -----------
+from shapely.geometry import LineString  # noqa: E402
+
+lignes = []
+for l in json.loads((DONNEES_TRAITEES / "lignes_metro_tram.json").read_text(encoding="utf-8")):
+    trace = LineString(l["trace"]).simplify(0.00008)          # ~8 m : assez fin pour l'animation
+    lignes.append({"ref": l["ref"], "type": l["type"],
+                   "trace": [[round(x, 5), round(y, 5)] for x, y in trace.coords]})
+trajets = json.loads((DONNEES_BRUTES / "trajets_pietons_saint_charles.json").read_text(encoding="utf-8"))
+index_kebab = {i: n for n, i in enumerate(k["id_kebab"])}
+pietons = [{"k": index_kebab[i], "secondes": round(t["secondes"]),
+            "trace": [[round(x, 5), round(y, 5)] for x, y in LineString(t["trace"]).simplify(0.00003).coords]}
+           for i, t in trajets.items() if i in index_kebab]
+
+# --- Ratés et comparaison des modèles (script 15) -----------------------------------------------
+rates = pd.read_csv(DONNEES_TRAITEES / "rates_modele.csv")
+centres_carreaux = c.set_index("idcar_200m")[["lon", "lat"]]
+rates = rates.join(centres_carreaux, on="idcar_200m").head(10)
+rates_liste = [{"lon": r(l.lon, 5), "lat": r(l.lat, 5), "zone": str(l.commune), "proba": float(l.proba_hors_echantillon),
+                "rang": int(l.rang_sur_carreaux)} for l in rates.itertuples()]
+comparaison = [{"modele": l.modele, "auc": r(l.auc_moyenne, 3)}
+               for l in pd.read_csv(DONNEES_TRAITEES / "resultats_comparaison_modeles.csv").itertuples()]
+
+donnees = {"lignes": lignes, "pietons": pietons, "gare": [5.3811927, 43.3032635],
+           "rates": rates_liste, "comparaison": comparaison,
+           "carreaux": carreaux, "kebabs": kebabs, "stations": stations, "zones": zones,
            "isochrones": isochrones, "opportunites": opportunites, "simulation": simulation,
            "effets": effets, "auc": r(valid.auc_moyenne, 2),
            "n_carreaux_modele": len(apprentissage)}

@@ -93,9 +93,13 @@ try:
     navigateur = webdriver.Chrome(options=options)
     navigateur.get((RACINE / "dashboard" / "kebabs_3d.html").as_uri())
     time.sleep(6)
-    for etape, nom in [(1, "figD_scene3d_marseille.png"), (5, "figD_scene3d_simulation.png")]:
+    for etape, nom in [(1, "figD_scene3d_marseille.png"), (4, "figD_scene3d_marche.png"),
+                       (6, "figD_scene3d_simulation.png")]:
         navigateur.execute_script(f"document.querySelectorAll('#points button')[{etape}].click()")
         time.sleep(5)
+        if etape == 4:                    # marche : on fige l'horloge à 11 minutes pour la capture
+            navigateur.execute_script("window.scene3d.avancer(660)")
+            time.sleep(3)
         navigateur.save_screenshot(str(FIGURES / nom))
     navigateur.quit()
 except Exception as erreur:  # pas de Chrome : les captures existantes sont conservées

@@ -10,3 +10,5 @@ scipy>=1.12
 markdown>=3.5
 statsmodels>=0.14
 scikit-learn>=1.4
+selenium        # optionnel : captures de la scène 3D et PDF du rapport
+openpyxl        # lecture du Gantt

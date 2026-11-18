@@ -11,7 +11,7 @@ SAÉ 5.EMS.01 : Mener une étude statistique dans un domaine d'application (BUT3
 **Guide (liens, mode d'emploi de la 3D, soutenance, questions du jury) :** [GUIDE.md](GUIDE.md)
 
 **Rapport :** [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf)
-(source Quarto : `rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd`).
+(version Word : `rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.docx`, source Quarto : `rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd`).
 
 **Périmètre :** Métropole d'Aix-Marseille-Provence (92 communes, ~1,9 M d'habitants).
 Marseille est découpée en 16 arrondissements, soit 107 zones de travail (modifiable dans
@@ -38,7 +38,9 @@ etude implantation des kebabs en marseille/
 │   ├── 11_modelisation.py           régression logistique, validation croisée
 │   ├── 12_scene_3d.py               scène 3D (deck.gl) + simulation de Monte-Carlo -> dashboard/
 │   ├── 13_figures_rapport.py        figure de l'article, Gantt, captures de la scène 3D
-│   ├── 98_livrables.py              rapport .qmd et PDF (impression Chrome)
+│   ├── 98_livrables.py              rapport .qmd, .docx (Pandoc) et PDF (Word)
+│   ├── 14_collecte_mouvement.py     tracés métro / tram et trajets à pied (scène animée)
+│   ├── 15_comparaison_modeles.py    logistique contre forêt aléatoire et gradient boosting
 │   └── 99_apercu_rapport.py         aperçu HTML du rapport (images affichées)
 ├── donnees/
 │   ├── brutes/              sorties de la collecte (non modifiées à la main)
@@ -62,7 +64,7 @@ python 10_gares_isochrone.py       # gares et isochrones (service Valhalla, sans
 python 11_modelisation.py          # modèle explicatif
 python 12_scene_3d.py              # scène 3D -> dashboard/kebabs_3d.html
 python 13_figures_rapport.py       # figures complémentaires du rapport
-python 98_livrables.py             # rapport .qmd + PDF (nécessite Chrome et selenium)
+python 98_livrables.py             # rapport .qmd, .docx et PDF (Pandoc + Word)
 ```
 
 L'échelle de la grille (200 m ou 1 km) se règle avec `TAILLE_CARREAU` dans `config.py`.

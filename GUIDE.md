@@ -9,6 +9,7 @@ les fichiers un par un.
 | Quoi | Où |
 |---|---|
 | Rapport (PDF à rendre) | [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf) |
+| Rapport Word (modifiable) | [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.docx`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.docx) |
 | Source Quarto du rapport | [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd) |
 | Lien du tableau de bord (fichier .txt demandé) | [`rapport/AMAVIGAN_COULIBALY_dashboard_SAE5EMS01.txt`](rapport/AMAVIGAN_COULIBALY_dashboard_SAE5EMS01.txt) |
 | Scène 3D en ligne | https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_3d.html |
@@ -132,12 +133,12 @@ python 14_collecte_mouvement.py    # tracés métro / tram, trajets à pied (sc�
 python 15_comparaison_modeles.py   # forêt aléatoire, gradient boosting, ratés du modèle
 python 12_scene_3d.py              # scène 3D -> dashboard/kebabs_3d.html
 python 13_figures_rapport.py       # figure de l'article, Gantt, captures de la scène
-python 98_livrables.py             # rapport .qmd et PDF
+python 98_livrables.py             # rapport .qmd, .docx (Pandoc) et PDF (Word)
 ```
 
 La première collecte prend quelques minutes (serveurs publics). Les suivantes relisent le
-cache de `donnees/brutes/` et sont presque instantanées. Les scripts 13 et 98 utilisent
-Chrome via Selenium pour les captures et le PDF.
+cache de `donnees/brutes/` et sont presque instantanées. Le script 13 utilise Chrome (Selenium) pour les captures ; le script 98 utilise Pandoc
+(paquet pypandoc_binary) pour le .docx et Microsoft Word pour le sommaire et le PDF.
 
 Pour modifier le texte du rapport : éditer `rapport/rapport.md`, puis relancer
 `python 98_livrables.py`. Pour modifier la scène 3D : éditer `dashboard/modele_scene.html`

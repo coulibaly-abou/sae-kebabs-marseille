@@ -12,3 +12,5 @@ statsmodels>=0.14
 scikit-learn>=1.4
 selenium        # optionnel : captures de la scène 3D et PDF du rapport
 openpyxl        # lecture du Gantt
+pypandoc_binary # rapport Word (Pandoc inclus)
+python-docx     # mise en forme du rapport Word

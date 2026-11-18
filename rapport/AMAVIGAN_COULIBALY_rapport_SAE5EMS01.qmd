@@ -7,10 +7,8 @@ lang: fr
 format:
   pdf:
     toc: false
-    number-sections: false
     mainfont: "Times New Roman"
   html:
-    toc: false
     embed-resources: true
 ---
 
@@ -992,22 +990,68 @@ sont publiés sur GitHub : [github.com/coulibaly-abou/sae-kebabs-marseille](http
 
 | Script | Rôle |
 |---|---|
-| 00_lancer_collecte.py | Lance toute la collecte (scripts 01 à 05) |
-| 01_collecte_limites.py | Limites des communes et arrondissements, découpage en 107 zones |
-| 02_collecte_kebabs_osm.py | Kebabs d'OpenStreetMap |
-| 03_collecte_kebabs_sirene.py | Kebabs du répertoire SIRENE |
-| 04_collecte_gares.py | Gares SNCF, stations de métro et arrêts de tram |
-| 05_collecte_insee_carreaux.py | Carreaux Insee Filosofi de 200 m |
-| 06_nettoyage_kebabs.py | Fiabilité, doublons, fusion des deux sources |
-| 07_cartes_exploratoires.py | Carroyage et cartes de la partie 4 |
-| 08_croisement_insee.py | Indicateurs, tests et figures des sections 5.1 à 5.5 |
-| 09_contributeurs_osm.py | Historique des fiches kebabs d'OpenStreetMap (section 3.6) |
-| 10_gares_isochrone.py | Distance aux gares et isochrones de Saint-Charles (section 5.6) |
-| 11_modelisation.py | Régression logistique et validation croisée (partie 6) |
-| 12_scene_3d.py | Scène 3D interactive et simulation de Monte-Carlo (section 6.4, annexe D) |
-| 14_collecte_mouvement.py | Tracés du métro et du tram, trajets à pied depuis Saint-Charles (scène animée) |
-| 15_comparaison_modeles.py | Comparaison avec forêt aléatoire et gradient boosting, ratés du modèle (section 6.3) |
-| 13_figures_rapport.py | Figure de l'article, diagramme de Gantt, captures de la scène 3D |
+| [00_lancer_collecte.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/00_lancer_collecte.py) | Lance toute la collecte (scripts 01 à 05) |
+| [01_collecte_limites.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/01_collecte_limites.py) | Limites des communes et arrondissements, découpage en 107 zones |
+| [02_collecte_kebabs_osm.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/02_collecte_kebabs_osm.py) | Kebabs d'OpenStreetMap |
+| [03_collecte_kebabs_sirene.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/03_collecte_kebabs_sirene.py) | Kebabs du répertoire SIRENE |
+| [04_collecte_gares.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/04_collecte_gares.py) | Gares SNCF, stations de métro et arrêts de tram |
+| [05_collecte_insee_carreaux.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/05_collecte_insee_carreaux.py) | Carreaux Insee Filosofi de 200 m |
+| [06_nettoyage_kebabs.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/06_nettoyage_kebabs.py) | Fiabilité, doublons, fusion des deux sources |
+| [07_cartes_exploratoires.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/07_cartes_exploratoires.py) | Carroyage et cartes de la partie 4 |
+| [08_croisement_insee.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/08_croisement_insee.py) | Indicateurs, tests et figures des sections 5.1 à 5.5 |
+| [09_contributeurs_osm.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/09_contributeurs_osm.py) | Historique des fiches kebabs d'OpenStreetMap (section 3.6) |
+| [10_gares_isochrone.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/10_gares_isochrone.py) | Distance aux gares et isochrones de Saint-Charles (section 5.6) |
+| [11_modelisation.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/11_modelisation.py) | Régression logistique et validation croisée (partie 6) |
+| [12_scene_3d.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/12_scene_3d.py) | Scène 3D interactive et simulation de Monte-Carlo (section 6.4, annexe D) |
+| [14_collecte_mouvement.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/14_collecte_mouvement.py) | Tracés du métro et du tram, trajets à pied depuis Saint-Charles (scène animée) |
+| [15_comparaison_modeles.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/15_comparaison_modeles.py) | Comparaison avec forêt aléatoire et gradient boosting, ratés du modèle (section 6.3) |
+| [13_figures_rapport.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/13_figures_rapport.py) | Figure de l'article, diagramme de Gantt, captures de la scène 3D |
+
+Deux extraits, pour donner une idée du code. Le premier ajuste le modèle de la partie 6 :
+les variables sont centrées et réduites, si bien que chaque coefficient, passé à
+l'exponentielle, se lit comme un multiplicateur des chances pour une hausse d'un écart-type
+([11_modelisation.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/11_modelisation.py)).
+
+```python
+def ajuster(d: pd.DataFrame, cible: str) -> pd.DataFrame:
+    """Régression logistique sur variables centrées-réduites : odds ratios par écart-type."""
+    X = d[list(VARIABLES)]
+    Z = (X - X.mean()) / X.std()
+    modele = sm.Logit(d[cible], sm.add_constant(Z)).fit(disp=False)
+    ic = np.exp(modele.conf_int())
+    return pd.DataFrame({
+        "variable": list(VARIABLES),
+        "odds_ratio": np.exp(modele.params[list(VARIABLES)]).values,
+        "ic_bas": ic.loc[list(VARIABLES), 0].values, "ic_haut": ic.loc[list(VARIABLES), 1].values,
+        "p": modele.pvalues[list(VARIABLES)].values,
+    })
+```
+
+Le second est le cœur de la simulation de Monte-Carlo (sections 5.2, 5.6 et 6.4) : on place
+144 kebabs fictifs au hasard, chaque carreau ayant une chance proportionnelle à son nombre
+d'habitants, puis on mesure leur distance aux stations et entre eux, 1 000 fois de suite
+([12_scene_3d.py](https://github.com/coulibaly-abou/sae-kebabs-marseille/blob/main/scripts/12_scene_3d.py)).
+
+```python
+def tirage(n):
+    i = rng.choice(len(d), size=n, p=poids)          # carreaux tirés selon la population
+    lat = d["lat"].values[i] + rng.uniform(-100, 100, n) / 111_320
+    lon = d["lon"].values[i] + rng.uniform(-100, 100, n) / (111_320 * np.cos(lat0))
+    return lon, lat
+
+
+def indicateurs(lon, lat):
+    dist_st = arbre.query(np.radians(np.c_[lat, lon]), k=1)[0][:, 0] * R_TERRE
+    pts = np.radians(np.c_[lat, lon])
+    voisins = BallTree(pts, metric="haversine").query(pts, k=2)[0][:, 1] * R_TERRE
+    return {"station_mediane_m": float(np.median(dist_st)),
+            "part_500m_station": float(np.mean(dist_st < 500)),
+            "voisin_moyen_m": float(np.mean(voisins))}
+
+
+reel = indicateurs(k["lon"].values, k["lat"].values)
+sims = pd.DataFrame([indicateurs(*tirage(len(k))) for _ in range(N_SIMULATIONS)])
+```
 
 ## C. Dictionnaire des données
 

@@ -8,8 +8,8 @@ SAÉ 5.EMS.01 : Mener une étude statistique dans un domaine d'application (BUT3
 **Scène 3D interactive des résultats :** https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_3d.html
 (population en relief, kebabs, stations, isochrones, simulation de Monte-Carlo, modèle ; visite guidée en 7 étapes).
 
-**Rapport :** [`rapport/COULIBALY_rapport_SAE5EMS01.pdf`](rapport/COULIBALY_rapport_SAE5EMS01.pdf)
-(source Quarto : `rapport/COULIBALY_rapport_SAE5EMS01.qmd`).
+**Rapport :** [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.pdf)
+(source Quarto : `rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd`).
 
 **Périmètre :** Métropole d'Aix-Marseille-Provence (92 communes, ~1,9 M d'habitants).
 Marseille est découpée en 16 arrondissements, soit 107 zones de travail (modifiable dans

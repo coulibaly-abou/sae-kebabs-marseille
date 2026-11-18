@@ -1,7 +1,7 @@
 ---
 title: "Étude de l'implantation des kebabs dans l'agglomération marseillaise"
 subtitle: "SAÉ 5.EMS.01 : Mener une étude statistique dans un domaine d'application"
-author: "Coulibaly Aboubakar, [Nom 2], [Nom 3]"
+author: "Ayi Amavigan, Aboubakar Coulibaly"
 date: "2026-2027"
 lang: fr
 format:
@@ -14,15 +14,6 @@ format:
     embed-resources: true
 ---
 
-<!--
-NOTES DE RÉDACTION (invisibles à l'affichage)
-- Consignes : 15 pages max hors page de garde, sommaire et annexes ; le code va en annexe.
-- Rendu final via Quarto : renommer ce fichier en .qmd, ajouter `toc: true` dans l'en-tête
-  et remplacer les <div class="saut-de-page"> par {{< pagebreak >}}.
-- Au moins 3 cartes thématiques + 1 carte isochrone (dossier rapport/figures/).
-- Style : texte rédigé, peu de gras, pas de noms de fichiers dans le corps (annexe B).
-- Repères [À FAIRE] = sections à rédiger plus tard, quand les analyses seront faites.
--->
 
 <div align="center">
 
@@ -41,7 +32,7 @@ IUT, BUT Science des Données, 3e année
 
 <br><br>
 
-Réalisé par Coulibaly Aboubakar, [Nom 2] et [Nom 3]<br>
+Réalisé par Ayi Amavigan et Aboubakar Coulibaly<br>
 Encadrant : Sébastien Pinel<br>
 Année universitaire 2026-2027<br>
 Décembre 2026
@@ -276,9 +267,11 @@ absent de leur étude : les gares et stations, qui amènent une clientèle de pa
 
 | Membre | Rôle principal |
 |---|---|
-| Coulibaly Aboubakar | [À FAIRE] |
-| [Nom 2] | [À FAIRE] |
-| [Nom 3] | [À FAIRE] |
+| Ayi Amavigan | Bibliographie et article de référence, croisement avec les données de l'Insee, tests statistiques (partie 5), relecture |
+| Aboubakar Coulibaly | Collecte et nettoyage des données, cartes (partie 4), modélisation (partie 6), scène 3D, mise en forme du rapport |
+
+Les choix de méthode (périmètre, hypothèses, définition d'une gare) ont été discutés à deux
+en séance, et chacun a relu les parties de l'autre.
 
 Nous travaillons sur un espace commun, un dossier Google Drive partagé qui contient les
 scripts, les données et le rapport. Le code est aussi versionné sur un dépôt GitHub public,

@@ -13,6 +13,7 @@ les fichiers un par un.
 | Source Quarto du rapport | [`rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd`](rapport/AMAVIGAN_COULIBALY_rapport_SAE5EMS01.qmd) |
 | Lien du tableau de bord (fichier .txt demandé) | [`rapport/AMAVIGAN_COULIBALY_dashboard_SAE5EMS01.txt`](rapport/AMAVIGAN_COULIBALY_dashboard_SAE5EMS01.txt) |
 | Scène 3D en ligne | https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_3d.html |
+| Carte 2D interactive (carroyage, grandes rues, isochrones au clic) | https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_2d.html |
 | Scène 3D hors ligne | `dashboard/kebabs_3d.html` : double-clic, elle s'ouvre dans le navigateur |
 | Dépôt complet | https://github.com/coulibaly-abou/sae-kebabs-marseille |
 
@@ -132,6 +133,7 @@ python 11_modelisation.py          # régression logistique
 python 14_collecte_mouvement.py    # tracés métro / tram, trajets à pied (scène animée)
 python 15_comparaison_modeles.py   # forêt aléatoire, gradient boosting, ratés du modèle
 python 12_scene_3d.py              # scène 3D -> dashboard/kebabs_3d.html
+python 16_carte_2d.py              # carte 2D + isochrones -> dashboard/kebabs_2d.html
 python 13_figures_rapport.py       # figure de l'article, Gantt, captures de la scène
 python 98_livrables.py             # rapport .qmd, .docx (Pandoc) et PDF (Word)
 ```

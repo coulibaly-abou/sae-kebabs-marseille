@@ -1,0 +1,513 @@
+<title>Kebabs de Marseille à plat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Concept : un plan de ville imprimé, lu à plat. La carte occupe tout l'écran,
+   un carnet à gauche porte les trois lectures (carroyage, isochrones, lieux).
+   Un seul monde visuel, clair, assumé dans les deux thèmes (comme un plan papier). */
+:root {
+  --mer: #d6e2ea;
+  --terre: #f4f2ee;
+  --encre: #1b2430;
+  --encre-2: #5a6472;
+  --trait: #d3d8de;
+  --panneau: rgba(255, 255, 255, 0.95);
+  --kebab: #d0341f;       /* les kebabs */
+  --iso: #5b2a9e;         /* isochrones, 5 min */
+  --accent-doux: #efe8f8;
+  --f-titre: "Barlow Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --f-texte: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { background: var(--mer); color: var(--encre); font-family: var(--f-texte); overflow: hidden; }
+#carte { position: fixed; inset: 0; }
+#carte canvas { outline: none; }
+
+.carnet {
+  position: fixed; z-index: 5; background: var(--panneau); border: 1px solid var(--trait); border-radius: 10px;
+  top: calc(14px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px));
+  width: min(380px, calc(100vw - 32px));
+  max-height: calc(100% - 28px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 6px 24px rgba(27, 36, 48, .12);
+}
+.entete { padding: 14px 16px 10px; border-bottom: 1px solid var(--trait); }
+.entete .sur { font-family: var(--f-data); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--encre-2); }
+.entete h1 { font-family: var(--f-titre); font-weight: 700; font-size: 26px; line-height: 1.05; margin: 4px 0 0; letter-spacing: .01em; text-wrap: balance; }
+.entete h1 em { font-style: normal; color: var(--kebab); }
+.onglets { display: flex; gap: 4px; padding: 8px 12px 0; border-bottom: 1px solid var(--trait); }
+.onglets button {
+  font: 600 14px var(--f-texte); color: var(--encre-2); background: none; border: 0; border-bottom: 3px solid transparent;
+  padding: 6px 8px 8px; cursor: pointer;
+}
+.onglets button[aria-selected="true"] { color: var(--encre); border-bottom-color: var(--encre); }
+.onglets button:focus-visible, .seg button:focus-visible, .lieu:focus-visible, .btn:focus-visible { outline: 2px solid var(--iso); outline-offset: 2px; }
+.vue { padding: 12px 16px 14px; overflow-y: auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.vue[hidden] { display: none; }
+.vue p { margin: 0; font-size: 14px; line-height: 1.5; }
+.vue .note { font-size: 12.5px; color: var(--encre-2); }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button {
+  font: 500 13px var(--f-texte); color: var(--encre); background: var(--terre); border: 1px solid var(--trait);
+  border-radius: 6px; padding: 5px 9px; cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--encre); color: #fff; border-color: var(--encre); }
+.legende { display: flex; flex-direction: column; gap: 4px; }
+.legende .titre { font-family: var(--f-data); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--encre-2); }
+.rampe { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; }
+.rampe span { height: 12px; border-radius: 2px; }
+.bornes { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; font-family: var(--f-data); font-size: 10.5px; color: var(--encre-2); }
+.cle { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--encre-2); }
+.cle i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; box-sizing: border-box; }
+.cle i.trait { border-radius: 1px; height: 4px; vertical-align: 2px; width: 16px; }
+.chiffres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.chiffre { border: 1px solid var(--trait); border-radius: 8px; padding: 7px 8px; background: #fff; }
+.chiffre .t { font-family: var(--f-data); font-size: 11px; color: var(--encre-2); display: flex; align-items: center; gap: 5px; }
+.chiffre .t i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.chiffre b { display: block; font: 600 22px/1.1 var(--f-titre); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.chiffre span { display: block; font-size: 11.5px; color: var(--encre-2); line-height: 1.3; font-variant-numeric: tabular-nums; }
+.liste { display: flex; flex-direction: column; border-top: 1px solid var(--trait); }
+.liste div { display: flex; justify-content: space-between; gap: 10px; padding: 4px 0; border-bottom: 1px solid var(--trait); font-size: 13px; }
+.liste div span:last-child { font-family: var(--f-data); font-size: 12px; color: var(--encre-2); white-space: nowrap; }
+.depart { font-size: 13.5px; background: var(--accent-doux); border-radius: 6px; padding: 7px 9px; }
+.depart b { color: var(--iso); }
+table.lieux { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.lieux th { font: 500 10.5px var(--f-data); text-transform: uppercase; letter-spacing: .05em; color: var(--encre-2); text-align: right; padding: 4px 3px; border-bottom: 1px solid var(--trait); }
+table.lieux th:first-child { text-align: left; }
+table.lieux td { padding: 5px 3px; border-bottom: 1px solid var(--trait); text-align: right; font-family: var(--f-data); font-size: 12px; font-variant-numeric: tabular-nums; }
+table.lieux td:first-child { text-align: left; font-family: var(--f-texte); font-size: 13px; }
+tr.lieu { cursor: pointer; }
+tr.lieu:hover, tr.lieu[aria-current="true"] { background: var(--accent-doux); }
+.barre { display: inline-block; height: 8px; background: var(--kebab); border-radius: 2px; vertical-align: 0; margin-right: 5px; }
+.cat { font-family: var(--f-data); font-size: 10px; color: var(--encre-2); text-transform: uppercase; margin-left: 4px; }
+
+.couches {
+  position: fixed; z-index: 5; top: calc(14px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--panneau); border: 1px solid var(--trait); border-radius: 10px; padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 5px; font-size: 13px; box-shadow: 0 6px 24px rgba(27, 36, 48, .12);
+}
+.couches .titre { font-family: var(--f-data); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--encre-2); }
+.couches label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.btn { font: 500 13px var(--f-texte); color: var(--encre); background: var(--terre); border: 1px solid var(--trait); border-radius: 6px; padding: 5px 9px; cursor: pointer; }
+.source { position: fixed; z-index: 4; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  font-size: 11px; color: var(--encre-2); background: rgba(255,255,255,.8); padding: 3px 7px; border-radius: 5px; max-width: calc(100vw - 32px); }
+.deck-tooltip { font-family: var(--f-texte) !important; font-size: 13px !important; background: #fff !important; color: var(--encre) !important;
+  border: 1px solid var(--trait); border-radius: 7px; box-shadow: 0 4px 16px rgba(0,0,0,.12); max-width: 280px; line-height: 1.4; }
+.deck-tooltip b { font-weight: 600; }
+.deck-tooltip .m { font-family: var(--f-data); font-size: 12px; color: var(--encre-2); }
+
+@media (max-width: 720px) {
+  .carnet { top: auto; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); max-height: 48%; }
+  .couches { padding: 8px 10px; font-size: 12px; }
+  .source { display: none; }
+  .entete h1 { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div id="carte" role="application" aria-label="Carte interactive des kebabs de Marseille"></div>
+
+<aside class="carnet" aria-label="Lecture de la carte">
+  <div class="entete">
+    <div class="sur">SAÉ 5.EMS.01 · Aix-Marseille-Provence</div>
+    <h1>Les kebabs dans le <em>carroyage</em> et à <em>pied</em></h1>
+  </div>
+  <div class="onglets" role="tablist">
+    <button role="tab" id="t-carro" aria-selected="true" aria-controls="v-carro">Carroyage</button>
+    <button role="tab" id="t-iso" aria-selected="false" aria-controls="v-iso">Isochrones</button>
+    <button role="tab" id="t-lieux" aria-selected="false" aria-controls="v-lieux">Comparer les lieux</button>
+  </div>
+
+  <section class="vue" id="v-carro" role="tabpanel" aria-labelledby="t-carro">
+    <p>Chaque carré de 200 m est un carreau Insee (Filosofi 2019). Les points rouges sont les kebabs recensés.</p>
+    <div class="seg" id="variable" role="group" aria-label="Couleur des carreaux">
+      <button data-v="kebabs" aria-pressed="true">Kebabs par carreau</button>
+      <button data-v="hab" aria-pressed="false">Habitants</button>
+      <button data-v="nv" aria-pressed="false">Niveau de vie</button>
+      <button data-v="proba" aria-pressed="false">Probabilité (modèle)</button>
+    </div>
+    <div class="legende" id="legende"></div>
+    <div class="cle">
+      <span><i style="background:var(--kebab)"></i>Kebab certain</span>
+      <span><i style="background:#fff;border:2.5px solid var(--kebab)"></i>Kebab probable</span>
+      <span><i class="trait" style="background:#3a3f47"></i>Grande rue</span>
+    </div>
+    <p class="note" id="note-variable"></p>
+  </section>
+
+  <section class="vue" id="v-iso" role="tabpanel" aria-labelledby="t-iso" hidden>
+    <p><b>Cliquez n'importe où sur la carte</b> : on calcule à pied, par les vraies rues et les escaliers, ce qui est atteignable en 5, 10 et 15 minutes.</p>
+    <div class="seg" id="mode-iso" role="group" aria-label="Point de départ">
+      <button data-m="point" aria-pressed="true">Depuis un point</button>
+      <button data-m="stations" aria-pressed="false">Depuis toutes les stations</button>
+    </div>
+    <div class="depart" id="depart"></div>
+    <div class="chiffres" id="chiffres-iso"></div>
+    <p class="note" id="compare-iso"></p>
+    <div class="legende"><div class="titre">Kebabs atteints, du plus proche au plus loin</div></div>
+    <div class="liste" id="liste-iso"></div>
+    <p class="note">Marche à 5 km/h, deux fois moins vite dans les escaliers. Réseau piéton OpenStreetMap (extrait BBBike), plus court chemin calculé dans le navigateur. Disponible sur Marseille et 2 km autour.</p>
+  </section>
+
+  <section class="vue" id="v-lieux" role="tabpanel" aria-labelledby="t-lieux" hidden>
+    <p>Combien de kebabs à 5, 10 et 15 minutes à pied de chaque lieu ? Cliquez une ligne pour afficher son isochrone.</p>
+    <div style="overflow-x:auto"><table class="lieux" id="table-lieux"></table></div>
+    <p class="note" id="note-lieux"></p>
+  </section>
+</aside>
+
+<div class="couches" role="group" aria-label="Couches affichées">
+  <div class="titre">Couches</div>
+  <label><input type="checkbox" id="c-carreaux" checked> Carreaux</label>
+  <label><input type="checkbox" id="c-kebabs" checked> Kebabs</label>
+  <label><input type="checkbox" id="c-rues" checked> Grandes rues</label>
+  <label><input type="checkbox" id="c-stations"> Stations</label>
+  <label><input type="checkbox" id="c-limites" checked> Arrondissements</label>
+  <button class="btn" id="b-vue" type="button">Recentrer</button>
+</div>
+<div class="source">Sources : OpenStreetMap, Insee (SIRENE, Filosofi 2019), IGN. Traitement : SAÉ kebabs.</div>
+
+<script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+<script>const D=/*__DONNEES__*/null;</script>
+<script>
+(() => {
+const {DeckGL, ColumnLayer, ScatterplotLayer, GeoJsonLayer, PathLayer} = deck;
+
+// ---------- Palettes (sans jaune pâle : chaque classe reste visible sur le fond clair) ----------
+const hex = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+const PAL = {
+  hab:   {titre: "Habitants par carreau", bornes: [25, 100, 250, 500, 1000, 2000],
+          coul: ["#cfdbe6","#a7c0d6","#7ea3c4","#5786b1","#386a99","#234f7c","#12345a"].map(hex), f: v => v.toLocaleString("fr-FR")},
+  nv:    {titre: "Niveau de vie moyen (€ par an)", bornes: [16000, 19000, 22000, 25000, 28000, 32000],
+          coul: ["#b4235f","#d2588a","#e597b4","#c9c6c4","#8fc4c9","#4a9ea8","#16707f"].map(hex), f: v => (v/1000).toLocaleString("fr-FR") + " k"},
+  proba: {titre: "Probabilité d'avoir un kebab (modèle)", bornes: [0.002, 0.005, 0.01, 0.02, 0.05, 0.1],
+          coul: ["#dfe3e0","#bcd3c6","#8dbca3","#5fa182","#3a8364","#1f6448","#0b4430"].map(hex), f: v => (v*100).toLocaleString("fr-FR") + " %"},
+  kebabs:{titre: "Kebabs par carreau (fond : habitants)", bornes: [1, 2, 3],
+          coul: ["#e9edf1", "#f29a7e", "#e0583a", "#9e1f10"].map(hex), f: v => String(v)}
+};
+const GRIS_NA = [226, 224, 220];
+const KEBAB = hex("#d0341f"), ENCRE = hex("#1b2430");
+const ISO_COUL = {300: hex("#5b2a9e"), 600: hex("#9467cf"), 900: hex("#c4a6ec")};
+const classe = (v, b) => { let i = 0; while (i < b.length && v >= b[i]) i++; return i; };
+
+// ---------- Données ----------
+const C = D.carreaux.map(c => ({lon: c[0], lat: c[1], hab: c[2], nv: c[3], nk: c[4], proba: c[5], st: c[6], est: c[7], mrs: c[8]}));
+const K = D.kebabs;
+const habMarseille = C.filter(c => c.mrs).reduce((s, c) => s + c.hab, 0);
+const kMarseille = K.filter(k => k.commune === "Marseille").length;
+const tauxMarseille = kMarseille / habMarseille * 1e4;
+
+// ---------- Réseau piéton : décodage ----------
+const G = D.graphe, V = G.vitesse;
+const nN = G.N.length / 2, NX = new Float64Array(nN), NY = new Float64Array(nN);
+{ let x = 0, y = 0; for (let i = 0; i < nN; i++) { x += G.N[2*i]; y += G.N[2*i+1]; NX[i] = x / 1e5; NY[i] = y / 1e5; } }
+const nE = G.E.length, EU = new Int32Array(nE), EV = new Int32Array(nE), EC = new Float64Array(nE);
+const EP = new Array(nE), EL = new Array(nE);       // polyligne et longueurs cumulées (0..1)
+const COSL = Math.cos(43.3 * Math.PI / 180);
+for (let e = 0; e < nE; e++) {
+  const [u, v, c, inter] = G.E[e];
+  EU[e] = u; EV[e] = v; EC[e] = Math.max(c, 0.1);
+  const pts = [[NX[u], NY[u]]];
+  let x = Math.round(NX[u] * 1e5), y = Math.round(NY[u] * 1e5);
+  for (let i = 0; i < inter.length; i += 2) { x += inter[i]; y += inter[i+1]; pts.push([x / 1e5, y / 1e5]); }
+  pts.push([NX[v], NY[v]]);
+  const cum = [0];
+  for (let i = 1; i < pts.length; i++) cum.push(cum[i-1] + Math.hypot((pts[i][0]-pts[i-1][0]) * COSL, pts[i][1]-pts[i-1][1]));
+  const tot = cum[cum.length-1] || 1;
+  EP[e] = pts; EL[e] = cum.map(c => c / tot);
+}
+// adjacence compacte
+const deg = new Int32Array(nN + 1);
+for (let e = 0; e < nE; e++) { deg[EU[e]+1]++; deg[EV[e]+1]++; }
+for (let i = 0; i < nN; i++) deg[i+1] += deg[i];
+const ADJ = new Int32Array(2 * nE), pos = deg.slice(0, nN);
+for (let e = 0; e < nE; e++) { ADJ[pos[EU[e]]++] = e; ADJ[pos[EV[e]]++] = e; }
+// sommets des polylignes, pour rattacher un clic au réseau
+let nS = 0; for (let e = 0; e < nE; e++) nS += EP[e].length;
+const SX = new Float64Array(nS), SY = new Float64Array(nS), SE = new Int32Array(nS), SF = new Float64Array(nS);
+{ let j = 0; for (let e = 0; e < nE; e++) for (let i = 0; i < EP[e].length; i++, j++) { SX[j] = EP[e][i][0]; SY[j] = EP[e][i][1]; SE[j] = e; SF[j] = EL[e][i]; } }
+function accrocherClic(lon, lat) {
+  let best = 0, bd = Infinity;
+  for (let i = 0; i < nS; i++) {
+    const dx = (SX[i] - lon) * COSL, dy = SY[i] - lat, d = dx*dx + dy*dy;
+    if (d < bd) { bd = d; best = i; }
+  }
+  return [SE[best], SF[best], Math.sqrt(bd) * 111320];
+}
+
+// Dijkstra (tas binaire), coupé à 15 minutes
+const LIMITE = 900;
+function dijkstra(sources) {
+  const t = new Float64Array(nN).fill(Infinity);
+  const tas = [];
+  const push = (d, n) => { tas.push([d, n]); let i = tas.length - 1;
+    while (i > 0) { const p = (i - 1) >> 1; if (tas[p][0] <= tas[i][0]) break; [tas[p], tas[i]] = [tas[i], tas[p]]; i = p; } };
+  const pop = () => { const top = tas[0], last = tas.pop(); if (tas.length) { tas[0] = last; let i = 0;
+    for (;;) { const l = 2*i+1, r = l+1; let m = i; if (l < tas.length && tas[l][0] < tas[m][0]) m = l;
+      if (r < tas.length && tas[r][0] < tas[m][0]) m = r; if (m === i) break; [tas[m], tas[i]] = [tas[i], tas[m]]; i = m; } } return top; };
+  for (const [n, d] of sources) if (d < t[n]) { t[n] = d; push(d, n); }
+  while (tas.length) {
+    const [d, n] = pop(); if (d > t[n] || d > LIMITE) continue;
+    for (let k = deg[n]; k < deg[n+1]; k++) { const e = ADJ[k], m = EU[e] === n ? EV[e] : EU[e], nd = d + EC[e];
+      if (nd < t[m]) { t[m] = nd; push(nd, m); } }
+  }
+  return t;
+}
+function sourcesDe(acc) {          // [arête, fraction, distance d'accès] -> sommets de départ
+  const [e, f, d] = acc, a = d / V;
+  if (e === -2) return [];
+  if (e === -1) return [[f, a]];
+  return [[EU[e], f * EC[e] + a], [EV[e], (1 - f) * EC[e] + a]];
+}
+function tempsPoint(t, acc) {
+  const [e, f, d] = acc;
+  if (e === -2) return Infinity;
+  const a = d / V;
+  if (e === -1) return t[f] + a;
+  return Math.min(t[EU[e]] + f * EC[e], t[EV[e]] + (1 - f) * EC[e]) + a;
+}
+function couper(e, a, b) {         // morceau [a, b] (fractions) de la polyligne de l'arête e
+  const p = EP[e], L = EL[e], out = [];
+  const at = s => { let i = 1; while (i < L.length - 1 && L[i] < s) i++;
+    const k = (s - L[i-1]) / ((L[i] - L[i-1]) || 1); return [p[i-1][0] + k * (p[i][0] - p[i-1][0]), p[i-1][1] + k * (p[i][1] - p[i-1][1])]; };
+  out.push(at(a)); for (let i = 0; i < L.length; i++) if (L[i] > a && L[i] < b) out.push(p[i]); out.push(at(b));
+  return out;
+}
+function tracerBandes(t) {
+  const bandes = {300: [], 600: [], 900: []};
+  for (let e = 0; e < nE; e++) {
+    const tu = t[EU[e]], tv = t[EV[e]];
+    if (tu > 900 && tv > 900) continue;
+    for (const T of [300, 600, 900]) {
+      const ru = Math.max(0, Math.min(1, (T - tu) / EC[e])), rv = Math.max(0, Math.min(1, (T - tv) / EC[e]));
+      if (ru + rv >= 1) bandes[T].push(EP[e]);
+      else { if (ru > 0) bandes[T].push(couper(e, 0, ru)); if (rv > 0) bandes[T].push(couper(e, 1 - rv, 1)); }
+    }
+  }
+  return bandes;
+}
+
+// ---------- État ----------
+const etat = {onglet: "carro", variable: "kebabs", modeIso: "point", iso: null, depart: null, lieu: null,
+  couches: {carreaux: true, kebabs: true, rues: true, stations: false, limites: true}};
+const VUE_MARSEILLE = {longitude: 5.392, latitude: 43.292, zoom: 12.1, pitch: 0, bearing: 0};
+let vue = {...VUE_MARSEILLE};
+
+function calculerIso(sources, libelle) {
+  const t = dijkstra(sources);
+  const tk = D.acc.k.map(a => tempsPoint(t, a));
+  const tc = D.acc.c.map(a => tempsPoint(t, a));
+  const res = {libelle, bandes: tracerBandes(t), tk, stats: {}};
+  for (const T of [300, 600, 900]) {
+    let h = 0; tc.forEach((x, i) => { if (x <= T) h += C[i].hab; });
+    res.stats[T] = {k: tk.filter(x => x <= T).length, h};
+  }
+  etat.iso = res; majIso(); dessiner();
+}
+function isoDepuisPoint(lon, lat, libelle, accFixe) {
+  const acc = accFixe || accrocherClic(lon, lat);
+  etat.depart = {lon, lat};
+  if (acc[2] > 400) {
+    etat.iso = null;
+    document.getElementById("depart").textContent = "Ce point est trop loin du réseau piéton couvert (Marseille et 2 km autour). Cliquez plus près d'une rue de Marseille.";
+    for (const id of ["chiffres-iso", "liste-iso", "compare-iso"]) document.getElementById(id).textContent = "";
+    dessiner(); return;
+  }
+  calculerIso(sourcesDe(acc), libelle || `Point cliqué (${lat.toFixed(4)}, ${lon.toFixed(4)})`);
+}
+function isoDepuisStations() {
+  const src = []; D.acc.s.forEach((a, i) => { if (D.stations[i].type !== "train") src.push(...sourcesDe(a)); });
+  etat.depart = null;
+  calculerIso(src, "toutes les stations de métro et arrêts de tram");
+}
+
+// ---------- Panneaux ----------
+const fmt = n => Math.round(n).toLocaleString("fr-FR");
+const fr1 = n => n.toLocaleString("fr-FR", {maximumFractionDigits: 1});
+function majLegende() {
+  const p = PAL[etat.variable], L = document.getElementById("legende");
+  const lib = etat.variable === "kebabs" ? ["0", "1", "2", "3 et +"]
+    : ["< " + p.f(p.bornes[0]), ...p.bornes.slice(0, -1).map(b => p.f(b)), "≥ " + p.f(p.bornes[p.bornes.length-1])];
+  L.innerHTML = `<div class="titre">${p.titre}</div>
+    <div class="rampe">${p.coul.map(c => `<span style="background:rgb(${c})"></span>`).join("")}</div>
+    <div class="bornes">${lib.map(l => `<span>${l}</span>`).join("")}</div>`;
+  const notes = {
+    kebabs: `${C.filter(c => c.nk > 0).length} carreaux habités contiennent au moins un kebab (en rouge). Les autres sont teintés en gris-bleu selon leur nombre d'habitants.`,
+    hab: "Le relief de la population : les kebabs suivent le centre dense, mais pas les grands ensembles du Nord ni les quartiers pavillonnaires de l'Est.",
+    nv: "Rose : niveau de vie bas ; bleu-vert : élevé. Les kebabs se concentrent dans le rose du centre ancien et presque jamais dans le bleu du Sud. Gris : valeur estimée par l'Insee (secret statistique).",
+    proba: "Probabilité estimée par la régression logistique (AUC 0,93). Les carreaux gris ont des valeurs estimées par l'Insee (secret statistique) et sont exclus du modèle."
+  };
+  document.getElementById("note-variable").textContent = notes[etat.variable];
+}
+function majIso() {
+  const r = etat.iso; if (!r) return;
+  document.getElementById("depart").innerHTML = `Départ : <b>${r.libelle}</b>`;
+  const coul = {300: "#5b2a9e", 600: "#9467cf", 900: "#c4a6ec"};
+  document.getElementById("chiffres-iso").innerHTML = [300, 600, 900].map(T => {
+    const s = r.stats[T];
+    return `<div class="chiffre"><div class="t"><i style="background:${coul[T]}"></i>${T/60} min</div><b>${s.k}</b>
+      <span>kebab${s.k > 1 ? "s" : ""}</span><span>${fmt(s.h)} hab.</span>
+      <span>${s.h > 0 ? fr1(s.k / s.h * 1e4) + " / 10 000 hab." : "–"}</span></div>`;
+  }).join("");
+  const s15 = r.stats[900];
+  document.getElementById("compare-iso").textContent = s15.h > 0
+    ? `À 15 minutes : ${fr1(s15.k / s15.h * 1e4)} kebabs pour 10 000 habitants, contre ${fr1(tauxMarseille)} en moyenne à Marseille.` : "";
+  const att = r.tk.map((t, i) => [t, i]).filter(([t]) => t <= 900).sort((a, b) => a[0] - b[0]);
+  document.getElementById("liste-iso").innerHTML = att.length
+    ? att.slice(0, 40).map(([t, i]) => `<div><span>${K[i].nom}</span><span>${Math.max(1, Math.round(t / 60))} min</span></div>`).join("")
+      + (att.length > 40 ? `<div><span>… et ${att.length - 40} autres</span><span></span></div>` : "")
+    : `<div><span>Aucun kebab à moins de 15 minutes</span><span></span></div>`;
+}
+let lieuxCalcules = false;
+function calculerLieux() {           // mêmes calculs que la carte : le tableau et l'isochrone affichent les mêmes chiffres
+  if (lieuxCalcules) return; lieuxCalcules = true;
+  for (const l of D.lieux) {
+    const t = dijkstra(sourcesDe(l.acc));
+    const tk = D.acc.k.map(a => tempsPoint(t, a)), tc = D.acc.c.map(a => tempsPoint(t, a));
+    for (const m of [5, 10, 15]) {
+      l["k" + m] = tk.filter(x => x <= m * 60).length;
+      let h = 0; tc.forEach((x, i) => { if (x <= m * 60) h += C[i].hab; }); l["h" + m] = h;
+    }
+  }
+}
+function majLieux() {
+  calculerLieux();
+  const max = Math.max(...D.lieux.map(l => l.k15), 1);
+  document.getElementById("table-lieux").innerHTML =
+    `<thead><tr><th>Lieu</th><th>5 min</th><th>10 min</th><th>15 min</th><th>Hab. 15 min</th></tr></thead><tbody>` +
+    D.lieux.map((l, i) => `<tr class="lieu" tabindex="0" data-i="${i}" ${etat.lieu === i ? 'aria-current="true"' : ""}>
+      <td>${l.nom}<span class="cat">${l.cat}</span></td><td>${l.k5}</td><td>${l.k10}</td>
+      <td><span class="barre" style="width:${Math.round(l.k15 / max * 34)}px"></span>${l.k15}</td><td>${fmt(l.h15)}</td></tr>`).join("") + "</tbody>";
+  document.getElementById("note-lieux").textContent =
+    "Le centre (Noailles, Vieux-Port) a déjà des kebabs à 5 minutes. Autour de la gare Saint-Charles, perchée sur sa butte, il faut marcher 10 à 15 minutes. Les campus de Luminy et de Saint-Jérôme n'en ont aucun à 15 minutes : le kebab suit le centre dense plus que les étudiants.";
+  document.querySelectorAll("tr.lieu").forEach(tr => {
+    const go = () => { const l = D.lieux[+tr.dataset.i]; etat.lieu = +tr.dataset.i; majLieux();
+      isoDepuisPoint(l.lon, l.lat, l.nom, l.acc); voler(l.lon, l.lat, 13.6); };
+    tr.addEventListener("click", go);
+    tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+}
+
+// ---------- Couches ----------
+const FOND_HAB = [[244,243,240],[236,237,238],[226,230,234],[214,221,228],[202,212,222],[190,203,216],[178,194,210]];
+function couleurCarreau(c) {
+  const v = etat.variable, p = PAL[v];
+  if (v === "kebabs") return c.nk > 0 ? p.coul[Math.min(c.nk, 3)] : FOND_HAB[classe(c.hab, PAL.hab.bornes)];
+  const x = v === "hab" ? c.hab : v === "nv" ? c.nv : c.proba;
+  if (x === null || x === undefined || (v !== "hab" && c.est)) return GRIS_NA;
+  return p.coul[classe(x, p.bornes)];
+}
+function dessiner() {
+  const L = [];
+  const isoOn = etat.onglet !== "carro" && !!etat.iso;
+  L.push(new GeoJsonLayer({id: "terre", data: D.zones, filled: true, stroked: false, getFillColor: [244, 242, 238]}));
+  if (etat.couches.carreaux) L.push(new ColumnLayer({
+    id: "carreaux", data: C, diskResolution: 4, angle: 45, radius: 141.42, extruded: false, pickable: !isoOn,
+    getPosition: c => [c.lon, c.lat], getFillColor: couleurCarreau, opacity: isoOn ? 0.45 : 1,
+    updateTriggers: {getFillColor: [etat.variable]}}));
+  if (etat.couches.limites) L.push(new GeoJsonLayer({id: "limites", data: D.zones, filled: false, stroked: true,
+    getLineColor: f => f.properties.est_marseille ? [90, 100, 114, 200] : [150, 156, 164, 150],
+    getLineWidth: f => f.properties.est_marseille ? 1.4 : 0.8, lineWidthUnits: "pixels"}));
+  if (etat.couches.rues) L.push(new PathLayer({
+    id: "rues", data: D.rues, getPath: d => d.p, pickable: !isoOn, widthUnits: "meters",
+    getWidth: d => [34, 22, 14][d.c], widthMinPixels: 1, widthMaxPixels: 5,
+    getColor: d => [[45, 50, 58, 230], [70, 76, 86, 210], [110, 116, 126, 190]][d.c], capRounded: true, jointRounded: true}));
+  if (isoOn) {
+    for (const T of [900, 600, 300]) L.push(new PathLayer({id: "halo" + T, data: etat.iso.bandes[T], getPath: d => d,
+      widthUnits: "meters", getWidth: 45, widthMinPixels: 3, getColor: [...ISO_COUL[T], 55], capRounded: true, jointRounded: true}));
+    for (const T of [900, 600, 300]) L.push(new PathLayer({id: "iso" + T, data: etat.iso.bandes[T], getPath: d => d,
+      widthUnits: "meters", getWidth: 16, widthMinPixels: 1.5, getColor: [...ISO_COUL[T], 235], capRounded: true, jointRounded: true}));
+  }
+  if (etat.couches.stations || (isoOn && etat.modeIso === "stations")) L.push(new ScatterplotLayer({
+    id: "stations", data: D.stations, getPosition: s => [s.lon, s.lat], pickable: true,
+    radiusUnits: "pixels", getRadius: s => s.type === "train" ? 5 : 3.5, stroked: true, lineWidthUnits: "pixels", getLineWidth: 1.5,
+    getFillColor: s => s.type === "train" ? [27, 36, 48] : s.type === "metro" ? [42, 120, 214] : [27, 175, 122],
+    getLineColor: [255, 255, 255]}));
+  if (etat.couches.kebabs) {
+    const atteint = isoOn ? etat.iso.tk : null;
+    const loin = i => atteint && atteint[i] > 900;
+    L.push(new ScatterplotLayer({
+      id: "kebabs", data: K, getPosition: k => [k.lon, k.lat], pickable: true,
+      radiusUnits: "pixels", getRadius: 5, stroked: true, lineWidthUnits: "pixels",
+      getLineWidth: k => k.fiab === "certain" ? 1.5 : 2.5,
+      getFillColor: (k, {index}) => k.fiab === "certain" ? [...KEBAB, loin(index) ? 90 : 255] : [255, 255, 255, loin(index) ? 90 : 255],
+      getLineColor: (k, {index}) => k.fiab === "certain" ? [255, 255, 255, loin(index) ? 90 : 255] : [...KEBAB, loin(index) ? 90 : 255],
+      updateTriggers: {getFillColor: [etat.iso, isoOn], getLineColor: [etat.iso, isoOn]}}));
+  }
+  if (isoOn && etat.depart) L.push(new ScatterplotLayer({id: "depart", data: [etat.depart], getPosition: d => [d.lon, d.lat],
+    radiusUnits: "pixels", getRadius: 8, stroked: true, getLineWidth: 3, lineWidthUnits: "pixels",
+    getFillColor: [255, 255, 255], getLineColor: ISO_COUL[300]}));
+  if (etat.onglet === "lieux") L.push(new ScatterplotLayer({id: "lieux", data: D.lieux, getPosition: l => [l.lon, l.lat], pickable: true,
+    radiusUnits: "pixels", getRadius: 6, stroked: true, getLineWidth: 2, lineWidthUnits: "pixels",
+    getFillColor: [255, 255, 255], getLineColor: ENCRE}));
+  carte.setProps({layers: L});
+}
+
+const ech = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+function infobulle({object, layer}) {
+  if (!object || !layer) return null;
+  const id = layer.id;
+  if (id === "kebabs") return {html: `<b>${ech(object.nom)}</b><br>${ech(object.commune)}${object.arr ? ", " + object.arr + (object.arr === 1 ? "er" : "e") : ""}
+    <br><span class="m">${object.fiab} · source ${object.src}</span>${object.adr ? `<br><span class="m">${ech(object.adr)}</span>` : ""}`};
+  if (id === "carreaux") { const c = object;
+    return {html: `<b>Carreau de 200 m</b><br>${fmt(c.hab)} habitants<br>Niveau de vie : ${c.nv ? fmt(c.nv) + " €" : "–"}${c.est ? " (estimé)" : ""}
+      <br>Kebabs : ${c.nk}<br>Station la plus proche : ${c.st !== null ? fmt(c.st) + " m" : "–"}
+      ${c.proba !== null && !c.est ? `<br><span class="m">probabilité du modèle : ${fr1(c.proba * 100)} %</span>` : ""}`}; }
+  if (id === "rues") return object.n ? {html: `<b>${ech(object.n)}</b>`} : null;
+  if (id === "stations") return {html: `<b>${ech(object.nom)}</b><br><span class="m">${{train: "gare SNCF / TER", metro: "station de métro", tram: "arrêt de tram"}[object.type]}</span>`};
+  if (id === "lieux") return {html: `<b>${ech(object.nom)}</b><br>${object.k5} / ${object.k10} / ${object.k15} kebabs à 5 / 10 / 15 min`};
+  return null;
+}
+
+const carte = new DeckGL({
+  container: "carte", initialViewState: vue,
+  controller: {dragRotate: false, touchRotate: false},
+  getTooltip: infobulle,
+  getCursor: ({isDragging, isHovering}) => isDragging ? "grabbing" : (etat.onglet === "iso" || isHovering) ? "pointer" : "grab",
+  onViewStateChange: ({viewState}) => { vue = viewState; },
+  onClick: info => {
+    if (etat.onglet !== "iso" || !info.coordinate) return;
+    setModeIso("point"); isoDepuisPoint(info.coordinate[0], info.coordinate[1]);
+  },
+  parameters: {clearColor: [214 / 255, 226 / 255, 234 / 255, 1]}
+});
+function voler(lon, lat, zoom) {
+  const calme = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  vue = {...vue, longitude: lon, latitude: lat, zoom, transitionDuration: calme ? 0 : 700,
+         transitionInterpolator: new deck.FlyToInterpolator()};
+  carte.setProps({initialViewState: vue});
+}
+
+// ---------- Contrôles ----------
+function setOnglet(o) {
+  etat.onglet = o;
+  for (const [b, v] of [["t-carro", "v-carro"], ["t-iso", "v-iso"], ["t-lieux", "v-lieux"]]) {
+    const actif = b === "t-" + o; document.getElementById(b).setAttribute("aria-selected", actif); document.getElementById(v).hidden = !actif;
+  }
+  if (o === "iso" && !etat.iso) { const l = D.lieux[0]; isoDepuisPoint(l.lon, l.lat, l.nom, l.acc); }
+  if (o === "lieux" && etat.lieu === null) { etat.lieu = 0; majLieux(); const l = D.lieux[0]; isoDepuisPoint(l.lon, l.lat, l.nom, l.acc); }
+  dessiner();
+}
+function setModeIso(m) {
+  etat.modeIso = m;
+  document.querySelectorAll("#mode-iso button").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === m));
+}
+document.querySelectorAll(".onglets button").forEach(b => b.addEventListener("click", () => setOnglet(b.id.slice(2))));
+document.querySelectorAll("#variable button").forEach(b => b.addEventListener("click", () => {
+  etat.variable = b.dataset.v;
+  document.querySelectorAll("#variable button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  majLegende(); dessiner();
+}));
+document.querySelectorAll("#mode-iso button").forEach(b => b.addEventListener("click", () => {
+  setModeIso(b.dataset.m);
+  if (b.dataset.m === "stations") { isoDepuisStations(); voler(5.392, 43.30, 11.6); }
+  else { const l = D.lieux[0]; isoDepuisPoint(l.lon, l.lat, l.nom, l.acc); }
+}));
+for (const k of Object.keys(etat.couches)) document.getElementById("c-" + k).addEventListener("change", e => { etat.couches[k] = e.target.checked; dessiner(); });
+document.getElementById("b-vue").addEventListener("click", () => voler(VUE_MARSEILLE.longitude, VUE_MARSEILLE.latitude, VUE_MARSEILLE.zoom));
+
+majLegende(); majLieux(); dessiner();
+})();
+</script>

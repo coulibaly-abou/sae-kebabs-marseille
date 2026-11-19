@@ -138,6 +138,23 @@ def noms_des_rues(routes, emprise):
     return sortie
 
 
+def transports(emprise):
+    """Lignes de métro et de tram (script 14) et voies ferrées (extrait BBBike)."""
+    lignes = []
+    for l in json.loads((DONNEES_TRAITEES / "lignes_metro_tram.json").read_text(encoding="utf-8")):
+        trace = LineString(l["trace"]).simplify(0.00005)
+        lignes.append({"ref": l["ref"], "type": "metro" if l["type"] == "subway" else "tram",
+                       "p": [[round(x, 5), round(y, 5)] for x, y in trace.coords]})
+    rails = gpd.read_file(f"zip://{ZIP_OSM.as_posix()}!Marseille-shp/shape/railways.shp")
+    rails = rails[rails["type"] == "rail"].explode(index_parts=False).to_crs(CRS_METRIQUE)
+    rails = rails[rails.intersects(emprise)]
+    rails["geometry"] = rails.geometry.simplify(8)
+    rails = rails.to_crs(CRS_GPS)
+    voies = [[[round(x, 5), round(y, 5)] for x, y in g.coords] for g in rails.geometry if g.length > 0]
+    print(f"  transports : {len(lignes)} lignes de métro / tram, {len(voies)} tronçons de voie ferrée")
+    return lignes, voies
+
+
 def graphe_pieton(routes, emprise):
     """Graphe contracté : on ne garde comme sommets que les carrefours et les impasses ;
     chaque arête est une suite de rues entre deux carrefours, avec son temps de marche."""
@@ -312,6 +329,7 @@ def main():
     routes = charger_routes()
     rues = grandes_rues(routes, emprise)
     noms_rues = noms_des_rues(routes, emprise)
+    lignes, voies = transports(emprise)
     xy, num, sur_arete, aretes = graphe_pieton(routes, emprise)
     N, E = encoder_graphe(xy, num, aretes)
     n_noeuds = int((num >= 0).sum())
@@ -391,7 +409,7 @@ def main():
     etiquettes += [{"t": n, "lon": x, "lat": y, "k": "quartier"} for n, x, y in QUARTIERS]
 
     donnees = {"carreaux": carreaux, "etiquettes": etiquettes, "angle": round(angle, 2), "kebabs": kebabs, "stations": stations,
-               "zones": zj, "rues": rues, "noms_rues": noms_rues, "lieux": lieux,
+               "zones": zj, "rues": rues, "noms_rues": noms_rues, "lignes": lignes, "voies": voies, "lieux": lieux,
                "graphe": {"N": N, "E": E, "vitesse": VITESSE},
                "acc": {"k": acc_k, "c": acc_c_tout, "s": acc_s}}
     texte = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))

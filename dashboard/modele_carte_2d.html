@@ -146,6 +146,10 @@ tr.lieu[aria-pressed="true"] td:first-child { font-weight: 600; }
       <span><i style="background:var(--kebab)"></i>Kebab certain</span>
       <span><i style="background:#fff;border:2.5px solid var(--kebab)"></i>Kebab probable</span>
       <span><i class="trait" style="background:#3a3f47"></i>Grande rue</span>
+      <span><i class="trait" style="background:#1f5fa8"></i>Métro</span>
+      <span><i class="trait" style="background:#1e9e6a"></i>Tram</span>
+      <span><i class="trait" style="background:#2b2f36;border-top:1px dashed #fff"></i>Train</span>
+      <span><i style="background:#fff;border:2.5px solid #1b2430"></i>Gare ou station</span>
     </div>
     <p class="note" id="note-variable"></p>
   </section>
@@ -183,7 +187,8 @@ tr.lieu[aria-pressed="true"] td:first-child { font-weight: 600; }
   <label><input type="checkbox" id="c-kebabs" checked> Kebabs</label>
   <label><input type="checkbox" id="c-reseau" checked> Toutes les rues</label>
   <label><input type="checkbox" id="c-rues" checked> Grandes rues et noms</label>
-  <label><input type="checkbox" id="c-stations"> Stations</label>
+  <label><input type="checkbox" id="c-transports" checked> Métro, tram et trains</label>
+  <label><input type="checkbox" id="c-stations" checked> Gares et stations</label>
   <label><input type="checkbox" id="c-limites" checked> Arrondissements</label>
   <button class="btn" id="b-vue" type="button">Recentrer</button>
 </div>
@@ -208,6 +213,9 @@ const PAL = {
           coul: ["#e9edf1", "#f29a7e", "#e0583a", "#9e1f10"].map(hex), f: v => String(v)}
 };
 const GRIS_NA = [226, 224, 220];
+// Lignes : métros en bleus, trams en verts (le rouge reste aux kebabs, le violet aux isochrones)
+const LIGNE_COUL = {M1: hex("#1f5fa8"), M2: hex("#4a9fdc"), T1: hex("#1e9e6a"), T2: hex("#6db33f"), T3: hex("#0f7f78")};
+const STATION_COUL = {train: [27, 36, 48], metro: hex("#1f5fa8"), tram: hex("#1e9e6a")};
 const KEBAB = hex("#d0341f"), ENCRE = hex("#1b2430");
 const ISO_COUL = {300: hex("#5b2a9e"), 600: hex("#9467cf"), 900: hex("#c4a6ec")};
 const classe = (v, b) => { let i = 0; while (i < b.length && v >= b[i]) i++; return i; };
@@ -312,7 +320,7 @@ function tracerBandes(t, durees = [300, 600, 900]) {
 // ---------- État ----------
 const etat = {onglet: "carro", variable: "kebabs", modeIso: "point", iso: null, depart: null,
   multi: [1, 5, 6, 9], dureeMulti: 300, zoom: 12.1,
-  couches: {carreaux: true, kebabs: true, reseau: true, rues: true, stations: false, limites: true}};
+  couches: {carreaux: true, kebabs: true, reseau: true, rues: true, transports: true, stations: true, limites: true}};
 const VUE_MARSEILLE = {longitude: 5.392, latitude: 43.292, zoom: 12.1, pitch: 0, bearing: 0};
 let vue = {...VUE_MARSEILLE};
 
@@ -384,8 +392,14 @@ function majIso() {
 // Une couleur par lieu superposé ; la zone est une teinte claire opaque (pas d'effet de taches
 // quand les rues se recouvrent) et la rue elle-même en couleur franche.
 const MULTI_COUL = ["#5b2a9e", "#0f7c8a", "#c2541a", "#2f6db5", "#3d8a3a", "#b0306a", "#7a5a2e", "#4e5bb0", "#8a7d14", "#a8326e", "#2d7f6a"].map(hex);
+const MILIEUX_LIGNES = D.lignes.map(l => ({ref: l.ref, type: l.type, pos: l.p[Math.floor(l.p.length * 0.62)]}));
+const NOMS_STATIONS = Object.values(D.stations.reduce((acc, s) => {
+  const k = s.nom + "|" + (s.type === "train" ? "g" : "s");
+  if (!acc[k]) acc[k] = {...s, n: 0, lon: 0, lat: 0};
+  acc[k].lon += s.lon; acc[k].lat += s.lat; acc[k].n += 1; return acc; }, {}))
+  .map(s => ({...s, lon: s.lon / s.n, lat: s.lat / s.n}));
 // Jeu de caractères des étiquettes (lettres accentuées comprises)
-const CARACTERES = Array.from(new Set([...D.etiquettes.map(e => e.t), ...D.lieux.map(l => l.nom), ...D.noms_rues.map(n => n.t)].join("") + " 0123456789")).join("");
+const CARACTERES = Array.from(new Set([...D.etiquettes.map(e => e.t), ...D.lieux.map(l => l.nom), ...D.noms_rues.map(n => n.t), ...D.stations.map(x => x.nom), "MT"].join("") + " 0123456789")).join("");
 const teinte = (c, k) => c.map(v => Math.round(v + (255 - v) * k));
 let lieuxCalcules = false;
 function calculerLieux() {           // mêmes calculs que la carte : le tableau et l'isochrone affichent les mêmes chiffres
@@ -470,11 +484,33 @@ function dessiner() {
       widthUnits: "meters", getWidth: 7, widthMinPixels: 1, getColor: [...MULTI_COUL[i % MULTI_COUL.length], 210],
       capRounded: true, jointRounded: true}));
   }
-  if (etat.couches.stations || (isoOn && etat.modeIso === "stations")) L.push(new ScatterplotLayer({
-    id: "stations", data: D.stations, getPosition: s => [s.lon, s.lat], pickable: true,
-    radiusUnits: "pixels", getRadius: s => s.type === "train" ? 5 : 3.5, stroked: true, lineWidthUnits: "pixels", getLineWidth: 1.5,
-    getFillColor: s => s.type === "train" ? [27, 36, 48] : s.type === "metro" ? [42, 120, 214] : [27, 175, 122],
-    getLineColor: [255, 255, 255]}));
+  if (etat.couches.transports) {
+    L.push(new PathLayer({id: "voies-fond", data: D.voies, getPath: d => d, widthUnits: "pixels", getWidth: 3.2,
+      getColor: [43, 47, 54, 220], pickable: false}));
+    L.push(new PathLayer({id: "voies-tirets", data: D.voies, getPath: d => d, widthUnits: "pixels", getWidth: 1.4,
+      getColor: [250, 250, 248, 230], getDashArray: [3, 3], dashJustified: true,
+      extensions: deck.PathStyleExtension ? [new deck.PathStyleExtension({dash: true})] : [], pickable: false}));
+    L.push(new PathLayer({id: "lignes-bord", data: D.lignes, getPath: d => d.p, widthUnits: "pixels",
+      getWidth: d => d.type === "metro" ? 7 : 6, getColor: [255, 255, 255, 230], capRounded: true, jointRounded: true}));
+    L.push(new PathLayer({id: "lignes", data: D.lignes, getPath: d => d.p, widthUnits: "pixels", pickable: true,
+      getWidth: d => d.type === "metro" ? 4.5 : 3.5, getColor: d => LIGNE_COUL[d.ref] || [90, 90, 90], capRounded: true, jointRounded: true}));
+    L.push(new ScatterplotLayer({id: "pastilles-lignes", data: MILIEUX_LIGNES, getPosition: d => d.pos, radiusUnits: "pixels",
+      getRadius: 11, getFillColor: d => LIGNE_COUL[d.ref], stroked: true, getLineColor: [255, 255, 255], lineWidthUnits: "pixels", getLineWidth: 2}));
+    L.push(new TextLayer({id: "refs-lignes", data: MILIEUX_LIGNES, getPosition: d => d.pos, getText: d => d.ref,
+      getSize: 11.5, getColor: [255, 255, 255], fontFamily: "'Segoe UI', Arial, sans-serif", fontWeight: 700,
+      characterSet: CARACTERES, pickable: false}));
+  }
+  if (etat.couches.stations || (isoOn && etat.modeIso === "stations")) {
+    L.push(new ScatterplotLayer({
+      id: "stations", data: D.stations, getPosition: s => [s.lon, s.lat], pickable: true,
+      radiusUnits: "pixels", getRadius: s => s.type === "train" ? 5.5 : etat.zoom >= 13.5 ? 4.5 : 3.2, stroked: true, lineWidthUnits: "pixels",
+      getLineWidth: s => s.type === "train" ? 2.5 : 2, getFillColor: [255, 255, 255], getLineColor: s => STATION_COUL[s.type],
+      updateTriggers: {getRadius: etat.zoom >= 13.5}}));
+    if (etat.zoom >= 13.6) L.push(new TextLayer({id: "noms-stations", data: NOMS_STATIONS.filter(s => s.type === "train" || etat.zoom >= 14),
+      getPosition: s => [s.lon, s.lat], getText: s => s.nom, getSize: s => s.type === "train" ? 13 : 12,
+      getColor: s => STATION_COUL[s.type], getPixelOffset: [0, -14], fontFamily: "'Segoe UI', Arial, sans-serif", fontWeight: 700,
+      characterSet: CARACTERES, fontSettings: {sdf: true}, outlineWidth: 5, outlineColor: [255, 255, 255, 240], pickable: false}));
+  }
   if (etat.couches.kebabs) {
     const atteint = isoOn ? etat.iso.tk : null;
     const multiT = multiOn ? etat.dureeMulti : null;
@@ -530,6 +566,7 @@ function infobulle({object, layer}) {
       <br>Kebabs : ${c.nk}<br>Station la plus proche : ${c.st !== null ? fmt(c.st) + " m" : "–"}
       ${c.proba !== null && !c.est ? `<br><span class="m">probabilité du modèle : ${fr1(c.proba * 100)} %</span>` : ""}`}; }
   if (id === "rues") return object.n ? {html: `<b>${ech(object.n)}</b>`} : null;
+  if (id === "lignes") return {html: `<b>${object.type === "metro" ? "Métro" : "Tram"} ${ech(object.ref)}</b>`};
   if (id === "stations") return {html: `<b>${ech(object.nom)}</b><br><span class="m">${{train: "gare SNCF / TER", metro: "station de métro", tram: "arrêt de tram"}[object.type]}</span>`};
   if (id === "lieux") return {html: `<b>${ech(object.nom)}</b><br>${object.k5} / ${object.k10} / ${object.k15} kebabs à 5 / 10 / 15 min`};
   return null;
@@ -542,7 +579,7 @@ const carte = new DeckGL({
   getCursor: ({isDragging, isHovering}) => isDragging ? "grabbing" : (etat.onglet === "iso" || isHovering) ? "pointer" : "grab",
   onViewStateChange: ({viewState}) => {
     vue = viewState;
-    const palier = z => (z < 10.8 ? 0 : z < 12.5 ? 1 : z < 13.2 ? 2 : z < 14.2 ? 3 : z < 14.3 ? 4 : z < 14.8 ? 5 : z < 15.6 ? 6 : 7);
+    const palier = z => (z < 10.8 ? 0 : z < 12.5 ? 1 : z < 13.2 ? 2 : z < 13.5 ? 3 : z < 13.6 ? 4 : z < 14 ? 5 : z < 14.2 ? 6 : z < 14.3 ? 7 : z < 14.8 ? 8 : z < 15.6 ? 9 : 10);
     const avant = palier(etat.zoom); etat.zoom = viewState.zoom;
     if (palier(viewState.zoom) !== avant) dessiner();
   },

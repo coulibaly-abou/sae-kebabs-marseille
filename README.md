@@ -6,6 +6,10 @@ SAÉ 5.EMS.01 : Mener une étude statistique dans un domaine d'application (BUT3
 > et cette répartition révèle-t-elle d'autres fractures socio-spatiales du territoire ?
 
 **Scène 3D interactive des résultats :** https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_3d.html
+
+**Carte 2D interactive (carroyage, grandes rues, isochrones à pied au clic) :** https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_2d.html
+
+**Diaporama de soutenance :** [rapport/AMAVIGAN_COULIBALY_soutenance_SAE5EMS01.pptx](rapport/AMAVIGAN_COULIBALY_soutenance_SAE5EMS01.pptx)
 (population en relief, kebabs, stations, isochrones, simulation de Monte-Carlo, modèle ; visite guidée en 8 étapes, isochrone animée, rames du métro et du tram).
 
 **Guide (liens, mode d'emploi de la 3D, soutenance, questions du jury) :** [GUIDE.md](GUIDE.md)
@@ -37,6 +41,7 @@ etude implantation des kebabs en marseille/
 │   ├── 10_gares_isochrone.py        distance aux gares (H3), isochrones de Saint-Charles
 │   ├── 11_modelisation.py           régression logistique, validation croisée
 │   ├── 12_scene_3d.py               scène 3D (deck.gl) + simulation de Monte-Carlo -> dashboard/
+│   ├── 16_carte_2d.py               carte 2D + isochrones à pied (réseau OSM, Dijkstra) -> dashboard/
 │   ├── 13_figures_rapport.py        figure de l'article, Gantt, captures de la scène 3D
 │   ├── 98_livrables.py              rapport .qmd, .docx (Pandoc) et PDF (Word)
 │   ├── 14_collecte_mouvement.py     tracés métro / tram et trajets à pied (scène animée)
@@ -63,6 +68,7 @@ python 09_contributeurs_osm.py     # historique OSM
 python 10_gares_isochrone.py       # gares et isochrones (service Valhalla, sans clé)
 python 11_modelisation.py          # modèle explicatif
 python 12_scene_3d.py              # scène 3D -> dashboard/kebabs_3d.html
+python 16_carte_2d.py              # carte 2D + isochrones -> dashboard/kebabs_2d.html
 python 13_figures_rapport.py       # figures complémentaires du rapport
 python 98_livrables.py             # rapport .qmd, .docx et PDF (Pandoc + Word)
 ```

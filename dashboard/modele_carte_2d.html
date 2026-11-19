@@ -181,7 +181,8 @@ tr.lieu[aria-pressed="true"] td:first-child { font-weight: 600; }
   <div class="titre">Couches</div>
   <label><input type="checkbox" id="c-carreaux" checked> Carreaux</label>
   <label><input type="checkbox" id="c-kebabs" checked> Kebabs</label>
-  <label><input type="checkbox" id="c-rues" checked> Grandes rues</label>
+  <label><input type="checkbox" id="c-reseau" checked> Toutes les rues</label>
+  <label><input type="checkbox" id="c-rues" checked> Grandes rues et noms</label>
   <label><input type="checkbox" id="c-stations"> Stations</label>
   <label><input type="checkbox" id="c-limites" checked> Arrondissements</label>
   <button class="btn" id="b-vue" type="button">Recentrer</button>
@@ -311,7 +312,7 @@ function tracerBandes(t, durees = [300, 600, 900]) {
 // ---------- État ----------
 const etat = {onglet: "carro", variable: "kebabs", modeIso: "point", iso: null, depart: null,
   multi: [1, 5, 6, 9], dureeMulti: 300, zoom: 12.1,
-  couches: {carreaux: true, kebabs: true, rues: true, stations: false, limites: true}};
+  couches: {carreaux: true, kebabs: true, reseau: true, rues: true, stations: false, limites: true}};
 const VUE_MARSEILLE = {longitude: 5.392, latitude: 43.292, zoom: 12.1, pitch: 0, bearing: 0};
 let vue = {...VUE_MARSEILLE};
 
@@ -384,7 +385,7 @@ function majIso() {
 // quand les rues se recouvrent) et la rue elle-même en couleur franche.
 const MULTI_COUL = ["#5b2a9e", "#0f7c8a", "#c2541a", "#2f6db5", "#3d8a3a", "#b0306a", "#7a5a2e", "#4e5bb0", "#8a7d14", "#a8326e", "#2d7f6a"].map(hex);
 // Jeu de caractères des étiquettes (lettres accentuées comprises)
-const CARACTERES = Array.from(new Set([...D.etiquettes.map(e => e.t), ...D.lieux.map(l => l.nom)].join("") + " 0123456789")).join("");
+const CARACTERES = Array.from(new Set([...D.etiquettes.map(e => e.t), ...D.lieux.map(l => l.nom), ...D.noms_rues.map(n => n.t)].join("") + " 0123456789")).join("");
 const teinte = (c, k) => c.map(v => Math.round(v + (255 - v) * k));
 let lieuxCalcules = false;
 function calculerLieux() {           // mêmes calculs que la carte : le tableau et l'isochrone affichent les mêmes chiffres
@@ -440,16 +441,19 @@ function dessiner() {
   const multiOn = etat.onglet === "lieux";
   L.push(new GeoJsonLayer({id: "terre", data: D.zones, filled: true, stroked: false, getFillColor: [244, 242, 238]}));
   if (etat.couches.carreaux) L.push(new ColumnLayer({
-    id: "carreaux", data: C, diskResolution: 4, angle: 45, radius: 141.42, extruded: false, pickable: !isoOn,
+    id: "carreaux", data: C, diskResolution: 4, angle: 45 + D.angle, radius: 141.42, extruded: false, pickable: !isoOn,
     getPosition: c => [c.lon, c.lat], getFillColor: couleurCarreau, opacity: (isoOn || multiOn) ? 0.45 : 1,
     updateTriggers: {getFillColor: [etat.variable]}}));
   if (etat.couches.limites) L.push(new GeoJsonLayer({id: "limites", data: D.zones, filled: false, stroked: true,
     getLineColor: f => f.properties.est_marseille ? [90, 100, 114, 200] : [150, 156, 164, 150],
     getLineWidth: f => f.properties.est_marseille ? 1.4 : 0.8, lineWidthUnits: "pixels"}));
+  if (etat.couches.reseau) L.push(new PathLayer({
+    id: "reseau", data: EP, getPath: d => d, widthUnits: "meters", getWidth: 5, widthMinPixels: 0.5, widthMaxPixels: 2,
+    getColor: [96, 106, 120, etat.zoom < 12.5 ? 60 : 90], updateTriggers: {getColor: etat.zoom < 12.5}, pickable: false}));
   if (etat.couches.rues) L.push(new PathLayer({
     id: "rues", data: D.rues, getPath: d => d.p, pickable: !isoOn && !multiOn, widthUnits: "meters",
-    getWidth: d => [34, 22, 14][d.c], widthMinPixels: 1, widthMaxPixels: 5,
-    getColor: d => [[45, 50, 58, 230], [70, 76, 86, 210], [110, 116, 126, 190]][d.c], capRounded: true, jointRounded: true}));
+    getWidth: d => [34, 22, 14, 9][d.c], widthMinPixels: 1, widthMaxPixels: 5,
+    getColor: d => [[45, 50, 58, 230], [70, 76, 86, 210], [110, 116, 126, 190], [130, 136, 146, 170]][d.c], capRounded: true, jointRounded: true}));
   if (isoOn) {          // zones pleines : rues élargies en teinte opaque, de 15 à 5 minutes
     const ZONE = {900: hex("#e4d8f5"), 600: hex("#c3a8ea"), 300: hex("#8d5fd0")};
     for (const T of [900, 600, 300]) L.push(new PathLayer({id: "zone" + T, data: etat.iso.bandes[T], getPath: d => d,
@@ -497,8 +501,15 @@ function dessiner() {
       getSize: 13, getColor: l => MULTI_COUL[l.i % MULTI_COUL.length], getPixelOffset: [0, -18], fontFamily: "'Segoe UI', Arial, sans-serif",
       fontWeight: 700, characterSet: CARACTERES, fontSettings: {sdf: true}, outlineWidth: 4, outlineColor: [255, 255, 255, 240]}));
   }
-  // Noms : communes de loin, arrondissements à l'échelle de la ville, quartiers en zoomant
+  // Noms : communes de loin, arrondissements à l'échelle de la ville, quartiers puis rues en zoomant
   const z = etat.zoom;
+  if (etat.couches.rues && z >= 14.3) {
+    const rues = D.noms_rues.filter(n => n.r === 1 || (n.r === 2 && z >= 14.8) || (n.r === 3 && z >= 15.6));
+    L.push(new TextLayer({id: "noms-rues", data: rues, getPosition: n => [n.lon, n.lat], getText: n => n.t,
+      getAngle: n => n.a, getSize: n => n.r === 1 ? 14 : 12.5, getColor: [28, 34, 44, 255],
+      fontFamily: "'Segoe UI', Arial, sans-serif", fontWeight: 600, characterSet: CARACTERES,
+      fontSettings: {sdf: true}, outlineWidth: 6, outlineColor: [252, 251, 248, 245], pickable: false}));
+  }
   const noms = D.etiquettes.filter(e => e.k === "commune" ? z < 12.5 : e.k === "arr" ? (z >= 10.8 && z < 14.2) : z >= 13.2);
   L.push(new TextLayer({id: "etiquettes", data: noms, getPosition: e => [e.lon, e.lat], getText: e => e.t,
     getSize: e => e.k === "arr" ? 15 : e.k === "quartier" ? 12.5 : 11.5,
@@ -531,7 +542,7 @@ const carte = new DeckGL({
   getCursor: ({isDragging, isHovering}) => isDragging ? "grabbing" : (etat.onglet === "iso" || isHovering) ? "pointer" : "grab",
   onViewStateChange: ({viewState}) => {
     vue = viewState;
-    const palier = z => (z < 10.8 ? 0 : z < 12.5 ? 1 : z < 13.2 ? 2 : z < 14.2 ? 3 : 4);
+    const palier = z => (z < 10.8 ? 0 : z < 12.5 ? 1 : z < 13.2 ? 2 : z < 14.2 ? 3 : z < 14.3 ? 4 : z < 14.8 ? 5 : z < 15.6 ? 6 : 7);
     const avant = palier(etat.zoom); etat.zoom = viewState.zoom;
     if (palier(viewState.zoom) !== avant) dessiner();
   },

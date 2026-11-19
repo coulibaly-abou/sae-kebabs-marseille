@@ -47,7 +47,10 @@ PIETON = {"footway", "residential", "path", "track", "tertiary", "steps", "secon
           "unclassified", "primary", "pedestrian", "cycleway", "living_street", "service",
           "tertiary_link", "secondary_link", "primary_link", "bridleway", "elevator",
           "corridor", "platform", "road"}
-GRANDES_RUES = {"motorway": 0, "trunk": 0, "primary": 1, "secondary": 2}
+GRANDES_RUES = {"motorway": 0, "trunk": 0, "primary": 1, "secondary": 2, "tertiary": 3}
+# Rues dont on écrit le nom quand on zoome (rang 1 = axes, 2 = rues moyennes, 3 = petites rues)
+RANG_NOM = {"trunk": 1, "primary": 1, "secondary": 1, "tertiary": 2, "residential": 3, "unclassified": 3,
+            "living_street": 3, "pedestrian": 3}
 
 # Lieux de comparaison (coordonnées des stations OSM, sinon entrée du site)
 LIEUX = [
@@ -93,15 +96,46 @@ def charger_routes() -> gpd.GeoDataFrame:
     return routes.explode(index_parts=False).reset_index(drop=True)
 
 
+def nom_rue(l):
+    for v in (l.name, l.ref):
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    return ""
+
+
 def grandes_rues(routes, emprise):
     g = routes[routes["type"].isin(GRANDES_RUES)].to_crs(CRS_METRIQUE)
     g = g[g.intersects(emprise)]
-    g["geometry"] = g.geometry.simplify(8)
+    g["geometry"] = g.geometry.simplify(6)
     g = g.to_crs(CRS_GPS)
-    return [{"n": (l.name or l.ref or "") if isinstance(l.name, str) or isinstance(l.ref, str) else "",
+    return [{"n": nom_rue(l),
              "c": GRANDES_RUES[l.type],
              "p": [[round(x, 5), round(y, 5)] for x, y in l.geometry.coords]}
             for l in g.itertuples()]
+
+
+def noms_des_rues(routes, emprise):
+    """Une étiquette par nom de rue : au milieu de son plus long tronçon, dans le sens de la rue."""
+    r = routes[routes["type"].isin(RANG_NOM) & routes["name"].notna()].to_crs(CRS_METRIQUE)
+    r = r[r.intersects(emprise)].copy()
+    r["rang"] = r["type"].map(RANG_NOM)
+    r["longueur"] = r.geometry.length
+    r = r[r["longueur"] > 60].sort_values("longueur", ascending=False).drop_duplicates("name")
+    vers_gps = Transformer.from_crs(CRS_METRIQUE, CRS_GPS, always_xy=True)
+    sortie = []
+    for l in r.itertuples():
+        g = l.geometry
+        a, b = g.interpolate(0.42, normalized=True), g.interpolate(0.58, normalized=True)
+        m = g.interpolate(0.5, normalized=True)
+        angle = float(np.degrees(np.arctan2(b.y - a.y, b.x - a.x)))
+        if angle > 90:
+            angle -= 180
+        elif angle < -90:
+            angle += 180
+        lon, lat = vers_gps.transform(m.x, m.y)
+        sortie.append({"t": l.name, "lon": round(lon, 5), "lat": round(lat, 5), "a": round(angle), "r": int(l.rang)})
+    print(f"  noms de rues : {len(sortie)}")
+    return sortie
 
 
 def graphe_pieton(routes, emprise):
@@ -259,10 +293,13 @@ def carreaux_et_modele():
     d["proba"] = np.nan
     d.loc[app.index, "proba"] = modele.predict(Xs)
     # angle des carreaux Insee (projection LAEA) une fois affichés en lon/lat
-    g = c.geometry.iloc[0]
-    (x0, y0), (x1, y1) = list(g.exterior.coords)[:2]
-    a = gpd.GeoSeries.from_xy([x0, x1], [y0, y1], crs=c.crs).to_crs(CRS_METRIQUE)
-    angle = float(np.degrees(np.arctan2(a.y.iloc[1] - a.y.iloc[0], a.x.iloc[1] - a.x.iloc[0])))
+    # Rotation de la grille Insee (LAEA) par rapport au nord, mesurée au centre de Marseille :
+    # un côté de carreau, passé en lon/lat, puis en mètres locaux (est, nord).
+    vers_laea = Transformer.from_crs(CRS_GPS, c.crs, always_xy=True)
+    vers_gps_ = Transformer.from_crs(c.crs, CRS_GPS, always_xy=True)
+    x0, y0 = vers_laea.transform(5.38, 43.30)
+    (lo0, la0), (lo1, la1) = vers_gps_.transform(x0, y0), vers_gps_.transform(x0 + 200, y0)
+    angle = float(np.degrees(np.arctan2(la1 - la0, (lo1 - lo0) * np.cos(np.radians(la0)))))
     return d, angle
 
 
@@ -274,6 +311,7 @@ def main():
 
     routes = charger_routes()
     rues = grandes_rues(routes, emprise)
+    noms_rues = noms_des_rues(routes, emprise)
     xy, num, sur_arete, aretes = graphe_pieton(routes, emprise)
     N, E = encoder_graphe(xy, num, aretes)
     n_noeuds = int((num >= 0).sum())
@@ -353,7 +391,7 @@ def main():
     etiquettes += [{"t": n, "lon": x, "lat": y, "k": "quartier"} for n, x, y in QUARTIERS]
 
     donnees = {"carreaux": carreaux, "etiquettes": etiquettes, "angle": round(angle, 2), "kebabs": kebabs, "stations": stations,
-               "zones": zj, "rues": rues, "lieux": lieux,
+               "zones": zj, "rues": rues, "noms_rues": noms_rues, "lieux": lieux,
                "graphe": {"N": N, "E": E, "vitesse": VITESSE},
                "acc": {"k": acc_k, "c": acc_c_tout, "s": acc_s}}
     texte = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))

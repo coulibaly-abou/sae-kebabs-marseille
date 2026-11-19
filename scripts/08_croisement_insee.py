@@ -40,7 +40,7 @@ from scipy.spatial import cKDTree
 
 from config import (CRS_GPS, CRS_INSEE, DONNEES_BRUTES, DONNEES_TRAITEES, ECHELLE, FIGURES,
                     TAILLE_CARREAU)
-from utils import FICHIER_ZONES
+from utils import FICHIER_ZONES, tracer_grandes_rues
 
 # Le Vieux-Port : point de référence pour la distance au centre de Marseille
 VIEUX_PORT = (5.3740, 43.2951)  # lon, lat
@@ -193,24 +193,31 @@ def figure_correlations(sp: pd.DataFrame):
     print("  -> figures/fig07_correlations.png")
 
 
+# Palettes des cartes : aucune classe assez pâle pour se confondre avec le fond.
+NIVEAU_VIE = ["#b4235f", "#d2588a", "#e597b4", "#8fc4c9", "#4a9ea8", "#16707f"]   # modeste -> aisé
+VIOLETS = ["#d7cdea", "#b9a6dc", "#9a7fcc", "#7b5ab8", "#5b3a9e", "#3d2273"]
+
+
 def carte_indicateur(car_m, kebabs_m, zones, colonne, seuils, etiquettes, titre_legende,
-                     titre, fichier):
-    """Carte d'un indicateur par carreau (classes, dégradé de bleus) avec les kebabs, à Marseille."""
-    couleurs = BLEUS[:len(etiquettes)]
+                     titre, fichier, couleurs=None):
+    """Carte d'un indicateur par carreau (classes) avec les kebabs et les grandes rues, à Marseille."""
+    couleurs = (couleurs or BLEUS)[:len(etiquettes)]
     fig, ax = plt.subplots(figsize=(8, 7.5))
     zones.plot(ax=ax, color=GRIS_ZONE, edgecolor=LIMITE, linewidth=0.4)
     car_m.plot(ax=ax, column=colonne, cmap=ListedColormap(couleurs),
                norm=BoundaryNorm(seuils, len(couleurs)), linewidth=0)
+    tracer_grandes_rues(ax, car_m.crs, zorder=3)
     marseille = zones[zones["est_marseille"]]
-    marseille.plot(ax=ax, color="none", edgecolor=TEXTE_2, linewidth=0.7)
-    ax.scatter(kebabs_m.geometry.x, kebabs_m.geometry.y, s=22, color="#eb6834",
+    marseille.plot(ax=ax, color="none", edgecolor=TEXTE_2, linewidth=0.7, zorder=4)
+    ax.scatter(kebabs_m.geometry.x, kebabs_m.geometry.y, s=22, color="#1b2430",
                edgecolor=FOND, linewidth=0.8, zorder=5)
     b = marseille.total_bounds
     ax.set_xlim(b[0] - 800, b[2] + 800); ax.set_ylim(b[1] - 800, b[3] + 800)
     ax.set_axis_off()
     poignees = [Patch(color=c, label=e) for c, e in zip(couleurs, etiquettes)]
-    poignees.append(Line2D([], [], marker="o", ls="", markersize=6, color="#eb6834",
+    poignees.append(Line2D([], [], marker="o", ls="", markersize=6, color="#1b2430",
                            markeredgecolor=FOND, label=f"Kebab ({len(kebabs_m)})"))
+    poignees.append(Line2D([], [], color="#3a3f47", lw=1.3, label="Grande rue"))
     ax.legend(handles=poignees, loc="lower left", frameon=False, fontsize=8,
               title=titre_legende, title_fontsize=8.5)
     ax.set_title(titre, loc="left", fontsize=12, fontweight="bold", pad=18)
@@ -229,7 +236,8 @@ def figure_niveau_vie(car_m, kebabs_m, zones):
         ["moins de 13 000 €", "13 000 à 16 000 €", "16 000 à 20 000 €",
          "20 000 à 25 000 €", "25 000 à 32 000 €", "32 000 € et plus"],
         "Niveau de vie moyen par habitant",
-        "Niveau de vie et implantation des kebabs à Marseille", "fig06_niveau_vie_kebabs.png")
+        "Niveau de vie et implantation des kebabs à Marseille", "fig06_niveau_vie_kebabs.png",
+        couleurs=NIVEAU_VIE)
 
 
 def figure_jeunes_adultes(car_m, kebabs_m, zones):
@@ -245,7 +253,8 @@ def figure_jeunes_adultes(car_m, kebabs_m, zones):
         car_m, kebabs_m, zones, "part_18_39", seuils,
         [e.replace("%", " %") for e in etiquettes],
         "Part des 18-39 ans dans la population",
-        "Jeunes adultes et implantation des kebabs à Marseille", "fig08_jeunes_adultes_kebabs.png")
+        "Jeunes adultes et implantation des kebabs à Marseille", "fig08_jeunes_adultes_kebabs.png",
+        couleurs=VIOLETS)
 
 
 # --- Analyse détaillée par tranche d'âge -----------------------------------------------------

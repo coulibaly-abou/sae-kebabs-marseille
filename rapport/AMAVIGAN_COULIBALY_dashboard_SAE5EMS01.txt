@@ -1,10 +1,13 @@
 SAÉ 5.EMS.01 - Étude de l'implantation des kebabs dans l'agglomération marseillaise
 Ayi Amavigan, Aboubakar Coulibaly - BUT Science des Données, 2026-2027
 
-Tableau de bord : scène 3D interactive (visite guidée en 7 étapes, simulation, modèle)
+Tableau de bord : scène 3D interactive (visite guidée en 8 étapes, simulation, modèle)
 https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_3d.html
 
-Fichier autonome équivalent dans le dépôt : dashboard/kebabs_3d.html (s'ouvre dans un navigateur)
+Carte 2D interactive : carroyage, grandes rues, isochrones à pied au clic, comparaison de lieux
+https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_2d.html
+
+Fichiers autonomes équivalents dans le dépôt : dashboard/kebabs_3d.html et dashboard/kebabs_2d.html (s'ouvrent dans un navigateur)
 
 Code, données et rapport :
 https://github.com/coulibaly-abou/sae-kebabs-marseille

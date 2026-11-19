@@ -36,7 +36,7 @@ from shapely.geometry import box
 
 from config import (CRS_GPS, CRS_INSEE, DONNEES_BRUTES, DONNEES_TRAITEES, ECHELLE, FIGURES,
                     TAILLE_CARREAU)
-from utils import FICHIER_ZONES
+from utils import FICHIER_ZONES, tracer_grandes_rues
 
 # --- Charte graphique (palette de référence, validée daltonisme) ----------------
 FOND = "#fcfcfb"
@@ -246,29 +246,42 @@ def carte_marseille(kebabs, zones):
     sauver(fig, "fig02_kebabs_marseille.png")
 
 
-def carte_carroyage(car, zones):
+# Carroyage : fond gris-bleu selon les habitants, carreaux à kebab en rouges (pas de teinte pâle
+# qui disparaîtrait sur le fond clair), points des kebabs et grandes rues par-dessus.
+FOND_HABITANTS = ["#dde3e9", "#c8d2dc", "#b1bfcd", "#98abbe", "#7f97ae"]
+BORNES_HABITANTS = [0, 50, 250, 750, 1500, 1e9]
+ROUGES = ["#f29a7e", "#e0583a", "#9e1f10"]
+
+
+def carte_carroyage(car, zones, kebabs=None):
     fig, ax = plt.subplots(figsize=(8, 7.5))
     fond_marseille(ax, zones)
-    car[car["habite"]].plot(ax=ax, color=GRIS_HABITE, edgecolor=FOND,
-                            linewidth=0 if TAILLE_CARREAU == 200 else 0.6)
-    # Classes de nombre de kebabs (comptes de la légende : Marseille seulement)
+    hab = car[car["habite"]]
+    hab.plot(ax=ax, column="ind", cmap=ListedColormap(FOND_HABITANTS),
+             norm=BoundaryNorm(BORNES_HABITANTS, len(FOND_HABITANTS)), linewidth=0, zorder=2)
     if TAILLE_CARREAU == 200:
         classes = [(1, 1, "1 kebab"), (2, 2, "2 kebabs"), (3, 999, "3 kebabs ou plus")]
-        couleurs = [BLEUS[2], BLEUS[4], BLEUS[6]]
+        couleurs = ROUGES
     else:
         classes = [(1, 1, "1 kebab"), (2, 3, "2 ou 3 kebabs"), (4, 9, "4 à 9 kebabs"),
                    (10, 999, "10 kebabs ou plus")]
-        couleurs = [BLEUS[1], BLEUS[3], BLEUS[5], BLEUS[6]]
+        couleurs = ["#f29a7e", "#e0583a", "#b8331c", "#7a160a"]
     avec = car[car["nb_kebabs"] > 0]
     avec_m = avec[avec["commune"] == "Marseille"]
-    poignees = [Patch(color=GRIS_HABITE, label="Carreau habité, sans kebab")]
+    poignees = [Patch(color=FOND_HABITANTS[1], label="Carreau sans kebab (plus foncé = plus peuplé)")]
     for (bas, haut, lib), coul in zip(classes, couleurs):
         dans = avec["nb_kebabs"].between(bas, haut)
-        bord = (coul, 0.8) if TAILLE_CARREAU == 200 else (FOND, 0.6)  # petits carreaux : bord plein
-        avec[dans].plot(ax=ax, color=coul, edgecolor=bord[0], linewidth=bord[1], zorder=4)
+        avec[dans].plot(ax=ax, color=coul, edgecolor=coul, linewidth=0.8, zorder=4)
         n = avec_m["nb_kebabs"].between(bas, haut).sum()
         poignees.append(Patch(color=coul, label=f"{lib} ({n} carreau{'x' if n > 1 else ''})"))
-    zones[zones["est_marseille"]].plot(ax=ax, color="none", edgecolor=TEXTE_2, linewidth=0.7, zorder=5)
+    tracer_grandes_rues(ax, CRS_INSEE, zorder=5)
+    zones[zones["est_marseille"]].plot(ax=ax, color="none", edgecolor=TEXTE_2, linewidth=0.7, zorder=6)
+    if kebabs is not None:
+        ax.scatter(kebabs.geometry.x, kebabs.geometry.y, s=9, color="#1b2430",
+                   edgecolor=FOND, linewidth=0.5, zorder=7)
+        poignees.append(Line2D([], [], marker="o", ls="", markersize=4.5, color="#1b2430",
+                               markeredgecolor=FOND, label="Position exacte du kebab"))
+    poignees.append(Line2D([], [], color="#3a3f47", lw=1.3, label="Grande rue (autoroute, axe principal)"))
     ax.legend(handles=poignees, loc="lower left", frameon=False, fontsize=8.5, labelcolor=TEXTE)
     m = car[car["commune"] == "Marseille"]
     habiller(ax, f"Carroyage : nombre de kebabs par carreau de {ECHELLE} à Marseille",
@@ -370,7 +383,7 @@ def main():
 
     carte_metropole(kebabs, zones, communes)
     carte_marseille(kebabs, zones)
-    carte_carroyage(car, zones)
+    carte_carroyage(car, zones, kebabs)
     carte_chaleur(kebabs, zones)
     carte_par_habitant(st, zones, communes)
 

@@ -65,6 +65,17 @@ LIEUX = [
 ]
 
 
+# Noms de quartiers affichés quand on zoome (position approximative du centre du quartier)
+QUARTIERS = [("Le Panier", 5.3685, 43.2990), ("Belsunce", 5.3772, 43.2996), ("Noailles", 5.3822, 43.2963),
+             ("Cours Julien", 5.3850, 43.2938), ("La Plaine", 5.3897, 43.2952), ("La Joliette", 5.3655, 43.3052),
+             ("Castellane", 5.3840, 43.2858), ("Le Prado", 5.3925, 43.2712), ("Vieux-Port", 5.3718, 43.2948),
+             ("Saint-Charles", 5.3810, 43.3045), ("La Timone", 5.4025, 43.2898), ("Notre-Dame-de-la-Garde", 5.3713, 43.2840),
+             ("La Canebière", 5.3790, 43.2975), ("Euroméditerranée", 5.3680, 43.3110), ("Les Chartreux", 5.3990, 43.3070),
+             ("Saint-Just", 5.4040, 43.3170), ("Malpassé", 5.4150, 43.3275), ("La Rose", 5.4260, 43.3340),
+             ("Saint-Antoine", 5.3720, 43.3700), ("L'Estaque", 5.3200, 43.3620), ("Mazargues", 5.4040, 43.2470),
+             ("Luminy", 5.4389, 43.2324), ("Saint-Loup", 5.4300, 43.2780), ("La Valentine", 5.4850, 43.2950)]
+
+
 def r(x, n):
     return None if pd.isna(x) else round(float(x), n)
 
@@ -331,7 +342,17 @@ def main():
         f["geometry"]["coordinates"] = json.loads(json.dumps(f["geometry"]["coordinates"]),
                                                   parse_float=lambda x: round(float(x), 5))
 
-    donnees = {"carreaux": carreaux, "angle": round(angle, 2), "kebabs": kebabs, "stations": stations,
+    etiquettes = []
+    for l in zones.itertuples():
+        p = l.geometry.representative_point()
+        if l.est_marseille:
+            n = int(l.arrondissement)
+            etiquettes.append({"t": "1er" if n == 1 else f"{n}e", "lon": round(p.x, 5), "lat": round(p.y, 5), "k": "arr"})
+        else:
+            etiquettes.append({"t": l.nom_zone, "lon": round(p.x, 5), "lat": round(p.y, 5), "k": "commune"})
+    etiquettes += [{"t": n, "lon": x, "lat": y, "k": "quartier"} for n, x, y in QUARTIERS]
+
+    donnees = {"carreaux": carreaux, "etiquettes": etiquettes, "angle": round(angle, 2), "kebabs": kebabs, "stations": stations,
                "zones": zj, "rues": rues, "lieux": lieux,
                "graphe": {"N": N, "E": E, "vitesse": VITESSE},
                "acc": {"k": acc_k, "c": acc_c_tout, "s": acc_s}}

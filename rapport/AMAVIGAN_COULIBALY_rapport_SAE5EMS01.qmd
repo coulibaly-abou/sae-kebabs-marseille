@@ -856,6 +856,19 @@ enfin afficher la probabilité calculée par le modèle, avec les douze carreaux
 favorables où nous ne connaissons aucun kebab, et les ratés du modèle. L'annexe D présente
 cette scène.
 
+Une version à plat complète la scène 3D, plus simple à lire en projection :
+[coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_2d.html](https://coulibaly-abou.github.io/sae-kebabs-marseille/dashboard/kebabs_2d.html).
+On y colore les carreaux selon le nombre de kebabs, les habitants, le niveau de vie ou la
+probabilité du modèle, avec les grandes rues et les noms des quartiers. Surtout, on peut
+cliquer n'importe où dans Marseille pour obtenir la zone atteignable à pied en 5, 10 et
+15 minutes, et superposer celles de plusieurs lieux : le centre, les facultés, le parc des
+expositions. Ces isochrones sont calculées par nos soins, avec un algorithme de plus court
+chemin (Dijkstra) sur le réseau piéton d'OpenStreetMap (77 443 carrefours), en marchant à
+5 km/h et deux fois moins vite dans les escaliers. Autour de la gare Saint-Charles, elles
+retrouvent les chiffres de Valhalla à 5 et 10 minutes (1 et 7 kebabs). La comparaison est
+parlante : 9 kebabs à 5 minutes de Noailles et 11 du Vieux-Port, mais aucun à 15 minutes des
+campus de Luminy et de Saint-Jérôme.
+
 # 7. Retour et recommandations
 
 ## 7.1 Difficultés rencontrées

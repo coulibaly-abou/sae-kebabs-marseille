@@ -2,7 +2,8 @@
 donnees/brutes/Filosofi2019_*.zip
 donnees/brutes/*.7z
 donnees/brutes/carreaux_200m_met.gpkg
-donnees/brutes/bbbike_marseille_shp.zip   # extrait OSM 65 Mo (re-téléchargé par scripts/16_carte_2d.py)
+# Extrait OSM BBBike, 65 Mo (re-téléchargé par scripts/16_carte_2d.py)
+donnees/brutes/bbbike_marseille_shp.zip
 
 __pycache__/
 .ipynb_checkpoints/
